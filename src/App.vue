@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator"
-import Map from "@/components/Map.vue"
+import { Component, Vue } from 'vue-property-decorator'
+import Map from '@/components/Map.vue'
 
 @Component({
   components: {

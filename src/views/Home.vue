@@ -17,12 +17,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator"
+import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  components: {
-
-  }
+  components: {}
 })
 export default class Home extends Vue {
   showNavigation = false
@@ -30,5 +28,4 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
