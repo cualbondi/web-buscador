@@ -17,8 +17,8 @@ import Map from '@/components/Map.vue'
 
 @Component({
   components: {
-    Map
-  }
+    Map,
+  },
 })
 export default class App extends Vue {}
 </script>

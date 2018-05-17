@@ -20,10 +20,10 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class Home extends Vue {
-  showNavigation = false
+  public showNavigation = false
 }
 </script>
 
