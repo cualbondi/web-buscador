@@ -1,18 +1,34 @@
 <template>
-  <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+
+  <v-toolbar dark color="primary">
+    <v-toolbar-side-icon></v-toolbar-side-icon>
+    <v-btn icon>
+      <v-icon>directions</v-icon>
+    </v-btn>
+    <v-btn icon>
+      <v-icon>directions_bus</v-icon>
+    </v-btn>
+    <v-spacer></v-spacer>
+    <v-btn icon>
+      <v-icon>share</v-icon>
+    </v-btn>
+  </v-toolbar>
+
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { Component, Vue } from "vue-property-decorator"
 
 @Component({
   components: {
-    HelloWorld,
-  },
+
+  }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  showNavigation = false
+}
 </script>
+
+<style lang="scss" scoped>
+
+</style>
