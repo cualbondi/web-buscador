@@ -4,11 +4,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
-import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+import 'vuetify/dist/vuetify.min.css'
 
 // TODO: Import only the components that are used instead of everything
+// TODO: use a stylus loader to tree-shake unused css
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#4285F4',
+  },
+})
+
 Vue.config.productionTip = false
 
 new Vue({

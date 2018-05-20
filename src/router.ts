@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import ABSearch from '@/views/ABSearch.vue'
+import Recorridos from '@/views/Recorridos.vue'
 
 Vue.use(Router)
 
@@ -9,7 +10,17 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: ABSearch,
+    },
+    {
+      path: '/direcciones',
+      name: 'busqueda',
+      component: ABSearch,
+    },
+    {
+      path: '/recorridos',
+      name: 'recorridos',
+      component: Recorridos,
     },
   ],
 })

@@ -23,7 +23,6 @@ import Map from '@/components/Map.vue'
 export default class App extends Vue {}
 </script>
 
-
 <style lang="sass">
 body,
 html,
