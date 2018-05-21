@@ -1,24 +1,15 @@
 <template>
   <v-app>
     <div id="root">
-      <div id="side-menu">
-        <router-view/>
-      </div>
-      <div id="map-slot">
-        <Map />
-      </div>
+      <router-view/>
     </div>
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Map from '@/components/Map.vue'
 
 @Component({
-  components: {
-    Map,
-  },
 })
 export default class App extends Vue {}
 </script>
@@ -31,13 +22,5 @@ html,
   height: 100%
   margin: 0
   font-family: Roboto
-
-#root
-  display: grid
-  grid-template-columns: minmax(auto, 408px) 1fr
-
-#side-menu
-
-#map-slot
 
 </style>

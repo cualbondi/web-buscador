@@ -12,15 +12,5 @@ export default new Router({
       name: 'home',
       component: ABSearch,
     },
-    {
-      path: '/direcciones',
-      name: 'busqueda',
-      component: ABSearch,
-    },
-    {
-      path: '/recorridos',
-      name: 'recorridos',
-      component: Recorridos,
-    },
   ],
 })

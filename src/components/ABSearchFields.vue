@@ -1,13 +1,14 @@
 <template>
   <div class="search-container primary">
         <div class="search-input origin">
-            <v-icon>directions</v-icon>
+            <v-icon dark>my_location</v-icon>
+            
         </div>
         <div class="search-input destination">
-            <v-icon>directions</v-icon>  
+            <v-icon dark>location_on</v-icon>  
         </div>
         <div class="swap">
-            <v-icon>directions</v-icon>
+            <v-icon dark>swap_vert</v-icon>
         </div>
   </div>
 </template>
@@ -21,7 +22,7 @@ export default class Home extends Vue {}
 
 <style lang="sass" scoped>
 .search-container
-    height: 200px
+    height: 120px
     padding: 10px 10px 30px
     display: grid
     grid-template-columns: auto 30px
@@ -31,6 +32,7 @@ export default class Home extends Vue {}
     display: flex;
     justify-content: center
     align-items: center
-.origin
+.search-input
+    display: flex
 
 </style>
