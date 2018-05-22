@@ -13,6 +13,7 @@ const productionPlugins = [
 ]
 
 module.exports = {
+  baseUrl: production ? '/web-buscador/' : '/',
   lintOnSave: false,
   configureWebpack: {
     plugins: production ? productionPlugins : developmentPlugins
