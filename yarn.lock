@@ -712,6 +712,10 @@
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.0.8.tgz#d27600e9ba2f371e08695d90a0fe0408d89c7be7"
 
+"@types/geojson@*":
+  version "7946.0.3"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.3.tgz#e5791534ab0acfb2b3a39b713966cfcee85d469f"
+
 "@types/jest@^22.0.1":
   version "22.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
@@ -723,6 +727,12 @@
 "@types/jquery@3.2.16":
   version "3.2.16"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.16.tgz#04419c404a3194350e7d3f339a90e72c88db3111"
+
+"@types/leaflet@^1.2.7":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.2.7.tgz#3dc357ea5e645033bf3569db6510d0d5e6a58df5"
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/lodash@4.14.87":
   version "4.14.87"
@@ -743,6 +753,10 @@
 "@types/node@^9.3.0":
   version "9.6.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.18.tgz#092e13ef64c47e986802c9c45a61c1454813b31d"
+
+"@types/pbf@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/pbf/-/pbf-3.0.0.tgz#861b8fca608a117295afc6f4a8a5b4bc8139c212"
 
 "@types/sinon-chai@2.7.29":
   version "2.7.29"

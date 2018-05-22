@@ -6,7 +6,7 @@ import geobuf from 'geobuf'
 
 Vue.use(Vuex)
 
-let geobufToLatlngs = function(base64str) {
+let geobufToLatlngs = function(base64str: string) {
   // convert base64str to Uint8Array
   const raw = atob(base64str)
   let rawLength = raw.length;
@@ -63,11 +63,11 @@ export default new Vuex.Store({
     results(state) {
       return state.results
     },
-    getFirstRecorrido(state){
-      if (state.results.length === 0 || state.results[0].itinerario.length === 0){
+    getFirstRecorrido({ results }:{results:any[]}){
+      if (results.length === 0 || results[0].itinerario.length === 0){
         return []
       }
-      return geobufToLatlngs(state.results[0].itinerario[0].ruta_corta)
+      return geobufToLatlngs(results[0].itinerario[0].ruta_corta)
     }
   },
 })
