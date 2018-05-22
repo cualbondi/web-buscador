@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="topContainer">
     <!-- <icon-navbar></icon-navbar> -->
     <v-navigation-drawer
       v-model="sideMenuOpen"
@@ -53,6 +53,8 @@ export default class Home extends Vue {
 }
 </script>
 
-<style lang="sass" scoped>
-
+<style lang="scss" scoped>
+  .topContainer {
+    height: 100%;
+  }
 </style>

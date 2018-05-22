@@ -6,6 +6,27 @@ import geobuf from 'geobuf'
 
 Vue.use(Vuex)
 
+let geobufToLatlngs = function(base64str) {
+  // convert base64str to Uint8Array
+  const raw = atob(base64str)
+  let rawLength = raw.length;
+  let array = new Uint8Array(new ArrayBuffer(rawLength));
+  for(let i = 0; i < rawLength; i++) {
+    array[i] = raw.charCodeAt(i);
+  }
+
+  // decode geobuf into geojson
+  const geojson = geobuf.decode(new Pbf(array))
+
+  // flip lat & lng
+  let coordinates = geojson.coordinates.slice()
+  for (var p = 0; p < coordinates.length; p++) {
+    coordinates[p].reverse()
+  }
+
+  return coordinates
+}
+
 export default new Vuex.Store({
   state: {
     sideMenuOpen: false,
@@ -23,7 +44,7 @@ export default new Vuex.Store({
     query({ commit }) {
       axios
         .get(
-          'http://localhost:8082/api/v3/recorridos/?l=-57.968416213989265%2C-34.910780590483675%2C300%7C-57.960262298583984%2C-34.9169742332207%2C300&c=la-plata&page=1&t=false',
+          'http://localhost:8082/recorridos/?l=-57.968416213989265%2C-34.910780590483675%2C300%7C-57.960262298583984%2C-34.9169742332207%2C300&c=la-plata&page=1&t=false',
         )
         .then(res => res.data)
         .then(data => commit('setResults', data.results))
@@ -46,13 +67,7 @@ export default new Vuex.Store({
       if (state.results.length === 0 || state.results[0].itinerario.length === 0){
         return []
       }
-      const atb = atob(state.results[0].itinerario[0].ruta_corta)
-      const pbf = new Pbf(atb)
-      const decoded = geobuf.decode(pbf)
-      console.log(atb)
-      console.log(pbf)
-      console.log(decoded)
-      return decoded
+      return geobufToLatlngs(state.results[0].itinerario[0].ruta_corta)
     }
   },
 })

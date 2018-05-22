@@ -1,8 +1,10 @@
 <template>
-    <l-map style="height: 90%" :zoom="13" :center="center">
+  <div class="mapContainer">
+    <l-map style="height: 90%" :zoom="11" :center="center">
       <l-tile-layer :url="'http://{s}.tile.osm.org/{z}/{x}/{y}.png'"></l-tile-layer>
       <l-polyline :latLngs="recorrido"></l-polyline>
     </l-map>
+  </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
@@ -18,7 +20,7 @@ import L from 'leaflet'
     }
 })
 export default class Map extends Vue {
-    center = L.latLng(47.413220, -1.219482)
+    center = L.latLng(-34.9205, -57.953646)
 
     get recorrido(){
         return this.$store.getters.getFirstRecorrido
@@ -26,6 +28,9 @@ export default class Map extends Vue {
 }
 </script>
 
-<style lang="sass" scoped>
-@import "~leaflet/dist/leaflet.css"
+<style lang="scss" scoped>
+  @import "~leaflet/dist/leaflet.css";
+  .mapContainer {
+    height: 100%;
+  }
 </style>
