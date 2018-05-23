@@ -42,7 +42,7 @@ export default new Vuex.Store({
   },
   actions: {
     query({ commit }) {
-      let apiUrl = process.env.NODE_ENV == 'production' ? 'https://api3.cualbondi.com.ar' : 'http://localhost:8082'
+      let apiUrl = process.env.NODE_ENV == 'production' ? 'https://api.cualbondi.com.ar/v3' : 'http://localhost:8082'
       axios
         .get(
           apiUrl + '/recorridos/?l=-57.968416213989265%2C-34.910780590483675%2C300%7C-57.960262298583984%2C-34.9169742332207%2C300&c=la-plata&page=1&t=false',
