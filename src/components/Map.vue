@@ -1,7 +1,7 @@
 <template>
   <div class="mapContainer">
     <l-map style="height: 90%" :zoom="11" :center="center">
-      <l-tile-layer :url="'http://{s}.tile.osm.org/{z}/{x}/{y}.png'"></l-tile-layer>
+      <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'"></l-tile-layer>
       <l-polyline :latLngs="recorrido"></l-polyline>
     </l-map>
   </div>
