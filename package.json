@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/leaflet": "^1.2.7",
+    "@types/leaflet-polylinedecorator": "^1.1.2",
     "@types/pbf": "^3.0.0",
     "axios": "^0.18.0",
     "geobuf": "^3.0.0",
@@ -23,6 +24,7 @@
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
     "vue2-leaflet": "^1.0.2",
+    "vue2-leaflet-polylinedecorator": "^1.0.0",
     "vuetify": "^1.0.18",
     "vuex": "^3.0.1"
   },
