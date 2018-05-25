@@ -3,9 +3,8 @@
     <l-map style="height: 90%" :zoom="11" :center="center">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-polyline :latLngs="recorrido" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity"></l-polyline>
-      <polylinedecorator :options="decoratorOptions">
-        <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
-      </polylinedecorator>
+      <polylinedecorator :patterns="patterns" :paths="[recorrido]"></polylinedecorator>
+      <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
     </l-map>
   </div>
 </template>
@@ -59,11 +58,11 @@ export default class Map extends Vue {
         weight: 8,
     }
 
-    decoratorOptions = { patterns: [
+    patterns = [
       decoratorArrow1,
       decoratorArrow2,
       decoratorArrow3,
-    ]}
+    ]
 
     get recorrido(){
         return this.$store.getters.getFirstRecorrido
