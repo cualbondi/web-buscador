@@ -30,6 +30,8 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Home extends Vue {
+  origin = ''
+  dest = ''
   openMenu() {
     this.$store.dispatch('openSideMenu')
   }

@@ -31,6 +31,8 @@ export default new Vuex.Store({
   state: {
     sideMenuOpen: false,
     results: [],
+    llA: null,
+    llB: null
   },
   mutations: {
     setSideMenu(state, open) {
@@ -39,23 +41,41 @@ export default new Vuex.Store({
     setResults(state, results) {
       state.results = results
     },
+    setllA(state, ll) {
+      state.llA = ll
+    },
+    setllB(state, ll) {
+      state.llB = ll
+    }
   },
   actions: {
-    query({ commit }) {
-      let apiUrl = process.env.NODE_ENV == 'production' ? 'https://api.cualbondi.com.ar/v3' : 'http://localhost:8082'
+    query({ commit }, {llA, llB}) {
+      const apiUrl = process.env.NODE_ENV == 'production' ? 'https://api.cualbondi.com.ar/v3' : 'http://localhost:8082'
+      const llAstr = llA.lng+','+llA.lat
+      const llBstr = llB.lng+','+llB.lat
       axios
         .get(
-          apiUrl + '/recorridos/?l=-57.968416213989265%2C-34.910780590483675%2C300%7C-57.960262298583984%2C-34.9169742332207%2C300&c=la-plata&page=1&t=false',
+          apiUrl + '/recorridos/?l='+llAstr+',300|'+llBstr+',300&c=la-plata&page=1&t=false',
         )
         .then(res => res.data)
         .then(data => commit('setResults', data.results))
     },
-    setSideMenu({ commit, state }, value) {
+    setSideMenu({ commit }, value) {
       commit('setSideMenu', value)
     },
-    openSideMenu({ commit, state }) {
+    openSideMenu({ commit }) {
       commit('setSideMenu', true)
     },
+    clickMap({ commit, state, dispatch }, value) {
+      console.log(value)
+      if (state.llA) {
+        commit('setllB', value)
+        dispatch('query', {llA:state.llA, llB:value})
+      }
+      else {
+        commit('setllA', value)
+      }
+    }
   },
   getters: {
     sideMenuOpen(state) {
@@ -69,6 +89,12 @@ export default new Vuex.Store({
         return []
       }
       return geobufToLatlngs(results[0].itinerario[0].ruta_corta)
-    }
+    },
+    llA(state) {
+      return state.llA
+    },
+    llB(state) {
+      return state.llB
+    },
   },
 })
