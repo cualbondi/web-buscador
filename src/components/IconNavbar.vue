@@ -52,8 +52,8 @@ export default class Home extends Vue {
 }
 </script>
 
-<style lang="sass" scoped>
-.share-tooltip
+<style lang="scss" scoped>
+.share-tooltip {
   margin-right: 0 !important
-
+}
 </style>

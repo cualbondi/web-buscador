@@ -1,6 +1,6 @@
 <template>
   <div class="mapContainer">
-    <l-map style="height: 90%" :zoom="11" :center="center">
+    <l-map :zoom="11" :center="center">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-polyline :latLngs="recorrido" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity"></l-polyline>
       <polylinedecorator :patterns="patterns" :paths="[recorrido]"></polylinedecorator>
