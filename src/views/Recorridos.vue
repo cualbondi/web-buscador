@@ -8,8 +8,8 @@ import IconNavbar from '@/components/IconNavbar.vue'
 
 @Component({
     components: {
-        IconNavbar
-    }
+        IconNavbar,
+    },
 })
 export default class Recorridos extends Vue {}
 </script>
