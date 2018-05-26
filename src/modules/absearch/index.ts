@@ -20,7 +20,7 @@ const module: Module<State, RootState> = {
   actions: {
     query({ commit }, { llA, llB }: {llA: LatLng, llB: LatLng}) {
       api.recorridos
-        .get(llA.lng, llA.lng, llB.lng, llB.lat)
+        .get(llA.lng, llA.lat, llB.lng, llB.lat)
         .then(results => commit('setResults', results))
     },
     clickMap({ commit, state, dispatch }, latlng: LatLng) {
