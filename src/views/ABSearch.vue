@@ -28,14 +28,14 @@ import ResultList from '@/components/ResultList.vue'
     ABSearchFields,
     Map,
     SideMenu,
-    ResultList
-  }
+    ResultList,
+  },
 })
 export default class Home extends Vue {
   get sideMenuOpen() {
     return this.$store.getters.sideMenuOpen
   }
-  set sideMenuOpen(value){
+  set sideMenuOpen(value) {
     this.$store.dispatch('setSideMenu', value)
   }
 }

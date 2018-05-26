@@ -42,11 +42,11 @@ export default class Home extends Vue {
     return this.$route.name === 'recorridos' ? selectedColor : 'primary'
   }
 
-  toBusqueda() {
+  public toBusqueda() {
     this.$router.push({ name: 'busqueda' })
   }
 
-  toRecorridos() {
+  public toRecorridos() {
     this.$router.push({ name: 'recorridos' })
   }
 }

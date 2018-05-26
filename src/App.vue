@@ -14,13 +14,13 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class App extends Vue {}
 </script>
 
-<style lang="sass">
+<style lang="scss">
 body,
 html,
-#root
-  width: 100%
-  height: 100%
-  margin: 0
-  font-family: Roboto
-
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: Roboto;
+}
 </style>

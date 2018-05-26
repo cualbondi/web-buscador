@@ -15,6 +15,9 @@
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
-    "semicolon": [true, "never"]
+    "semicolon": [true, "never"],
+    "only-arrow-functions": false,
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "no-empty-interface": false
   }
 }
