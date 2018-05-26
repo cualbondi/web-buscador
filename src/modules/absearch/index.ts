@@ -1,6 +1,7 @@
 import { Module } from 'vuex'
+import { LatLng } from 'leaflet'
 import { RootState } from '@/store'
-import { geobufToLatlngs, LatLng } from '@/utils'
+import { geobufToLatlngs } from '@/utils'
 import api from '@/api'
 
 interface State {

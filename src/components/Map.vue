@@ -15,6 +15,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker, LPolyline } from 'vue2-leaflet'
+import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
@@ -40,13 +41,6 @@ const decoratorBuilder = function(offset: string, opacity: number) {
 const decoratorArrow1 = decoratorBuilder('42', 0.5)
 const decoratorArrow2 = decoratorBuilder('50', 0.7)
 const decoratorArrow3 = decoratorBuilder('58', 0.9)
-
-interface MapClickEvent {
-  latlng: {
-    lat: number,
-    lng: number,
-  }
-}
 
 @Component({
   components: {
@@ -92,7 +86,7 @@ export default class Map extends Vue {
   get llB() {
     return this.$store.getters.llB
   }
-  public onClick(e: MapClickEvent) {
+  public onClick(e: LeafletMouseEvent) {
     this.$store.dispatch('clickMap', e.latlng)
   }
 }

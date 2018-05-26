@@ -21,8 +21,3 @@ export const geobufToLatlngs = function(base64str: string) {
 
   return coordinates
 }
-
-export interface LatLng {
-  lat: number
-  lng: number
-}
