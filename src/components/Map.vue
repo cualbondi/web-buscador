@@ -18,8 +18,9 @@ import { LMap, LTileLayer, LMarker, LPolyline } from 'vue2-leaflet'
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-import iconUrl from 'leaflet/dist/images/marker-icon.png'
-import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
+
+import iconUrl from '@/assets/marker-icon.png'
+import shadowUrl from '@/assets/marker-shadow.png'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -32,13 +33,20 @@ const decoratorBuilder = function(offset: string, opacity: number) {
         color: '#FFF',
         opacity,
         weight: 2,
-      }
-    })
+      },
+    }),
   }
 }
 const decoratorArrow1 = decoratorBuilder('42', 0.5)
 const decoratorArrow2 = decoratorBuilder('50', 0.7)
 const decoratorArrow3 = decoratorBuilder('58', 0.9)
+
+interface MapClickEvent {
+  latlng: {
+    lat: number,
+    lng: number,
+  }
+}
 
 @Component({
   components: {
@@ -46,33 +54,33 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
     LTileLayer,
     LMarker,
     LPolyline,
-    Polylinedecorator
-  }
+    Polylinedecorator,
+  },
 })
 export default class Map extends Vue {
-  center = L.latLng(-34.9205, -57.953646)
+  public center = L.latLng(-34.9205, -57.953646)
 
-  backPolyStyle = {
+  public backPolyStyle = {
     color: '#555',
     opacity: 0.9,
     weight: 10,
   }
 
-  polyStyle = {
+  public polyStyle = {
     color: '#4285f4',
     opacity: 0.9,
     weight: 8,
   }
 
-  patterns = [
+  public patterns = [
     decoratorArrow1,
     decoratorArrow2,
     decoratorArrow3,
   ]
 
-  icon = L.icon(Object.assign({},
+  public icon = L.icon(Object.assign({},
     L.Icon.Default.prototype.options,
-    {iconUrl, shadowUrl}
+    {iconUrl, shadowUrl},
   ))
 
   get recorrido() {
@@ -84,7 +92,7 @@ export default class Map extends Vue {
   get llB() {
     return this.$store.getters.llB
   }
-  onClick(e) {
+  public onClick(e: MapClickEvent) {
     this.$store.dispatch('clickMap', e.latlng)
   }
 }
