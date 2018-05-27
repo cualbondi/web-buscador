@@ -6,11 +6,11 @@
     </v-btn>
     
     <div class="input-location origin" @click="searchOrigin">
-      Your location
+      {{ locationOrigin }}
     </div>
 
     <div class="input-location destination" @click="searchDestination">
-      Choose destination
+      {{ locationDestination }}
     </div>
 
     <v-btn class="swap" flat icon dark>
@@ -29,12 +29,28 @@ export default class Home extends Vue {
     this.$store.dispatch('openSideMenu')
   }
 
-  searchOrigin(){
-    this.$router.push({ name: 'location', params: { point: 'origin' }})
+  get locationOrigin() {
+    const coords = this.$store.getters.llA
+    if (!coords) {
+      return 'Your location'
+    }
+    return `${coords.lat}, ${coords.lng}`
   }
 
-  searchDestination(){
-    this.$router.push({ name: 'location', params: { point: 'destination' }})
+  get locationDestination() {
+    const coords = this.$store.getters.llB
+    if (!coords) {
+      return 'Select destination'
+    }
+    return `${coords.lat}, ${coords.lng}`
+  }
+
+  searchOrigin() {
+    this.$router.push({ name: 'location', params: { point: 'origin' } })
+  }
+
+  searchDestination() {
+    this.$router.push({ name: 'location', params: { point: 'destination' } })
   }
 }
 </script>
