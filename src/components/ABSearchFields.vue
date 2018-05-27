@@ -1,27 +1,22 @@
 <template>
-  <div class="search-container primary">
+  <div class="search-container primary shadow-right">
+    
     <v-btn class="menubtn" flat icon dark @click="openMenu">
       <v-icon dark>menu</v-icon>  
     </v-btn>
-    <v-text-field
-      class="input-origin"
-      v-model="origin"
-      label="Origen"
-      dark
-      :single-line="true"
-      :hide-details="true"
-    ></v-text-field>
-    <v-text-field
-      class="input-dest"
-      v-model="dest"
-      label="Destino"
-      dark
-      :single-line="true"
-      :hide-details="true"
-    ></v-text-field>
-    <div class="swap">
-      <v-icon dark>swap_vert</v-icon>
+    
+    <div class="input-location origin" @click="searchOrigin">
+      Your location
     </div>
+
+    <div class="input-location destination" @click="searchDestination">
+      Choose destination
+    </div>
+
+    <v-btn class="swap" flat icon dark>
+      <v-icon dark>swap_vert</v-icon>
+    </v-btn>
+  
   </div>
 </template>
 
@@ -30,43 +25,19 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Home extends Vue {
-  public origin = ''
-  public dest = ''
   public openMenu() {
     this.$store.dispatch('openSideMenu')
+  }
+
+  searchOrigin(){
+    this.$router.push({ name: 'location', params: { point: 'origin' }})
+  }
+
+  searchDestination(){
+    this.$router.push({ name: 'location', params: { point: 'destination' }})
   }
 }
 </script>
 
-<style lang="scss" scoped>
-  .search-container {
-    height: 130px;
-    display: grid;
-    grid-template-columns: auto 30px;
-    grid-template-rows: 25px 50px 50px;
-    grid-row-gap: 0
-  }
-  .swap {
-    grid-column: 2;
-    grid-row: 2 / span 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .input-origin {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  .input-dest {
-    grid-column: 1;
-    grid-row: 3;
-  }
-  .menubtn {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  .input-group {
-    padding-top: 0;
-    margin-left: 20px
-  }
+<style lang="scss" src="./ABSearchFields.scss" scoped>
 </style>

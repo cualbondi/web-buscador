@@ -22,5 +22,25 @@ html,
   height: 100%;
   margin: 0;
   font-family: Roboto;
+  background: #F5F5F5;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.column {
+  display: flex;
+  flex-direction: column
+}
+.justify-center {
+  justify-content: center;
+}
+.align-center {
+  align-items: center;
+}
+
+.shadow-right {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
 }
 </style>

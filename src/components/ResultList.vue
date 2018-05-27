@@ -1,20 +1,63 @@
 <template>
-  <div class="root">
-    resultlist
-  </div>
+  <v-list :two-line="hasSubtext" class="results">
+    <v-subheader v-if="title">{{ title }}</v-subheader>
+    <template v-for="(result, index) in results">
+      <v-divider v-if="shouldDivide(index)" inset :key="result.id + ' divider'"></v-divider>
+      <v-list-tile :key="result.id" @click="resultClick(result)">
+        <v-list-tile-avatar>
+          <v-icon :color="result.icon.color">{{result.icon.name}}</v-icon>
+        </v-list-tile-avatar>
+        <v-list-tile-content>
+          <v-list-tile-title v-html="result.text"></v-list-tile-title>
+          <v-list-tile-sub-title v-html="result.subtext"></v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
+    </template>
+  </v-list>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+
+export interface Result {
+  id: number
+  icon: {
+    name: string
+    color?: string
+  }
+  text: string
+  subtext?: string
+}
 
 @Component({})
 export default class Home extends Vue {
+  @Prop() results!: Result[]
+
+  @Prop() title?: string
+
+  get hasSubtext() {
+    return (
+      this.results &&
+      this.results.length &&
+      this.results[0].hasOwnProperty('subtext')
+    )
+  }
+
+  @Emit('selection')
+  resultClick(result: Result) {
+  }
+
+  shouldDivide(index: number) {
+    return index % 2 === 1
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  .root {
-    z-index: 10000;
-    background: white;
-  }
+.results {
+  margin-top: 5px;
+}
+.subheader {
+  height: 25px;
+}
 </style>

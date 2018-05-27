@@ -35,13 +35,42 @@ const module: Module<State, RootState> = {
         }
       }
     },
-    setllA({ commit, dispatch }, ll) {
+    setllA({ commit, dispatch }, ll: LatLng) {
       commit('setllA', ll)
       dispatch('query')
     },
-    setllB({ commit, dispatch }, ll) {
+    setllB({ commit, dispatch }, ll: LatLng) {
       commit('setllB', ll)
       dispatch('query')
+    },
+    geolocate({ commit }) {
+      return new Promise((resolve, reject) => {
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              const lat = position.coords.latitude.toString()
+              const lng = position.coords.longitude.toString()
+              resolve({ lat, lng })
+            },
+            err => {
+              reject(err)
+            },
+            { enableHighAccuracy: true },
+          )
+        } else {
+          window.alert('Oops, your browser does not support geolocation')
+          reject()
+        }
+      })
+    },
+    fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
+      return dispatch('geolocate').then(latlng => {
+        if (source === 'origin') {
+          return dispatch('setllA', latlng)
+        } else {
+          return dispatch('setllB', latlng)
+        }
+      })
     },
   },
 
@@ -75,4 +104,5 @@ const module: Module<State, RootState> = {
     },
   },
 }
+
 export default module

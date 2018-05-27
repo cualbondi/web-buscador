@@ -1,5 +1,10 @@
-<template>
-    <div>
+<template>  
+    <v-navigation-drawer
+      class="navigation"
+      v-model="sideMenuOpen"
+      temporary
+      absolute
+    >
       <v-list class="pa-1">
         <v-list-tile avatar>
           <v-list-tile-avatar>
@@ -13,8 +18,7 @@
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
       </v-list>
-
-    </div>
+    </v-navigation-drawer>
 </template>
 
 <script lang="ts">
@@ -23,5 +27,11 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
 })
 export default class Home extends Vue {
+  get sideMenuOpen() {
+    return this.$store.getters.sideMenuOpen
+  }
+  set sideMenuOpen(value) {
+    this.$store.dispatch('setSideMenu', value)
+  }
 }
 </script>
