@@ -1,40 +1,45 @@
 <template>
-  <div class="location-search">
-    <div class="input-container">
-        <v-btn class="menubtn" flat icon @click="goBack">
-            <v-icon dark>arrow_back</v-icon>  
-        </v-btn>
-        <v-text-field
-        class="input"
-        v-model="location"
-        :label="inputLabel"
-        flat
-        solo
-        ></v-text-field>
+    <div class="location-search-container">
+        <div class="location-search">
+            <div class="input-container">
+                <v-btn class="menubtn" flat icon @click="goBack">
+                    <v-icon dark>arrow_back</v-icon>  
+                </v-btn>
+                <v-text-field
+                class="input"
+                v-model="location"
+                :label="inputLabel"
+                flat
+                solo
+                ></v-text-field>
+            </div>
+
+            <result-list 
+            class="geolocation" 
+            :results="fixedResults"
+            @selection="onGeoSelection"
+            ></result-list>
+
+            <result-list 
+            class="previous-searches" 
+            title="Yesterday" 
+            :results="results"
+            ></result-list>
+
+        </div>
+        <Map class="map" />
     </div>
-
-    <result-list 
-    class="geolocation" 
-    :results="fixedResults"
-    @selection="onGeoSelection"
-    ></result-list>
-
-    <result-list 
-    class="previous-searches" 
-    title="Yesterday" 
-    :results="results"
-    ></result-list>
-
-  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import ResultList, { Result } from '@/components/ResultList.vue'
+import Map from '@/components/Map.vue'
 
 @Component({
   components: {
     ResultList,
+    Map,
   },
 })
 export default class Home extends Vue {
@@ -95,9 +100,9 @@ export default class Home extends Vue {
   get originOrDestination() {
     return this.$route.params.point
   }
-  
+
   get inputLabel() {
-      return  this.originOrDestination === 'origin' ? 'Origen' : 'Destino' 
+    return this.originOrDestination === 'origin' ? 'Origen' : 'Destino'
   }
 
   onGeoSelection(result: Result) {
@@ -118,8 +123,29 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.location-search-container {
+  display: grid;
+  height: 100%;
+}
+@media (max-width: 600px) {
+  .location-search-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'search';
+  }
+}
+@media (min-width: 601px) {
+  .location-search-container {
+    grid-template-columns: 400px auto;
+    grid-template-areas: 'search map';
+  }
+}
+.map {
+  grid-area: map;
+}
 .location-search {
   margin: 7px;
+  grid-area: search;
+  
 }
 .geolocation {
   margin-bottom: 15px;
