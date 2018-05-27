@@ -18,18 +18,30 @@ const module: Module<State, RootState> = {
   },
 
   actions: {
-    query({ commit }, { llA, llB }: {llA: LatLng, llB: LatLng}) {
-      api.recorridos
-        .get(llA.lng, llA.lat, llB.lng, llB.lat)
-        .then(results => commit('setResults', results))
-    },
-    clickMap({ commit, state, dispatch }, latlng: LatLng) {
-      if (state.llA) {
-        commit('setllB', latlng)
-        dispatch('query', { llA: state.llA, llB: latlng })
-      } else {
-        commit('setllA', latlng)
+    query({ commit, state }) {
+      if (state.llA && state.llB) {
+        api.recorridos
+          .get(state.llA.lng, state.llA.lat, state.llB.lng, state.llB.lat)
+          .then(results => commit('setResults', results))
       }
+    },
+    clickMap({ commit, state, dispatch }, ll: LatLng) {
+      if (!state.llA) {
+        commit('setllA', ll)
+      } else {
+        if (!state.llB) {
+          commit('setllB', ll)
+          dispatch('query')
+        }
+      }
+    },
+    setllA({ commit, dispatch }, ll) {
+      commit('setllA', ll)
+      dispatch('query')
+    },
+    setllB({ commit, dispatch }, ll) {
+      commit('setllB', ll)
+      dispatch('query')
     },
   },
 
