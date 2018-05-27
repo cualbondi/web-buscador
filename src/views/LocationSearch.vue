@@ -22,7 +22,7 @@
 
             <result-list 
             class="previous-searches" 
-            title="Yesterday" 
+            title="Ayer" 
             :results="results"
             ></result-list>
 
@@ -51,14 +51,14 @@ export default class Home extends Vue {
         name: 'my_location',
         color: 'primary',
       },
-      text: 'Your location',
+      text: 'Tu ubicación',
     },
     {
       id: 2,
       icon: {
         name: 'location_on',
       },
-      text: 'Choose on map',
+      text: 'Elegir desde el mapa',
     },
   ]
 
