@@ -1,6 +1,6 @@
 <template>
   <div class="mapContainer">
-    <l-map :zoom="11" :center="center" @click="onClick" ref="mapRef">
+    <l-map :zoom="11" :center="center" @click="onClick" ref="mapRef" :options="options">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-polyline :latLngs="recorrido" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity"></l-polyline>
       <polylinedecorator :patterns="patterns" :paths="[recorrido]"></polylinedecorator>
@@ -56,6 +56,9 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
 })
 export default class Map extends Vue {
   public center = L.latLng(-34.9205, -57.953646)
+  public options = {
+    zoomControl: false
+  }
 
   public backPolyStyle = {
     color: '#555',

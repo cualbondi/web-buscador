@@ -112,7 +112,10 @@ export default class Home extends Vue {
         .then(() => this.$router.push({ name: 'absearch' }))
         .catch(err => console.error(err))
     } else {
-      // open map picker view
+      this.$router.push({
+        name: 'map-location',
+        params: { point: this.originOrDestination },
+      })
     }
   }
 
@@ -122,39 +125,5 @@ export default class Home extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.location-search-container {
-  display: grid;
-  height: 100%;
-}
-@media (max-width: 600px) {
-  .location-search-container {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'search';
-  }
-}
-@media (min-width: 601px) {
-  .location-search-container {
-    grid-template-columns: 400px auto;
-    grid-template-areas: 'search map';
-  }
-}
-.map {
-  grid-area: map;
-}
-.location-search {
-  margin: 7px;
-  grid-area: search;
-  
-}
-.geolocation {
-  margin-bottom: 15px;
-}
-.input-container {
-  display: flex;
-  flex-direction: row;
-  background: white;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
-}
+<style lang="scss" src="./LocationSearch.scss" scoped>
 </style>

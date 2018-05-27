@@ -42,7 +42,7 @@ export default class Home extends Vue {
     if (!coords) {
       return 'Select destination'
     }
-    return `${coords.lat}, ${coords.lng}`
+    return `${coords.lat},${coords.lng}`
   }
 
   searchOrigin() {

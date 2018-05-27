@@ -29,44 +29,5 @@ export default class Home extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.navigation {
-  z-index: 10000;
-}
-.main {
-  height: 100%;
-  display: grid;
-}
-.top,
-.bottom {
-  z-index: 1000;
-}
-.top {
-  grid-area: top;
-}
-.middle {
-  grid-area: map;
-}
-.bottom {
-  grid-area: bottom;
-}
-
-@media (max-width: 600px) {
-  .no-results {
-    grid-template-areas: 'top' 'map' 'map';
-  }
-  .with-results {
-    grid-template-areas: 'top' 'map' 'bottom';
-  }
-  .main {
-    grid-template-rows: 120px auto 50px;
-  }
-}
-@media (min-width: 601px) {
-  .main {
-    grid-template-areas: 'top map' 'bottom map';
-    grid-template-rows: 130px auto;
-    grid-template-columns: 400px auto;
-  }
-}
+<style lang="scss" src="./ABSearch.scss" scoped>
 </style>

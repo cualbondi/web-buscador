@@ -29,6 +29,9 @@ html,
   display: flex;
   flex-direction: row;
 }
+.flex {
+  display: flex;
+}
 .column {
   display: flex;
   flex-direction: column

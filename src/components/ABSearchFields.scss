@@ -2,7 +2,7 @@
     display: grid;
     padding-top: 8px;
     padding-bottom: 20px;
-    grid-template-columns: 56px auto 56px;
+    grid-template-columns: 56px 1fr 56px;
     grid-template-rows: 50px 50px;
     grid-template-areas: "menu origin swap" "blank destination swap";
     align-items: center;
@@ -33,4 +33,7 @@
       padding: 8px 12px;
       display: flex;
       align-items: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
   }
