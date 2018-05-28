@@ -8,7 +8,7 @@ interface State {
   llA: LatLng | null
   llB: LatLng | null
   results: string[]
-  radius: Number
+  radius: number
 }
 
 const module: Module<State, RootState> = {
@@ -45,7 +45,7 @@ const module: Module<State, RootState> = {
       commit('setllB', ll)
       dispatch('query')
     },
-    setRadius({ state, commit, dispatch }, meters: LatLng) {
+    setRadius({ state, commit, dispatch }, meters: number) {
       if ( state.radius == meters ) return;
       commit('setRadius', meters)
       dispatch('query')
@@ -91,7 +91,7 @@ const module: Module<State, RootState> = {
     setllB(state, ll: LatLng) {
       state.llB = ll
     },
-    setRadius(state, meters: Number) {
+    setRadius(state, meters: number) {
       state.radius = meters
     },
   },
