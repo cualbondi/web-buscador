@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import absearch from './modules/absearch'
 import ui from './modules/ui'
+import analyticsMiddleware from './analyticsMiddleware'
 
 Vue.use(Vuex)
 
@@ -18,4 +19,7 @@ export default new Vuex.Store<RootState>({
     ui,
   },
   strict: process.env.NODE_ENV !== 'production',
+  plugins: [
+    analyticsMiddleware
+  ]
 })
