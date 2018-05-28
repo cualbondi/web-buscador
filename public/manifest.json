@@ -1,20 +1,41 @@
 {
-  "name": "vuetest",
-  "short_name": "vuetest",
+  "name": "Cualbondi",
+  "short_name": "cualbondi",
   "icons": [
     {
-      "src": "/img/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
+      "src": "./icon/iconldpi.png",
+      "sizes": "114x114",
       "type": "image/png"
     },
     {
-      "src": "/img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
+      "src": "./icon/iconmdpi.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon/iconhdpi.png",
+      "sizes": "228x228",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon/iconxhdpi.png",
+      "sizes": "304x304",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon/iconxxhdpi.png",
+      "sizes": "456x456",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon/iconxxxhdpi.png",
+      "sizes": "608x608",
       "type": "image/png"
     }
   ],
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#4DBA87"
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#4285F4"
 }
