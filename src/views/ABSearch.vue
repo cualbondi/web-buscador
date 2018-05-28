@@ -23,8 +23,8 @@ import ResultList from '@/components/ResultList.vue'
   },
 })
 export default class Home extends Vue {
-  get withResults(){
-    return false ? 'with-results' : 'no-results' 
+  get withResults() {
+    return false ? 'with-results' : 'no-results'
   }
 }
 </script>

@@ -23,7 +23,7 @@ export interface Result {
   id: number
   icon: {
     name: string
-    color?: string
+    color?: string,
   }
   text: string
   subtext?: string
@@ -31,9 +31,9 @@ export interface Result {
 
 @Component({})
 export default class Home extends Vue {
-  @Prop() results!: Result[]
+  @Prop() public results!: Result[]
 
-  @Prop() title?: string
+  @Prop() public title?: string
 
   get hasSubtext() {
     return (
@@ -44,10 +44,10 @@ export default class Home extends Vue {
   }
 
   @Emit('selection')
-  resultClick(result: Result) {
+  public resultClick(result: Result) {
   }
 
-  shouldDivide(index: number) {
+  public shouldDivide(index: number) {
     return index % 2 === 1
   }
 }

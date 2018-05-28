@@ -45,11 +45,11 @@ export default class Home extends Vue {
     return `${coords.lat},${coords.lng}`
   }
 
-  searchOrigin() {
+  public searchOrigin() {
     this.$router.push({ name: 'location', params: { point: 'origin' } })
   }
 
-  searchDestination() {
+  public searchDestination() {
     this.$router.push({ name: 'location', params: { point: 'destination' } })
   }
 }

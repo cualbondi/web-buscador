@@ -57,7 +57,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
 export default class Map extends Vue {
   public center = L.latLng(-34.9205, -57.953646)
   public options = {
-    zoomControl: false
+    zoomControl: false,
   }
 
   public backPolyStyle = {
@@ -89,11 +89,11 @@ export default class Map extends Vue {
   get llA() {
     return this.$store.getters.llA
   }
-  get llB() {
-    return this.$store.getters.llB
-  }
   set llA(val) {
     this.$store.dispatch('setllA', val)
+  }
+  get llB() {
+    return this.$store.getters.llB
   }
   set llB(val) {
     this.$store.dispatch('setllB', val)
@@ -106,7 +106,6 @@ export default class Map extends Vue {
 
 
 <style lang="scss" scoped>
-  @import "~leaflet/dist/leaflet.css";
   .mapContainer {
     height: 100%;
   }

@@ -44,7 +44,7 @@ import Map from '@/components/Map.vue'
 })
 export default class Home extends Vue {
   public location = ''
-  fixedResults: Result[] = [
+  public fixedResults: Result[] = [
     {
       id: 1,
       icon: {
@@ -62,7 +62,7 @@ export default class Home extends Vue {
     },
   ]
 
-  results: Result[] = [
+  public results: Result[] = [
     {
       id: 3,
       icon: {
@@ -105,7 +105,7 @@ export default class Home extends Vue {
     return this.originOrDestination === 'origin' ? 'Origen' : 'Destino'
   }
 
-  onGeoSelection(result: Result) {
+  public onGeoSelection(result: Result) {
     if (result.id === 1) {
       this.$store
         .dispatch('fromGeoLocation', this.originOrDestination)
@@ -119,7 +119,7 @@ export default class Home extends Vue {
     }
   }
 
-  goBack() {
+  public goBack() {
     this.$router.back()
   }
 }
