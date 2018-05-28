@@ -8,6 +8,7 @@ interface State {
   llA: LatLng | null
   llB: LatLng | null
   results: string[]
+  radius: Number
 }
 
 const module: Module<State, RootState> = {
@@ -15,13 +16,14 @@ const module: Module<State, RootState> = {
     llA: null,
     llB: null,
     results: [],
+    radius: 300,
   },
 
   actions: {
     query({ commit, state }) {
       if (state.llA && state.llB) {
         api.recorridos
-          .get(state.llA.lng, state.llA.lat, state.llB.lng, state.llB.lat)
+          .get(state.llA.lng, state.llA.lat, state.llB.lng, state.llB.lat, state.radius)
           .then(results => commit('setResults', results))
       }
     },
@@ -41,6 +43,11 @@ const module: Module<State, RootState> = {
     },
     setllB({ commit, dispatch }, ll: LatLng) {
       commit('setllB', ll)
+      dispatch('query')
+    },
+    setRadius({ state, commit, dispatch }, meters: LatLng) {
+      if ( state.radius == meters ) return;
+      commit('setRadius', meters)
       dispatch('query')
     },
     geolocate({ commit }) {
@@ -84,6 +91,9 @@ const module: Module<State, RootState> = {
     setllB(state, ll: LatLng) {
       state.llB = ll
     },
+    setRadius(state, meters: Number) {
+      state.radius = meters
+    },
   },
 
   getters: {
@@ -101,6 +111,9 @@ const module: Module<State, RootState> = {
     },
     llB(state) {
       return state.llB
+    },
+    radius(state) {
+      return state.radius
     },
   },
 }

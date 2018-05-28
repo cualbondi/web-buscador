@@ -7,12 +7,24 @@
     >
       <v-list class="pa-1">
         <v-list-tile>
-            <img :src="logo" />
+          <img :src="logo" />
         </v-list-tile>
       </v-list>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
       </v-list>
+      <v-list-tile>
+        <v-slider
+          @change="setRadius"
+          v-model="radius"
+          prepend-icon="directions_walk"
+          :persistent-hint="true"
+          :min="200"
+          :max="800"
+          :step="100"
+          :ticks="true"
+        />
+      </v-list-tile>
     </v-navigation-drawer>
 </template>
 
@@ -20,15 +32,19 @@
 import { Component, Vue } from 'vue-property-decorator'
 import logo from '@/assets/logo.png'
 
-@Component({
-})
+@Component({})
 export default class Home extends Vue {
   logo = logo
+  radius = this.$store.getters.radius
   get sideMenuOpen() {
     return this.$store.getters.sideMenuOpen
   }
   set sideMenuOpen(value) {
     this.$store.dispatch('setSideMenu', value)
+  }
+
+  public setRadius(value: Number) {
+    this.$store.dispatch('setRadius', value)
   }
 }
 </script>

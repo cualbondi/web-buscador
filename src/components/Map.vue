@@ -1,12 +1,12 @@
 <template>
   <div class="mapContainer">
-    <l-map :zoom="11" :center="center" @click="onClick" ref="mapRef" :options="options">
+    <l-map :zoom="11" :center="center" @click="onClick" :options="options">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-polyline :latLngs="recorrido" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity"></l-polyline>
       <polylinedecorator :patterns="patterns" :paths="[recorrido]"></polylinedecorator>
       <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
-      <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="300" :options="{icon}" />
-      <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="300" :options="{icon}" />
+      <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon}" />
+      <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon}" />
     </l-map>
   </div>
 </template>
@@ -88,6 +88,9 @@ export default class Map extends Vue {
   }
   get llA() {
     return this.$store.getters.llA
+  }
+  get radius() {
+    return this.$store.getters.radius
   }
   set llA(val) {
     this.$store.dispatch('setllA', val)

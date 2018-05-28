@@ -10,8 +10,8 @@ const client = axios.create({
 })
 
 const recorridos = {
-  get(lngA: number, latA: number, lngB: number, latB: number) {
-    const url = `/recorridos/?l=${lngA},${latA},300|${lngB},${latB},300&c=la-plata&page=1&t=false`
+  get(lngA: number, latA: number, lngB: number, latB: number, rad: number) {
+    const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=la-plata&page=1&t=false`
     return client.get(url).then(res => res.data.results)
   },
 }
