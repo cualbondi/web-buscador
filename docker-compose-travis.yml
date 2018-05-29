@@ -13,7 +13,7 @@ services:
 
     apiv3:
         build:
-          context: git@github.com:cualbondi/apiv3.git
+          context: https://github.com/cualbondi/apiv3.git
           dockerfile: docker/local/Dockerfile
         depends_on:
             - db
