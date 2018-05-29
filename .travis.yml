@@ -7,7 +7,7 @@ before_install:
   - docker --version
   - docker-compose --version
   - docker-compose -f docker-compose-travis.yml up -d
-  - docker-compose -f docker-compose-travis.yml exec apiv3 run manage.py loaddata
+  - docker-compose -f docker-compose-travis.yml exec apiv3 run python manage.py loaddata
 
 script:
   - docker-compose -f docker-compose-travis.yml exec web-buscador yarn test:e2e
