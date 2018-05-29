@@ -89,9 +89,6 @@ export default class Map extends Vue {
   get llA() {
     return this.$store.getters.llA
   }
-  get radius() {
-    return this.$store.getters.radius
-  }
   set llA(val) {
     this.$store.dispatch('setllA', val)
   }
@@ -100,6 +97,9 @@ export default class Map extends Vue {
   }
   set llB(val) {
     this.$store.dispatch('setllB', val)
+  }
+  get radius() {
+    return this.$store.getters.radius
   }
   public onClick(e: LeafletMouseEvent) {
     this.$store.dispatch('clickMap', e.latlng)
