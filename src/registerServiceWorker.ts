@@ -1,9 +1,10 @@
 /* tslint:disable:no-console */
 
 import { register } from 'register-service-worker'
+import { isProd, BASE_URL } from '@/config'
 
-if (process.env.NODE_ENV === 'production') {
-  register(`${process.env.BASE_URL}service-worker.js`, {
+if (isProd) {
+  register(`${BASE_URL}service-worker.js`, {
     ready() {
       console.log(
         'App is being served from cache by a service worker.\n' +

@@ -6,12 +6,10 @@ import store from './store'
 import VueAnalytics from 'vue-analytics'
 import './registerServiceWorker'
 import 'vuetify/dist/vuetify.min.css'
+import { isProd, GA_KEY } from '@/config'
 
 // TODO: Import only the components that are used instead of everything
 // TODO: use a stylus loader to tree-shake unused css
-
-const isProd = process.env.NODE_ENV == 'production'
-const GAid = 'UA-20703799-1'
 
 Vue.use(Vuetify, {
   theme: {
@@ -20,12 +18,12 @@ Vue.use(Vuetify, {
 })
 
 Vue.use(VueAnalytics, {
-  id: GAid,
+  id: GA_KEY,
   router,
   debug: {
     enabled: !isProd,
-    sendHitTask: isProd
-  }
+    sendHitTask: isProd,
+  },
 })
 
 Vue.config.productionTip = false
