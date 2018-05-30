@@ -1,6 +1,6 @@
 <template>
   <div class="map-location-picker">
-    <l-map :zoom="11" :center="center" @click="onClick" ref="mapRef" :options="options">
+    <l-map :zoom="11" :center="center" ref="mapRef" :options="options">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="300" :options="{icon}" />
     </l-map>
@@ -62,9 +62,6 @@ export default class Map extends Vue {
   }
   set llA(val) {
     this.$store.dispatch('setllA', val)
-  }
-  public onClick(e: LeafletMouseEvent) {
-    this.$store.dispatch('clickMap', e.latlng)
   }
 }
 </script>

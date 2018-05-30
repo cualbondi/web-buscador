@@ -46,7 +46,7 @@ const module: Module<State, RootState> = {
       dispatch('query')
     },
     setRadius({ state, commit, dispatch }, meters: number) {
-      if ( state.radius == meters ) return;
+      if ( state.radius == meters ) { return }
       commit('setRadius', meters)
       dispatch('query')
     },
