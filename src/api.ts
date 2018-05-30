@@ -1,12 +1,8 @@
 import axios from 'axios'
-
-const apiUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://api.cualbondi.com.ar/v3'
-    : 'http://localhost:8082'
+import { API_URL } from '@/config'
 
 const client = axios.create({
-  baseURL: apiUrl,
+  baseURL: API_URL,
 })
 
 const recorridos = {
