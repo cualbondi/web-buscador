@@ -1,6 +1,7 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const production = process.env.NODE_ENV === 'production'
+const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : (production ? '/web-buscador/' : '/')
 
 const developmentPlugins = []
 const productionPlugins = [
@@ -13,7 +14,7 @@ const productionPlugins = [
 ]
 
 module.exports = {
-  baseUrl: production ? '/web-buscador/' : '/',
+  baseUrl: BASE_URL,
   lintOnSave: false,
   configureWebpack: {
     plugins: production ? productionPlugins : developmentPlugins

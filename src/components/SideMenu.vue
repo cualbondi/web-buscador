@@ -34,8 +34,8 @@ import logo from '@/assets/logo.png'
 
 @Component({})
 export default class Home extends Vue {
-  logo = logo
-  radius = this.$store.getters.radius
+  public logo = logo
+  public radius = this.$store.getters.radius
   get sideMenuOpen() {
     return this.$store.getters.sideMenuOpen
   }
@@ -43,7 +43,7 @@ export default class Home extends Vue {
     this.$store.dispatch('setSideMenu', value)
   }
 
-  public setRadius(value: Number) {
+  public setRadius(value: number) {
     this.$store.dispatch('setRadius', value)
   }
 }
