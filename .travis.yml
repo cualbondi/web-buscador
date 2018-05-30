@@ -31,4 +31,4 @@ before_install:
 
 script:
   - docker-compose -f docker-compose-travis.yml exec web-buscador yarn lint
-  - docker-compose -f docker-compose-travis.yml exec web-buscador yarn test:e2e
+  - docker-compose -f docker-compose-travis.yml exec web-buscador yarn test:e2e:headless
