@@ -8,7 +8,7 @@ services:
           - apiv3
         ports:
             - 8083:8080
-        command: bash -c "yarn && yarn serve"
+        command: /bin/true
         working_dir: /src
         volumes:
             - .:/src
