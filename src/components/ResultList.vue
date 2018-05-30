@@ -43,9 +43,9 @@ export default class Home extends Vue {
     )
   }
 
-  @Emit('selection')
-  public resultClick(result: Result) {
-  }
+  // @Emit('selection')
+  // public resultClick(result: Result) {
+  // }
 
   public shouldDivide(index: number) {
     return index % 2 === 1

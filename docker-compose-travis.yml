@@ -1,0 +1,35 @@
+version: '3.2'
+
+services:
+
+    web-buscador:
+        image: cypress/base:10
+        depends_on:
+          - apiv3
+        ports:
+            - 8083:8080
+        command: tail -f /dev/null
+        working_dir: /src
+        volumes:
+            - .:/src
+
+    apiv3:
+        build:
+            context: ./apiv3
+            dockerfile: docker/local/Dockerfile
+        depends_on:
+            - db
+            - cache
+        env_file: .env.local.travis
+        volumes:
+            - ./apiv3:/app:cached
+        ports:
+            - 8082:8000
+        command: ["/start.sh"]
+
+    db:
+        image: cualbondi/postgres
+        env_file: .env.local.travis
+
+    cache:
+        image: memcached:alpine

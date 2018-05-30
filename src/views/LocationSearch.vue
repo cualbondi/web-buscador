@@ -110,7 +110,7 @@ export default class Home extends Vue {
       this.$store
         .dispatch('fromGeoLocation', this.originOrDestination)
         .then(() => this.$router.push({ name: 'absearch' }))
-        .catch(err => console.error(err))
+        // .catch(err => console.error(err))
     } else {
       this.$router.push({
         name: 'map-location',

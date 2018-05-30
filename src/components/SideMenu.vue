@@ -43,7 +43,7 @@ export default class Home extends Vue {
     this.$store.dispatch('setSideMenu', value)
   }
 
-  public setRadius(value: Number) {
+  public setRadius(value: number) {
     this.$store.dispatch('setRadius', value)
   }
 }
