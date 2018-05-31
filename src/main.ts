@@ -6,7 +6,16 @@ import store from './store'
 import VueAnalytics from 'vue-analytics'
 import './registerServiceWorker'
 import 'vuetify/dist/vuetify.min.css'
-import { isProd, GA_KEY } from '@/config'
+import { isProd, GA_KEY, SENTRY_URL } from '@/config'
+
+import Raven from 'raven-js'
+import RavenVue from 'raven-js/plugins/vue'
+if (SENTRY_URL) {
+  Raven
+    .config(SENTRY_URL)
+    .addPlugin(RavenVue, Vue)
+    .install()
+}
 
 // TODO: Import only the components that are used instead of everything
 // TODO: use a stylus loader to tree-shake unused css
