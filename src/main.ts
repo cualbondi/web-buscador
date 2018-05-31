@@ -6,13 +6,13 @@ import store from './store'
 import VueAnalytics from 'vue-analytics'
 import './registerServiceWorker'
 import 'vuetify/dist/vuetify.min.css'
-import { isProd, GA_KEY } from '@/config'
+import { isProd, GA_KEY, SENTRY_URL } from '@/config'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
-if (isProd) {
+if (SENTRY_URL) {
   Raven
-    .config('http://67b7a80534a5442cb7dabed8033a7d65@sentry.cualbondi.com.ar/5')
+    .config(SENTRY_URL)
     .addPlugin(RavenVue, Vue)
     .install()
 }
