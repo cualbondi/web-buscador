@@ -37,8 +37,13 @@ Vue.use(VueAnalytics, {
 
 Vue.config.productionTip = false
 
-export default new Vue({
+interface VueExtended extends Vue {
+  $ga?: any
+}
+const vueInstance: VueExtended = new Vue({
   router,
   store,
   render: h => h(App),
 }).$mount('#app')
+
+export default vueInstance

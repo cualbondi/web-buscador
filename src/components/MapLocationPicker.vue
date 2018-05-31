@@ -1,9 +1,25 @@
 <template>
-  <div class="map-location-picker">
-    <l-map :zoom="11" :center="center" ref="mapRef" :options="options">
+  <div class="map-picker">
+    
+    <v-toolbar dark color="primary">
+      <v-toolbar-side-icon @click="goBack">
+        <v-icon dark>arrow_back</v-icon>
+      </v-toolbar-side-icon>
+      <v-toolbar-title class="white--text">Elige un destino</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+          ok
+      </v-btn>
+    </v-toolbar>
+
+    <l-map :zoom="11" :center="center" ref="mapRef" :options="options" @move="move">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
-      <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="300" :options="{icon}" />
+      <l-editablecirclemarker :latLng="center" :rad="300" :options="{icon}" />
     </l-map>
+    
+    <v-btn class="mylocation" fab color="white">
+        <v-icon>my_location</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -15,26 +31,7 @@ import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
-
-import iconUrl from '@/assets/marker-icon.png'
-import iconRetinaUrl from '@/assets/marker-icon-2x.png'
-import shadowUrl from '@/assets/marker-shadow.png'
-
-const decoratorBuilder = function(offset: string, opacity: number) {
-  return {
-    offset,
-    repeat: 150,
-    symbol: L.Symbol.arrowHead({
-      pixelSize: 6,
-      polygon: false,
-      pathOptions: {
-        color: '#FFF',
-        opacity,
-        weight: 2,
-      },
-    }),
-  }
-}
+import LocationIcon from '@/components/LocationIcon'
 
 @Component({
   components: {
@@ -45,30 +42,39 @@ const decoratorBuilder = function(offset: string, opacity: number) {
 })
 export default class Map extends Vue {
   public center = L.latLng(-34.9205, -57.953646)
-  public options = {
-    zoomControl: false,
-  }
+  public icon = LocationIcon
+  public options = { zoomControl: false }
 
-  public icon = L.icon(
-    Object.assign({}, L.Icon.Default.prototype.options, {
-      iconUrl,
-      shadowUrl,
-      iconRetinaUrl,
-    }),
-  )
-
-  get llA() {
-    return this.$store.getters.llA
+  move(e: LeafletMouseEvent) {
+    this.center = e.target.getCenter()
   }
-  set llA(val) {
-    this.$store.dispatch('setllA', val)
+  get latlng() {
+    return this.$route.params.point === 'origin'
+      ? this.$store.getters.llA
+      : this.$store.getters.llB
+  }
+  set latlng(val) {
+    this.$route.params.point === 'origin'
+      ? this.$store.dispatch('setllA', val)
+      : this.$store.dispatch('setllB', val)
+  }
+  public goBack() {
+    this.$router.back()
   }
 }
 </script>
 
 
 <style lang="scss" scoped>
-.map-location-picker {
+.map-picker {
   height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.mylocation {
+  position: absolute !important;
+  right: 0;
+  bottom: 15px;
+  z-index: 1000;
 }
 </style>

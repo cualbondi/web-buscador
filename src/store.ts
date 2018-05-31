@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import absearch from './modules/absearch'
-import ui from './modules/ui'
-import analyticsMiddleware from './analyticsMiddleware'
+import absearch from '@/modules/absearch'
+import ui from '@/modules/ui'
+import analyticsMiddleware from '@/middleware/analytics'
 import { isProd } from '@/config'
 
 Vue.use(Vuex)
@@ -20,7 +20,5 @@ export default new Vuex.Store<RootState>({
     ui,
   },
   strict: isProd,
-  plugins: [
-    analyticsMiddleware,
-  ],
+  plugins: [analyticsMiddleware],
 })

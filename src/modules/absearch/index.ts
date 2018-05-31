@@ -2,12 +2,13 @@ import { Module } from 'vuex'
 import { LatLng } from 'leaflet'
 import { RootState } from '@/store'
 import { geobufToLatlngs } from '@/utils'
-import api from '@/api'
+import api from '@/api/api'
+import { Recorrido } from '@/api/schema'
 
 interface State {
   llA: LatLng | null
   llB: LatLng | null
-  results: string[]
+  results: Recorrido[]
   radius: number
 }
 
@@ -22,8 +23,15 @@ const module: Module<State, RootState> = {
   actions: {
     query({ commit, state }) {
       if (state.llA && state.llB) {
-        api.recorridos
-          .get(state.llA.lng, state.llA.lat, state.llB.lng, state.llB.lat, state.radius)
+        api
+          .recorridos(
+            state.llA.lng,
+            state.llA.lat,
+            state.llB.lng,
+            state.llB.lat,
+            state.radius,
+          )
+          .then(data => data.results)
           .then(results => commit('setResults', results))
       }
     },
@@ -46,7 +54,9 @@ const module: Module<State, RootState> = {
       dispatch('query')
     },
     setRadius({ state, commit, dispatch }, meters: number) {
-      if ( state.radius === meters ) { return }
+      if (state.radius === meters) {
+        return
+      }
       commit('setRadius', meters)
       dispatch('query')
     },
@@ -82,7 +92,7 @@ const module: Module<State, RootState> = {
   },
 
   mutations: {
-    setResults(state, results) {
+    setResults(state, results: Recorrido[]) {
       state.results = results
     },
     setllA(state, ll: LatLng) {
@@ -100,7 +110,7 @@ const module: Module<State, RootState> = {
     results(state) {
       return state.results
     },
-    getFirstRecorrido({ results }: { results: any[] }) {
+    getFirstRecorrido({ results }: { results: Recorrido[] }) {
       if (results.length === 0 || results[0].itinerario.length === 0) {
         return []
       }
@@ -117,5 +127,6 @@ const module: Module<State, RootState> = {
     },
   },
 }
+
 
 export default module
