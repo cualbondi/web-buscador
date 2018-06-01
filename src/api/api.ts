@@ -7,10 +7,10 @@ const client = axios.create({
 })
 
 const convertResults = function convertResultsGeobufToLatlngs(results: any) {
-  return results.map(result =>
+  return results.map((result: any) =>
     ({
       ...result,
-      itinerario: result.itinerario.map(parte =>
+      itinerario: result.itinerario.map((parte: any) =>
         ({ ...parte, ruta_corta: geobufToLatlngs(parte.ruta_corta) })
       ),
     })
