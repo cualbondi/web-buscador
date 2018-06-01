@@ -10,19 +10,24 @@ interface State {
   llB: LatLng | null
   results: Recorrido[]
   radius: number
+  resultSelected: number
+  resultsLoading: boolean
 }
 
 const module: Module<State, RootState> = {
   state: {
     llA: null,
     llB: null,
-    results: [],
     radius: 300,
+    results: [],
+    resultSelected: 0,
+    resultsLoading: false,
   },
 
   actions: {
     query({ commit, state }) {
       if (state.llA && state.llB) {
+        commit('startLoadingResults')
         api
           .recorridos(
             state.llA.lng,
@@ -33,6 +38,8 @@ const module: Module<State, RootState> = {
           )
           .then(data => data.results)
           .then(results => commit('setResults', results))
+          // .catch(err => notification?)
+          .then(data => commit('finishLoadingResults'))
       }
     },
     clickMap({ commit, state, dispatch }, ll: LatLng) {
@@ -60,7 +67,7 @@ const module: Module<State, RootState> = {
       commit('setRadius', meters)
       dispatch('query')
     },
-    fromGeoLocation({ dispatch, commit, state }, source: 'origin' | 'destination') {
+    fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
       return dispatch('geolocate').then(latlng => {
         if (source === 'origin') {
           return dispatch('setllA', latlng)
@@ -72,8 +79,19 @@ const module: Module<State, RootState> = {
   },
 
   mutations: {
+    startLoadingResults(state) {
+      state.resultsLoading = true
+      state.results = []
+    },
+    finishLoadingResults(state) {
+      state.resultsLoading = false
+    },
     setResults(state, results: Recorrido[]) {
       state.results = results
+      state.resultSelected = 0
+    },
+    setRecorridoSelectedIndex(state, index: number) {
+      state.resultSelected = index
     },
     setllA(state, ll: LatLng) {
       state.llA = ll
@@ -87,14 +105,17 @@ const module: Module<State, RootState> = {
   },
 
   getters: {
-    results(state) {
+    getRecorridos(state) {
       return state.results
     },
-    getFirstRecorrido({ results }: { results: Recorrido[] }) {
-      if (results.length === 0 || results[0].itinerario.length === 0) {
-        return []
-      }
-      return geobufToLatlngs(results[0].itinerario[0].ruta_corta)
+    getRecorridoSelectedIndex(state) {
+      return state.resultSelected
+    },
+    getRecorridoSelected(state) {
+      return state.results[state.resultSelected]
+    },
+    getRecorridosLoading(state) {
+      return state.resultsLoading
     },
     llA(state) {
       return state.llA

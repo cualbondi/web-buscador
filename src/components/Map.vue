@@ -1,13 +1,21 @@
 <template>
   <div class="mapContainer">
     <l-map :zoom="11" :center="center" @click="onClick" :options="options">
-      <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
-      <l-polyline :latLngs="recorrido" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity"></l-polyline>
-      <polylinedecorator :patterns="patterns" :paths="[recorrido]"></polylinedecorator>
-      <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
+      <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
+
+      <slot v-if="recorrido">
+        <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
+        <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
+        <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[0].ruta_corta]" />
+      </slot>
+
+      <l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" />
+
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon}" />
       <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon}" />
+
       <l-marker v-if="geolocation" :latLng="geolocation" :icon="icon"/>
+
     </l-map>
   </div>
 </template>
@@ -59,6 +67,12 @@ export default class Map extends Vue {
     zoomControl: false,
   }
 
+  public disabledPolyStyle = {
+    color: '#444',
+    opacity: 0.5,
+    weight: 5,
+  }
+
   public backPolyStyle = {
     color: '#555',
     opacity: 0.9,
@@ -79,8 +93,17 @@ export default class Map extends Vue {
 
   public icon = LocationIcon
 
+  get recorridos() {
+    return this.$store.getters.getRecorridos
+  }
+  get recorridoSelectedIndex() {
+    return this.$store.getters.getRecorridoSelectedIndex
+  }
+  set recorridoSelectedIndex(val) {
+    this.$store.dispatch('setRecorridoSelectedIndex', val)
+  }
   get recorrido() {
-    return this.$store.getters.getFirstRecorrido
+    return this.$store.getters.getRecorridoSelected
   }
   get llA() {
     return this.$store.getters.llA
