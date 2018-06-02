@@ -6,7 +6,6 @@ import L from 'leaflet'
 const icon = L.icon(
   Object.assign({}, L.Icon.Default.prototype.options, {
     iconUrl,
-    shadowUrl,
     iconRetinaUrl,
   }),
 )

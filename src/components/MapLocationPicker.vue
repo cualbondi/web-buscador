@@ -7,14 +7,14 @@
       </v-toolbar-side-icon>
       <v-toolbar-title class="white--text">Elige un destino</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon @click="onOk">
           ok
       </v-btn>
     </v-toolbar>
 
-    <l-map :zoom="11" :center="center" ref="mapRef" :options="options" @move="move">
+    <l-map :zoom="13" :center="center" ref="mapRef" :options="options" @move="move">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
-      <l-editablecirclemarker :latLng="center" :rad="300" :options="{icon}" />
+      <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon, draggable: false}" />
     </l-map>
     
     <v-btn class="mylocation" fab color="white">
@@ -25,7 +25,7 @@
 
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
@@ -38,28 +38,27 @@ import LocationIcon from '@/components/LocationIcon'
     LMap,
     LTileLayer,
     LEditablecirclemarker,
+    LMarker,
   },
 })
 export default class Map extends Vue {
-  public center = L.latLng(-34.9205, -57.953646)
+  @Prop() initialCenter: L.LatLng
+
   public icon = LocationIcon
   public options = { zoomControl: false }
+
+  center = this.initialCenter
 
   move(e: LeafletMouseEvent) {
     this.center = e.target.getCenter()
   }
-  get latlng() {
-    return this.$route.params.point === 'origin'
-      ? this.$store.getters.llA
-      : this.$store.getters.llB
-  }
-  set latlng(val) {
-    this.$route.params.point === 'origin'
-      ? this.$store.dispatch('setllA', val)
-      : this.$store.dispatch('setllB', val)
-  }
-  public goBack() {
+
+  goBack() {
     this.$router.back()
+  }
+
+  onOk() {
+    this.$emit('locationPicked', this.center)
   }
 }
 </script>

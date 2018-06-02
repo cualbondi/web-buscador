@@ -15,7 +15,7 @@
             </div>
 
             <result-list 
-            class="geolocation" 
+            class="geolocation"
             :results="fixedResults"
             @selection="onGeoSelection"
             ></result-list>
