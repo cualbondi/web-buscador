@@ -7,6 +7,8 @@
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[0].ruta_corta]" />
+        <l-marker v-if="recorrido.itinerario[0].p11" :latLng="recorrido.itinerario[0].p11" />
+        <l-marker v-if="recorrido.itinerario[0].p12" :latLng="recorrido.itinerario[0].p12" />
       </slot>
 
       <l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" />
@@ -54,6 +56,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
 @Component({
   components: {
     LMap,
+    LMarker,
     LTileLayer,
     LEditablecirclemarker,
     LPolyline,
@@ -133,6 +136,9 @@ export default class Map extends Vue {
 <style lang="scss" scoped>
   .mapContainer {
     height: 100%;
+    path.leaflet-interactive {
+      cursor: inherit;
+    }
   }
 </style>
 <style lang="scss">

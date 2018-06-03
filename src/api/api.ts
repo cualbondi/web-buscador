@@ -1,13 +1,14 @@
 import axios from 'axios'
 import { API_URL } from '@/config'
 import { Recorrido, ApiResponse } from './schema'
+import { geobufToLatlngs } from '@/utils'
 
 const client = axios.create({
   baseURL: API_URL,
 })
 
 const convertResults = function convertResultsGeobufToLatlngs(results: any) {
-  return results.map((result: any) =>
+  return results.map((result: Recorrido) =>
     ({
       ...result,
       itinerario: result.itinerario.map((parte: any) =>

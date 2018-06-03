@@ -3,7 +3,7 @@
     <side-menu></side-menu>
     <a-b-search-fields class="top"></a-b-search-fields>
     <Map class="middle" />
-    <ResultList v-if="false" class="bottom"></ResultList>
+    <RecorridosResultList v-if="recorridos" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom"/>
   </div>
 </template>
 
@@ -12,17 +12,26 @@ import { Component, Vue } from 'vue-property-decorator'
 import ABSearchFields from '@/components/ABSearchFields.vue'
 import Map from '@/components/Map.vue'
 import SideMenu from '@/components/SideMenu.vue'
-import ResultList from '@/components/ResultList.vue'
+import RecorridosResultList from '@/components/RecorridosResultList.vue'
 
 @Component({
   components: {
     ABSearchFields,
     Map,
     SideMenu,
-    ResultList,
+    RecorridosResultList,
   },
 })
 export default class Home extends Vue {
+  get recorridos() {
+    return this.$store.getters.getRecorridos
+  }
+  get recorridoSelectedIndex() {
+    return this.$store.getters.getRecorridoSelectedIndex
+  }
+  set recorridoSelectedIndex(val) {
+    this.$store.dispatch('setRecorridoSelectedIndex', val)
+  }
   get withResults() {
     return false ? 'with-results' : 'no-results'
   }

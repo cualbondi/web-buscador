@@ -1,15 +1,14 @@
 import { Module } from 'vuex'
 import { LatLng } from 'leaflet'
 import { RootState } from '@/store'
-import { geobufToLatlngs } from '@/utils'
 import api from '@/api/api'
 import { Recorrido } from '@/api/schema'
 
 interface State {
   llA: LatLng | null
   llB: LatLng | null
-  results: Recorrido[]
   radius: number
+  results: Recorrido[]
   resultSelected: number
   resultsLoading: boolean
 }
@@ -36,7 +35,6 @@ const module: Module<State, RootState> = {
             state.llB.lat,
             state.radius,
           )
-          .then(data => data.results)
           .then(results => commit('setResults', results))
           // .catch(err => notification?)
           .then(data => commit('finishLoadingResults'))
@@ -66,6 +64,9 @@ const module: Module<State, RootState> = {
       }
       commit('setRadius', meters)
       dispatch('query')
+    },
+    setRecorridoSelectedIndex({ state }, index: number) {
+      state.resultSelected = index
     },
     fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
       return dispatch('geolocate').then(latlng => {
