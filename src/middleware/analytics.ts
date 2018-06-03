@@ -1,10 +1,13 @@
 /* tslint:disable:no-console */
 
-import vueInstance from './main'
+import vueInstance from '@/main'
 import { isProd } from '@/config'
+import { Store } from 'vuex'
+import { RootState } from '@/store'
+import Vue from 'vue'
 
-export default (store: any) => {
-  store.subscribe((mutation: any, state: any) => {
+export default (store: Store<RootState>) => {
+  store.subscribe((mutation, state) => {
     if (!mutation.payload) {
       return
     }
@@ -19,7 +22,7 @@ export default (store: any) => {
     }
 
     if (d[0] && d[1]) {
-      (vueInstance as any).$ga.event({
+      vueInstance.$ga.event({
         eventCategory: d[0],
         eventAction: d[1],
         eventLabel: d[2],

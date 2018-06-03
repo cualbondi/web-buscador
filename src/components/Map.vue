@@ -21,10 +21,7 @@ import 'leaflet-polylinedecorator'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-
-import iconUrl from '@/assets/marker-icon.png'
-import iconRetinaUrl from '@/assets/marker-icon-2x.png'
-import shadowUrl from '@/assets/marker-shadow.png'
+import LocationIcon from '@/components/LocationIcon'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -78,10 +75,7 @@ export default class Map extends Vue {
     decoratorArrow3,
   ]
 
-  public icon = L.icon(Object.assign({},
-    L.Icon.Default.prototype.options,
-    {iconUrl, shadowUrl, iconRetinaUrl},
-  ))
+  public icon = LocationIcon
 
   get recorrido() {
     return this.$store.getters.getFirstRecorrido

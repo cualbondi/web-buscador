@@ -8,9 +8,6 @@
           "node_modules/**"
       ]
   },
-  "compilerOptions": {
-    "experimentalDecorators": true
-  },
   "rules": {
     "quotemark": [true, "single"],
     "indent": [true, "spaces", 2],

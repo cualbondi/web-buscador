@@ -7,7 +7,9 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [

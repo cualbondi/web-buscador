@@ -3,7 +3,7 @@
     <v-subheader v-if="title">{{ title }}</v-subheader>
     <template v-for="(result, index) in results">
       <v-divider v-if="shouldDivide(index)" inset :key="result.id + ' divider'"></v-divider>
-      <v-list-tile :key="result.id" @click="resultClick(result)">
+      <v-list-tile :key="result.id" @click="$emit('selection', result)">
         <v-list-tile-avatar>
           <v-icon :color="result.icon.color">{{result.icon.name}}</v-icon>
         </v-list-tile-avatar>
@@ -42,10 +42,6 @@ export default class Home extends Vue {
       this.results[0].hasOwnProperty('subtext')
     )
   }
-
-  // @Emit('selection')
-  // public resultClick(result: Result) {
-  // }
 
   public shouldDivide(index: number) {
     return index % 2 === 1

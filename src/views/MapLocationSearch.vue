@@ -1,24 +1,11 @@
 <template>
-    <div class="map-picker">
-        <v-toolbar dark color="primary">
-        <v-toolbar-side-icon @click="goBack"><v-icon dark>arrow_back</v-icon></v-toolbar-side-icon>
-        <v-toolbar-title class="white--text">Elige un destino</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-            ok
-        </v-btn>
-    </v-toolbar>
-        <MapLocationPicker class="mpicker-map" />
-        
-        <v-btn class="mylocation" fab color="white">
-            <v-icon dark>my_location</v-icon>
-        </v-btn>
-    </div>
+  <MapLocationPicker :initialCenter="latlng" @locationPicked="locationPicked" />
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MapLocationPicker from '@/components/MapLocationPicker.vue'
+import L from 'leaflet'
 
 @Component({
   components: {
@@ -26,23 +13,26 @@ import MapLocationPicker from '@/components/MapLocationPicker.vue'
   },
 })
 export default class extends Vue {
-  public goBack() {
-    this.$router.back()
+
+  get latlng() {
+    const latlng = this.$route.params.point === 'origin'
+      ? this.$store.getters.llA
+      : this.$store.getters.llB
+    return latlng || L.latLng(-34.9205, -57.953646)
   }
+  setLatlng(val: L.LatLng) {
+    this.$route.params.point === 'origin'
+      ? this.$store.dispatch('setllA', val)
+      : this.$store.dispatch('setllB', val)
+  }
+  locationPicked(center: L.LatLng){
+    this.setLatlng(center)
+    this.$router.push({name: "absearch"})
+  }
+
 }
 </script>
 
 
 <style lang="scss" scoped>
-.map-picker {
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-.mylocation {
-  position: absolute;
-  right: 0;
-  bottom: 15px;
-  z-index: 1000;
-}
 </style>
