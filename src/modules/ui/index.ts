@@ -1,6 +1,6 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
-import { geolocate as geolocateUtil, LatLng } from '@/utils'
+import { geolocate, LatLng } from '@/utils'
 
 interface State {
   sideMenuOpen: boolean
@@ -13,14 +13,14 @@ const module: Module<State, RootState> = {
     geolocation: null,
   },
   actions: {
-    setSideMenu({ commit }, value) {
+    setSideMenu({ commit }, value: boolean) {
       commit('setSideMenu', value)
     },
     openSideMenu({ commit }) {
       commit('setSideMenu', true)
     },
     geolocate({ commit }) {
-      return geolocateUtil().then(latlng => {
+      return geolocate().then(latlng => {
         commit('setGeolocation', latlng)
         return latlng
       })

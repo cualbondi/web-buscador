@@ -41,7 +41,7 @@ export const geolocate = (): Promise<LatLng> =>
         { enableHighAccuracy: true },
       )
     } else {
-      console.error('Oops, your browser does not support geolocation')
+      window.alert('Oops, your browser does not support geolocation')
       reject()
     }
   })
