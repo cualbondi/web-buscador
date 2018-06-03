@@ -2,6 +2,13 @@
   <v-app>
     <div id="root">
       <router-view/>
+      <v-snackbar
+        :timeout="5000"
+        v-model="messageActive"
+      >
+        {{ messageText }}
+        <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
+      </v-snackbar>
     </div>
   </v-app>
 </template>
@@ -11,7 +18,20 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  get messageActive() {
+    return this.$store.getters.messageActive
+  }
+  set messageActive(val) {
+    this.$store.dispatch('setMessageActive', val)
+  }
+  closeMessage() {
+    this.$store.dispatch('setMessageActive', false)
+  }
+  get messageText() {
+    return this.$store.getters.messageText
+  }
+}
 </script>
 
 <style lang="scss">
