@@ -60,27 +60,7 @@ const module: Module<State, RootState> = {
       commit('setRadius', meters)
       dispatch('query')
     },
-    geolocate({ commit }) {
-      return new Promise((resolve, reject) => {
-        if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            position => {
-              const lat = position.coords.latitude.toString()
-              const lng = position.coords.longitude.toString()
-              resolve({ lat, lng })
-            },
-            err => {
-              reject(err)
-            },
-            { enableHighAccuracy: true },
-          )
-        } else {
-          window.alert('Oops, your browser does not support geolocation')
-          reject()
-        }
-      })
-    },
-    fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
+    fromGeoLocation({ dispatch, commit, state }, source: 'origin' | 'destination') {
       return dispatch('geolocate').then(latlng => {
         if (source === 'origin') {
           return dispatch('setllA', latlng)

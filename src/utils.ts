@@ -21,3 +21,27 @@ export const geobufToLatlngs = function(base64str: string) {
 
   return coordinates
 }
+
+export interface LatLng {
+  lat: string, lng: string
+}
+
+export const geolocate = (): Promise<LatLng> =>
+  new Promise((resolve, reject) => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const lat = position.coords.latitude.toString()
+          const lng = position.coords.longitude.toString()
+          resolve({ lat, lng })
+        },
+        err => {
+          reject(err)
+        },
+        { enableHighAccuracy: true },
+      )
+    } else {
+      console.error('Oops, your browser does not support geolocation')
+      reject()
+    }
+  })

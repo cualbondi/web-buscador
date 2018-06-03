@@ -7,6 +7,7 @@
       <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon}" />
       <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon}" />
+      <l-marker v-if="geolocation" :latLng="geolocation" :icon="icon"/>
     </l-map>
   </div>
 </template>
@@ -49,6 +50,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
     LEditablecirclemarker,
     LPolyline,
     Polylinedecorator,
+    LMarker,
   },
 })
 export default class Map extends Vue {
@@ -97,6 +99,9 @@ export default class Map extends Vue {
   }
   public onClick(e: LeafletMouseEvent) {
     this.$store.dispatch('clickMap', e.latlng)
+  }
+  get geolocation() {
+    return this.$store.getters.geolocation
   }
 }
 </script>
