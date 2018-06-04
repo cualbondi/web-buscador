@@ -7,7 +7,7 @@
       <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon}" />
       <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon}" />
-      <l-marker v-if="geolocation" :latLng="geolocation" :icon="icon"/>
+      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :icon="icon" :options="markerOptions"/>
     </l-map>
   </div>
 </template>
@@ -59,6 +59,15 @@ export default class Map extends Vue {
     zoomControl: false,
   }
 
+  markerOptions = {
+    draggable: false,
+    radius: 0,
+    icon: new L.DivIcon({ className: 'location-marker' }),
+    opacity: 0,
+    fillOpacity: 0.1,
+    fillColor: 'red'
+  }
+
   public backPolyStyle = {
     color: '#555',
     opacity: 0.9,
@@ -71,11 +80,7 @@ export default class Map extends Vue {
     weight: 8,
   }
 
-  public patterns = [
-    decoratorArrow1,
-    decoratorArrow2,
-    decoratorArrow3,
-  ]
+  public patterns = [decoratorArrow1, decoratorArrow2, decoratorArrow3]
 
   public icon = LocationIcon
 
@@ -108,13 +113,43 @@ export default class Map extends Vue {
 
 
 <style lang="scss" scoped>
-  .mapContainer {
-    height: 100%;
-  }
+.mapContainer {
+  height: 100%;
+}
 </style>
 <style lang="scss">
-  .osmTileLayer {
-    opacity: 0.9 !important;
-    filter: saturate(90%);
+.osmTileLayer {
+  opacity: 0.9 !important;
+  filter: saturate(90%);
+}
+div.location-marker {
+  border: 1px solid #428bca;
+  background-color: #5bc0de;
+  height: 16px !important;
+  width: 16px !important;
+  border-radius: 8px;
+  margin: -8px 0 0 -8px !important;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.5s infinite alternate;
+}
+
+div.location-marker.red {
+  background-color: red;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 1;
   }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
 </style>

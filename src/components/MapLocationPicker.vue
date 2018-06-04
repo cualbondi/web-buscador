@@ -12,7 +12,7 @@
       </v-btn>
     </v-toolbar>
 
-    <l-map :zoom="13" :center="center" ref="mapRef" :options="options" @move="move">
+    <l-map :zoom="zoom" :center="center" ref="mapRef" :options="options" @move="move" @moveend="moveend">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon, draggable: false}" />
       <l-marker v-if="geolocation" :latLng="geolocation" :icon="icon"/>
@@ -48,11 +48,14 @@ export default class Map extends Vue {
   public icon = LocationIcon
   public options = { zoomControl: false }
 
-  center = this.initialCenter
+  center = {...this.initialCenter}
+  zoom = 13
 
-
+  updatingGeolocation = false
   move(e: LeafletMouseEvent) {
-    this.center = e.target.getCenter()
+    if (!this.updatingGeolocation){
+      this.center = e.target.getCenter()
+    }
   }
 
   goBack() {
@@ -68,7 +71,14 @@ export default class Map extends Vue {
   }
 
   geolocate(){
-    this.$store.dispatch('geolocate')
+    this.$store.dispatch('geolocate').then(position => {
+      this.updatingGeolocation = true
+      this.center = this.geolocation
+      this.zoom = 16
+    })
+  }
+  moveend(){
+    this.updatingGeolocation = false
   }
 }
 </script>
