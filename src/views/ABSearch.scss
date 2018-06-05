@@ -20,20 +20,22 @@
   }
   
   @media (max-width: 600px) {
-    .no-results {
-      grid-template-areas: 'top' 'map' 'map';
-    }
-    .with-results {
-      grid-template-areas: 'top' 'map' 'bottom';
-    }
     .main {
-      grid-template-rows: 120px auto 50px;
+      grid-template-columns: 1fr;
+      &.no-results {
+        grid-template-rows: 120px 1fr;
+        grid-template-areas: 'top' 'map';
+      }
+      &.with-results {
+        grid-template-rows: 120px 1fr 90px;
+        grid-template-areas: 'top' 'map' 'bottom';
+      }
     }
   }
   @media (min-width: 601px) {
     .main {
       grid-template-areas: 'top map' 'bottom map';
-      grid-template-rows: 130px auto;
-      grid-template-columns: 400px auto;
+      grid-template-rows: 130px 1fr;
+      grid-template-columns: 400px 1fr;
     }
   }

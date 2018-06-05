@@ -3,7 +3,7 @@
     <side-menu></side-menu>
     <a-b-search-fields class="top"></a-b-search-fields>
     <Map class="middle" />
-    <RecorridosResultList v-if="recorridos" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom"/>
+    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom" />
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default class Home extends Vue {
     this.$store.dispatch('setRecorridoSelectedIndex', val)
   }
   get withResults() {
-    return false ? 'with-results' : 'no-results'
+    return this.recorridos.length > 0 ? 'with-results' : 'no-results'
   }
 }
 </script>
