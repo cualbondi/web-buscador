@@ -61,7 +61,6 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
     LEditablecirclemarker,
     LPolyline,
     Polylinedecorator,
-    LMarker,
   },
 })
 export default class Map extends Vue {
