@@ -65,8 +65,8 @@ const module: Module<State, RootState> = {
       commit('setRadius', meters)
       dispatch('query')
     },
-    setRecorridoSelectedIndex({ state }, index: number) {
-      state.resultSelected = index
+    setRecorridoSelectedIndex({ commit }, index: number) {
+      commit('setRecorridoSelectedIndex', index);
     },
     fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
       return dispatch('geolocate').then(latlng => {
@@ -92,7 +92,9 @@ const module: Module<State, RootState> = {
       state.resultSelected = 0
     },
     setRecorridoSelectedIndex(state, index: number) {
-      state.resultSelected = index
+      if (index < state.results.length && index > -1) {
+        state.resultSelected = index
+      }
     },
     setllA(state, ll: LatLng) {
       state.llA = ll

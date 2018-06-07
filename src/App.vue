@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div id="root">
+    <div id="root" v-resize="onResize">
       <router-view/>
     </div>
   </v-app>
@@ -11,7 +11,15 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted () {
+    this.onResize()
+  }
+  onResize () {
+    // TODO: debounce this using https://www.npmjs.com/package/debounce
+    this.$store.dispatch('updateAppWidth')
+  }
+}
 </script>
 
 <style lang="scss">

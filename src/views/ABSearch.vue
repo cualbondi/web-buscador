@@ -3,7 +3,7 @@
     <side-menu></side-menu>
     <a-b-search-fields class="top"></a-b-search-fields>
     <Map class="middle" />
-    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom" />
+    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :small="isSmallScreen" />
   </div>
 </template>
 
@@ -23,6 +23,9 @@ import RecorridosResultList from '@/components/RecorridosResultList.vue'
   },
 })
 export default class Home extends Vue {
+  get isSmallScreen() {
+    return this.$store.getters.isSmallScreen
+  }
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
