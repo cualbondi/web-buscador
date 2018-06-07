@@ -32,6 +32,20 @@
   </div>
 </template>
 
+<script lang="ts">
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+import { Recorrido } from '@/api/schema'
+
+@Component({})
+export default class Home extends Vue {
+  @Prop() public results!: Recorrido[]
+  @Prop() public selectedIndex: number
+  @Prop() public small: boolean
+
+  directionRight = true
+
+}
+</script>
 
 <style lang="scss" scoped>
 .single-result {
@@ -44,6 +58,7 @@
   > span.arrow-left {
     grid-area: left;
     background: white;
+    border-right: 1px solid #ddd;
     z-index: 10;
     display: grid;
     height: 100%;
@@ -51,9 +66,11 @@
     cursor: pointer;
   }
   > span.card {
+    background: white;
     position: relative;
     overflow: hidden;
     span.animated {
+      background: white;
       position: absolute;
       grid-area: card;
       display: grid;
@@ -80,6 +97,7 @@
   > span.arrow-right {
     grid-area: right;
     background: white;
+    border-left: 1px solid #ddd;
     z-index: 10;
     display: grid;
     height: 100%;
@@ -88,11 +106,18 @@
   }
 }
 
+@media (min-width: 601px) {
+  .single-result {
+    display: none;
+  }
+}
+
+
 $speed: 0.2s;
 
 .directionRight {
   &.fade-enter-active, &.fade-leave-active {
-    right: -150%;
+    right: -100%;
     animation: slideRight $speed forwards;
   }
   &.fade-leave-to {
@@ -100,7 +125,7 @@ $speed: 0.2s;
     animation: slideRight $speed forwards;
   }
   &.fade-enter-active {
-    right: -150%;
+    right: -100%;
     animation: slideRightBack $speed forwards;
   }
   &.fade-enter {
@@ -109,7 +134,7 @@ $speed: 0.2s;
   }
 }
 @keyframes slideRight {
-    100% { right: -150%; }
+    100% { right: -100%; }
 }
 @keyframes slideRightBack {
     100% { right: 0; }
@@ -117,7 +142,7 @@ $speed: 0.2s;
 
 .directionLeft {
   &.fade-leave-active {
-    left: -150%;
+    left: -100%;
     animation: slideLeft $speed forwards;
   }
   &.fade-leave-to {
@@ -125,7 +150,7 @@ $speed: 0.2s;
     animation: slideLeft $speed forwards;
   }
   &.fade-enter-active {
-    left: -150%;
+    left: -100%;
     animation: slideLeftBack $speed forwards;
   }
   &.fade-enter {
@@ -134,7 +159,7 @@ $speed: 0.2s;
   }
 }
 @keyframes slideLeft {
-    100% { left: -150%; }
+    100% { left: -100%; }
 }
 @keyframes slideLeftBack {
     100% { left: 0; }
@@ -152,18 +177,3 @@ $speed: 0.2s;
   background: #DEF
 }
 </style>
-
-<script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
-import { Recorrido } from '@/api/schema'
-
-@Component({})
-export default class Home extends Vue {
-  @Prop() public results!: Recorrido[]
-  @Prop() public selectedIndex: number
-  @Prop() public small: boolean
-
-  directionRight = true
-
-}
-</script>
