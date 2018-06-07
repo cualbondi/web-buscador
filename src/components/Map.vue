@@ -7,16 +7,20 @@
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[0].ruta_corta]" />
-        <l-marker v-if="recorrido.itinerario[0].p11" :latLng="recorrido.itinerario[0].p11" />
-        <l-marker v-if="recorrido.itinerario[0].p12" :latLng="recorrido.itinerario[0].p12" />
+        <l-marker v-if="recorrido.itinerario[0].p1" :latLng="recorrido.itinerario[0].p1.latlng" :icon="stopIcon">
+          <l-popup>{{recorrido.itinerario[0].p1.nombre}}</l-popup>
+        </l-marker>
+        <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIcon">
+          <l-popup>{{recorrido.itinerario[0].p2.nombre}}</l-popup>
+        </l-marker>
       </slot>
 
       <l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" />
 
-      <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon}" />
-      <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon}" />
+      <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon: aIcon}" />
+      <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon: bIcon}" />
 
-      <l-marker v-if="geolocation" :latLng="geolocation" :icon="icon"/>
+      <l-marker v-if="geolocation" :latLng="geolocation" :icon="locationIcon"/>
 
     </l-map>
   </div>
@@ -25,14 +29,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker, LPolyline } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LPolyline, LPopup } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-import LocationIcon from '@/components/LocationIcon'
+import { LocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -61,6 +65,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
     LEditablecirclemarker,
     LPolyline,
     Polylinedecorator,
+    LPopup,
   },
 })
 export default class Map extends Vue {
@@ -93,7 +98,10 @@ export default class Map extends Vue {
     decoratorArrow3,
   ]
 
-  public icon = LocationIcon
+  public locationIcon = LocationIcon
+  public stopIcon = StopIcon
+  public aIcon = AIcon
+  public bIcon = BIcon
 
   get recorridos() {
     return this.$store.getters.getRecorridos
