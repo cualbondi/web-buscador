@@ -7,9 +7,10 @@
       <span class="card">
         <transition name="fade">
           <span class="animated" :class="{directionRight: directionRight, directionLeft: !directionRight}" v-for="(result, $index) in results" :key="result.id" v-if="selectedIndex == $index">
-            <span class="avatar">{{$index+1}}</span>
+            <span class="avatar"><v-icon>directions_bus</v-icon></span>
             <span class="title" v-html="results[selectedIndex].itinerario[0].nombre"></span>
             <span class="description">de {{results[selectedIndex].itinerario[0].inicio}} a {{results[selectedIndex].itinerario[0].fin}}</span>
+            <span class="distances"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_bondi/100)/10}}km</span>
           </span>
         </transition>
       </span>
@@ -26,6 +27,7 @@
         <v-list-tile-content>
           <v-list-tile-title v-html="result.itinerario[0].nombre"></v-list-tile-title>
           <v-list-tile-sub-title>de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-tile-sub-title>
+          <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
@@ -76,14 +78,17 @@ export default class Home extends Vue {
       display: grid;
       height: 100%;
       width: 100%;
+      padding-top: 2%;
       grid-template-columns: 35px 1fr;
-      grid-template-rows: 50% 50%;
+      grid-template-rows: 43% 25% 25%;
       grid-template-areas:
         "avatar title"
-        "description description";
+        "description description"
+        "distances distances";
       > span.avatar {
         grid-area: avatar;
         align-self: center;
+        justify-self: center;
       }
       > span.title {
         grid-area: title;
@@ -91,6 +96,17 @@ export default class Home extends Vue {
       }
       > span.description {
         grid-area: description;
+        align-self: center;
+        margin-left: 10px;
+      }
+      > span.distances {
+        grid-area: distances;
+        align-self: center;
+        margin-left: 8px;
+        .v-icon {
+          font-size: 17px;
+          vertical-align: text-top;
+        }
       }
     }
   }
