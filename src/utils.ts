@@ -23,28 +23,11 @@ export const geobufToLatlngs = function(base64str: string) {
   return coordinates
 }
 
-export const geolocate = (): Promise<Coordinates> =>
-  new Promise((resolve, reject) => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          resolve(position.coords)
-        },
-        err => {
-          reject(err)
-        },
-        { enableHighAccuracy: true, maximumAge: 2000 },
-      )
-    } else {
-      reject()
-    }
-  })
+type OnPermissionChangedCallback = (status: string) => void
 
-export const checkGeolocationPermission = (
-  onPermissionChanged: (status: string) => void,
-) => {
+export function checkGeolocationPermission(onPermissionChanged: OnPermissionChangedCallback) {
   // Check for Geolocation API permissions
-  ;(navigator as any).permissions
+  (navigator as any).permissions
     .query({ name: 'geolocation' })
     .then(function(permissionStatus: any) {
       onPermissionChanged(permissionStatus.state)
@@ -73,7 +56,7 @@ class GeolocationObservable {
   // array of observers for next value
   private takeFirstObservers: Array<{
     resolve: any
-    reject: any
+    reject: any,
   }>
 
   private constructor() {
@@ -83,12 +66,14 @@ class GeolocationObservable {
   }
 
   public start() {
-    this.watchId = navigator.geolocation.watchPosition(
-      position => this.update(position.coords),
-      err => console.error(err),
-      { enableHighAccuracy: true, maximumAge: 2000 },
-    )
-    this.started = true
+    if (!this.started) {
+      this.watchId = navigator.geolocation.watchPosition(
+        position => this.update(position.coords),
+        err => console.error(err),
+        { enableHighAccuracy: true, maximumAge: 2000 },
+      )
+      this.started = true
+    }
   }
   public stop() {
     navigator.geolocation.clearWatch(this.watchId)
@@ -109,20 +94,21 @@ class GeolocationObservable {
     this.takeFirstObservers = []
   }
   public addListener(observer: Observer) {
-    if (!this.started) {
-      this.start()
-    }
     this.takeManyObservers.push(observer)
   }
   public takeFirst(cache = true): Promise<Coordinates> {
     const lastCoordinate = this.lastCoordinate
 
+    // start watching since a position is immediately requested
     if (!this.started) {
       this.start()
     }
+
+    // resolve from cache if available
     if (cache && lastCoordinate !== null) {
       return new Promise(resolve => resolve(lastCoordinate))
     }
+    // return a promise that will resolve on next update
     return new Promise((resolve, reject) => {
       this.takeFirstObservers.push({
         reject,

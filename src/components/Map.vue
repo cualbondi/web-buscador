@@ -7,7 +7,7 @@
       <l-polyline :latLngs="recorrido" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity"></l-polyline>
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon}" />
       <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon}" />
-      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :icon="icon" :options="markerOptions"/>
+      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
   </div>
 </template>
@@ -106,7 +106,13 @@ export default class Map extends Vue {
     this.$store.dispatch('clickMap', e.latlng)
   }
   get geolocation() {
-    return this.$store.getters.geolocation
+    const coordinates: Coordinates = this.$store.getters.geolocation
+    if (coordinates === null) return null
+    return {
+      lat: coordinates.latitude,
+      lng: coordinates.longitude,
+      precision: coordinates.accuracy,
+    }
   }
 }
 </script>

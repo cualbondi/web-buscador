@@ -15,7 +15,7 @@
     <l-map :zoom="zoom" :center="center" ref="mapRef" :options="options" @move="move" @moveend="moveend">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
       <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon, draggable: false}" />
-      <l-marker v-if="geolocation" :latLng="geolocation" :icon="icon"/>
+      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
     
     <v-btn class="mylocation" fab color="white" @click="geolocate">
@@ -34,6 +34,7 @@ import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import LocationIcon from '@/components/LocationIcon'
 
+
 @Component({
   components: {
     LMap,
@@ -51,6 +52,15 @@ export default class Map extends Vue {
   center = {...this.initialCenter}
   zoom = 13
 
+  markerOptions = {
+    draggable: false,
+    radius: 0,
+    icon: new L.DivIcon({ className: 'location-marker' }),
+    opacity: 0,
+    fillOpacity: 0.1,
+    fillColor: 'red'
+  }
+
   updatingGeolocation = false
   move(e: LeafletMouseEvent) {
     if (!this.updatingGeolocation){
@@ -67,13 +77,22 @@ export default class Map extends Vue {
   }
 
   get geolocation() {
-    return this.$store.getters.geolocation
+    const coordinates: Coordinates = this.$store.getters.geolocation
+    if (coordinates === null) return null
+    return {
+      lat: coordinates.latitude,
+      lng: coordinates.longitude,
+      precision: coordinates.accuracy,
+    }
   }
 
   geolocate(){
     this.$store.dispatch('geolocate').then(position => {
       this.updatingGeolocation = true
-      this.center = this.geolocation
+      this.center = {
+        lat: position.latitude,
+        lng: position.longitude,
+      }
       this.zoom = 16
     })
   }

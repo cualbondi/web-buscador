@@ -1,6 +1,5 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
-import { geolocate } from '@/utils'
 
 interface State {
   sideMenuOpen: boolean

@@ -1,9 +1,13 @@
 import { Module } from 'vuex'
-import { LatLng } from 'leaflet'
 import { RootState } from '@/store'
 import { geobufToLatlngs } from '@/utils'
 import api from '@/api/api'
 import { Recorrido } from '@/api/schema'
+
+interface LatLng {
+  lat: number
+  lng: number
+}
 
 interface State {
   llA: LatLng | null
@@ -62,10 +66,11 @@ const module: Module<State, RootState> = {
     },
     fromGeoLocation({ dispatch, commit, state }, source: 'origin' | 'destination') {
       return dispatch('geolocate').then(latlng => {
+        const ll = {lat: latlng.latitude, lng: latlng.longitude}
         if (source === 'origin') {
-          return dispatch('setllA', latlng)
+          return dispatch('setllA', ll)
         } else {
-          return dispatch('setllB', latlng)
+          return dispatch('setllB', ll)
         }
       })
     },

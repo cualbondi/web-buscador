@@ -14,32 +14,23 @@ const module: Module<State, RootState> = {
   },
   actions: {
     geolocate({ commit, dispatch }) {
-      return geolocationObservable
-        .takeFirst()
-        .then(latlng => {
-          commit('setGeolocation', latlng)
-          return latlng
-        })
-        .catch(e => {
-          dispatch('message', 'No se pudo acceder a la geolocalizacion')
-          console.error(e)
-        })
-    },
-    initGeolocation({ commit, dispatch }) {
-      checkGeolocationPermission(status => {
-        commit('setGeolocationPermission', status)
-        dispatch('startWatchingGeolocation')
+      return geolocationObservable.takeFirst().catch(e => {
+        dispatch('message', 'No se pudo acceder a la geolocalizacion')
+        console.error(e)
       })
     },
-    startWatchingGeolocation({ dispatch, commit, state }) {
-      if (state.geolocationPermission === 'granted') {
-        dispatch('watchGeolocation')
-      } else {
-        geolocationObservable.stop()
-        commit('setGeolocation', null)
-      }
-    },
-    watchGeolocation({ commit, dispatch }) {
+    initGeolocation({ commit, dispatch }) {
+      // add a hook to geolocation permission to save the state and start/stop watching
+      checkGeolocationPermission(status => {
+        commit('setGeolocationPermission', status)
+        if (status === 'granted') {
+          geolocationObservable.start()
+        } else {
+          geolocationObservable.stop()
+          commit('setGeolocation', null)
+        }
+      })
+      // add the listener to get position updates
       geolocationObservable.addListener(position =>
         commit('setGeolocation', position),
       )
