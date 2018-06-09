@@ -11,6 +11,9 @@ interface State {
   results: Recorrido[]
   resultSelected: number
   resultsLoading: boolean
+  resultsPage: number
+  resultsMore: boolean
+  resultsMoreLoading: boolean
 }
 
 const module: Module<State, RootState> = {
@@ -21,6 +24,9 @@ const module: Module<State, RootState> = {
     results: [],
     resultSelected: 0,
     resultsLoading: false,
+    resultsPage: 1,
+    resultsMore: true,
+    resultsMoreLoading: false,
   },
 
   actions: {
@@ -34,11 +40,48 @@ const module: Module<State, RootState> = {
             state.llB.lng,
             state.llB.lat,
             state.radius,
+            state.resultsPage,
           )
-          .then(results => commit('setResults', results))
+          .then(
+            results => {
+              if (results.length < 5) {
+                commit('setResultsMore', false)
+              }
+              commit('setResults', results)
+            }
+          )
           // .catch(err => notification?)
           .then(data => commit('finishLoadingResults'))
       }
+    },
+    getNextPage({ commit, state, dispatch }) {
+      commit('startLoadingMoreResults')
+      return new Promise((resolve, reject) => {
+        if (state.llA && state.llB) {
+          api
+            .recorridos(
+              state.llA.lng,
+              state.llA.lat,
+              state.llB.lng,
+              state.llB.lat,
+              state.radius,
+              state.resultsPage + 1,
+            )
+            .then(
+              results => {
+                commit('appendResults', results)
+                commit('finishLoadingMoreResults')
+                if (results.length === 5) {
+                  commit('setResultsMore', true)
+                }
+                resolve(results.length)
+              }
+            )
+            .catch(() => {
+              commit('finishLoadingMoreResults')
+            })
+        }
+      })
     },
     clickMap({ commit, state, dispatch }, ll: LatLng) {
       if (!state.llA) {
@@ -65,8 +108,18 @@ const module: Module<State, RootState> = {
       commit('setRadius', meters)
       dispatch('query')
     },
-    setRecorridoSelectedIndex({ commit }, index: number) {
-      commit('setRecorridoSelectedIndex', index);
+    setRecorridoSelectedIndex({ state, commit, dispatch }, index: number) {
+      if (index < state.results.length ) {
+        commit('setRecorridoSelectedIndex', index)
+      } else {
+        if (state.resultsMore) {
+          dispatch('getNextPage').then(count => {
+            if (count > 0) {
+              commit('setRecorridoSelectedIndex', index)
+            }
+          })
+        }
+      }
     },
     fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
       return dispatch('geolocate').then(latlng => {
@@ -83,6 +136,8 @@ const module: Module<State, RootState> = {
     startLoadingResults(state) {
       state.resultsLoading = true
       state.results = []
+      state.resultsPage = 1
+      state.resultsMore = false
     },
     finishLoadingResults(state) {
       state.resultsLoading = false
@@ -90,11 +145,26 @@ const module: Module<State, RootState> = {
     setResults(state, results: Recorrido[]) {
       state.results = results
       state.resultSelected = 0
+      state.resultsMore = true
     },
     setRecorridoSelectedIndex(state, index: number) {
       if (index < state.results.length && index > -1) {
         state.resultSelected = index
       }
+    },
+    setResultsMore(state, val: boolean) {
+      state.resultsMore = val
+    },
+    startLoadingMoreResults(state) {
+      state.resultsMore = false
+      state.resultsMoreLoading = true
+    },
+    appendResults(state, results: Recorrido[]) {
+      state.results.push(...results)
+      state.resultsPage += 1
+    },
+    finishLoadingMoreResults(state) {
+      state.resultsMoreLoading = false
     },
     setllA(state, ll: LatLng) {
       state.llA = ll
@@ -119,6 +189,12 @@ const module: Module<State, RootState> = {
     },
     getRecorridosLoading(state) {
       return state.resultsLoading
+    },
+    getResultsMore(state) {
+      return state.resultsMore
+    },
+    getResultsMoreLoading(state) {
+      return state.resultsMoreLoading
     },
     llA(state) {
       return state.llA

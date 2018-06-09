@@ -1,10 +1,13 @@
 <template>
   <div>
+    <div v-if="resultsLoading && results.length == 0">
+      Buscando ...
+    </div>
     <div class="single-result">
       <span class="arrow-left" v-ripple @click="$emit('update:selectedIndex', selectedIndex - 1); directionRight = false">
         <v-icon>chevron_left</v-icon>
       </span>
-      <span class="card">
+      <span class="card" @click="toggleSmallResults">
         <transition name="fade">
           <span class="animated" :class="{directionRight: directionRight, directionLeft: !directionRight}" v-for="(result, $index) in results" :key="result.id" v-if="selectedIndex == $index">
             <span class="avatar"><v-icon>directions_bus</v-icon></span>
@@ -30,6 +33,10 @@
           <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
+      <v-list-tile>
+        <v-btn v-if="resultsMore" @click="getNextPage">Buscar mas resultados</v-btn>
+        <span v-if="resultsMoreLoading">Buscando mas ...</span>
+      </v-list-tile>
     </v-list>
   </div>
 </template>
@@ -43,6 +50,26 @@ export default class Home extends Vue {
   @Prop() public results!: Recorrido[]
   @Prop() public selectedIndex: number
   @Prop() public small: boolean
+
+  toggleSmallResults() {
+    this.$store.dispatch('toggleSmallResults')
+  }
+
+  getNextPage() {
+    this.$store.dispatch('getNextPage')
+  }
+
+  get resultsLoading() {
+    return this.$store.getters.getRecorridosLoading
+  }
+
+  get resultsMoreLoading() {
+    return this.$store.getters.getResultsMoreLoading
+  }
+
+  get resultsMore() {
+    return this.$store.getters.getResultsMore
+  }
 
   directionRight = true
 

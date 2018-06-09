@@ -24,8 +24,12 @@ const recorridos = (
   lngB: number,
   latB: number,
   rad: number,
-): Promise<ApiResponse<Recorrido>> => {
-  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=la-plata&page=1&t=false`
+  page: number | undefined,
+): Promise<Recorrido[]> => {
+  if (!page) {
+    page = 1
+  }
+  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=la-plata&page=${page}&t=false`
   return client.get(url).then(res => convertResults(res.data.results))
 }
 

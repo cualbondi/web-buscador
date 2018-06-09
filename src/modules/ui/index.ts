@@ -5,14 +5,19 @@ import { geolocate, LatLng } from '@/utils'
 interface State {
   sideMenuOpen: boolean
   geolocation: LatLng | null
+  smallResults: boolean
 }
 
 const module: Module<State, RootState> = {
   state: {
     sideMenuOpen: false,
     geolocation: null,
+    smallResults: false,
   },
   actions: {
+    toggleSmallResults({ commit }) {
+      commit('toggleSmallResults')
+    },
     setSideMenu({ commit }, value: boolean) {
       commit('setSideMenu', value)
     },
@@ -27,6 +32,9 @@ const module: Module<State, RootState> = {
     },
   },
   mutations: {
+    toggleSmallResults(state) {
+      state.smallResults = !state.smallResults
+    },
     setSideMenu(state, open: boolean) {
       state.sideMenuOpen = open
     },
@@ -35,6 +43,9 @@ const module: Module<State, RootState> = {
     },
   },
   getters: {
+    getSmallResults(state) {
+      return state.smallResults
+    },
     sideMenuOpen(state) {
       return state.sideMenuOpen
     },
