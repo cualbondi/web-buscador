@@ -1,6 +1,6 @@
 <template>
   <div class="map-picker">
-    
+
     <v-toolbar dark color="primary">
       <v-toolbar-side-icon @click="goBack">
         <v-icon dark>arrow_back</v-icon>
@@ -17,7 +17,7 @@
       <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon, draggable: false}" />
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
-    
+
     <v-btn class="mylocation" fab color="white" @click="geolocate">
         <v-icon>my_location</v-icon>
     </v-btn>
@@ -32,7 +32,7 @@ import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
-import LocationIcon from '@/components/LocationIcon'
+import { LocationIcon } from '@/components/icons'
 
 
 @Component({

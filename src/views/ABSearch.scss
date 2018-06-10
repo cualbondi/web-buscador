@@ -18,22 +18,33 @@
   .bottom {
     grid-area: bottom;
   }
-  
+
   @media (max-width: 600px) {
-    .no-results {
-      grid-template-areas: 'top' 'map' 'map';
-    }
-    .with-results {
-      grid-template-areas: 'top' 'map' 'bottom';
-    }
     .main {
-      grid-template-rows: 120px auto 50px;
+      grid-template-columns: 1fr;
+      &.no-results {
+        grid-template-rows: 120px calc(100vh - 120px);
+        grid-template-areas: 'top' 'map';
+      }
+      &.with-results {
+        grid-template-rows: 120px calc(100vh - 120px - 90px) 90px;
+        grid-template-areas: 'top' 'map' 'bottom';
+      }
+    }
+    .bottom {
+      height: calc(100% - 120px - 150px);
+      background: white;
+    }
+    .bottom.small {
+      position: absolute;
+      width: 100%;
+      top: 170px;
     }
   }
   @media (min-width: 601px) {
     .main {
       grid-template-areas: 'top map' 'bottom map';
-      grid-template-rows: 130px auto;
-      grid-template-columns: 400px auto;
+      grid-template-rows: 130px calc(100vh - 130px);
+      grid-template-columns: 400px 1fr;
     }
   }

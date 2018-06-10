@@ -3,6 +3,7 @@ import { RootState } from '@/store'
 
 interface State {
   sideMenuOpen: boolean
+  smallResults: boolean
   messageText: string
   messageActive: boolean
 }
@@ -10,10 +11,14 @@ interface State {
 const module: Module<State, RootState> = {
   state: {
     sideMenuOpen: false,
+    smallResults: false,
     messageText: '',
     messageActive: false,
   },
   actions: {
+    toggleSmallResults({ commit }) {
+      commit('toggleSmallResults')
+    },
     setSideMenu({ commit }, value: boolean) {
       commit('setSideMenu', value)
     },
@@ -29,6 +34,9 @@ const module: Module<State, RootState> = {
     },
   },
   mutations: {
+    toggleSmallResults(state) {
+      state.smallResults = !state.smallResults
+    },
     setSideMenu(state, open: boolean) {
       state.sideMenuOpen = open
     },
@@ -40,6 +48,9 @@ const module: Module<State, RootState> = {
     },
   },
   getters: {
+    getSmallResults(state) {
+      return state.smallResults
+    },
     sideMenuOpen(state) {
       return state.sideMenuOpen
     },

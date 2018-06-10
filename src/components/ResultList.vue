@@ -31,7 +31,7 @@ export interface Result {
 
 @Component({})
 export default class Home extends Vue {
-  @Prop() public results!: Result[]
+  @Prop() public results: Result[]
 
   @Prop() public title?: string
 
