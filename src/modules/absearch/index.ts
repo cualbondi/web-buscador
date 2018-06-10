@@ -43,11 +43,11 @@ const module: Module<State, RootState> = {
             state.resultsPage,
           )
           .then(
-            results => {
-              if (results.length < 5) {
+            data => {
+              if (data.next) {
                 commit('setResultsMore', false)
               }
-              commit('setResults', results)
+              commit('setResults', data.results)
             }
           )
           // .catch(err => notification?)
@@ -68,13 +68,13 @@ const module: Module<State, RootState> = {
               state.resultsPage + 1,
             )
             .then(
-              results => {
-                commit('appendResults', results)
+              data => {
+                commit('appendResults', data.results)
                 commit('finishLoadingMoreResults')
-                if (results.length === 5) {
+                if (data.next) {
                   commit('setResultsMore', true)
                 }
-                resolve(results.length)
+                resolve(!!data.next)
               }
             )
             .catch(() => {

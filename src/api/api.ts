@@ -7,15 +7,18 @@ const client = axios.create({
   baseURL: API_URL,
 })
 
-const convertResults = function convertResultsGeobufToLatlngs(results: any) {
-  return results.map((result: Recorrido) =>
-    ({
-      ...result,
-      itinerario: result.itinerario.map((parte: any) =>
-        ({ ...parte, ruta_corta: geobufToLatlngs(parte.ruta_corta) })
-      ),
-    })
-  )
+const convertResults = function convertResultsGeobufToLatlngs(data: ApiResponse<Recorrido>) {
+  return {
+    ...data,
+    results: data.results.map((result: Recorrido) =>
+      ({
+        ...result,
+        itinerario: result.itinerario.map((parte: any) =>
+          ({ ...parte, ruta_corta: geobufToLatlngs(parte.ruta_corta) })
+        ),
+      })
+    ),
+  }
 }
 
 const recorridos = (
@@ -24,13 +27,10 @@ const recorridos = (
   lngB: number,
   latB: number,
   rad: number,
-  page: number | undefined,
-): Promise<Recorrido[]> => {
-  if (!page) {
-    page = 1
-  }
+  page = 1,
+): Promise<ApiResponse<Recorrido>> => {
   const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=la-plata&page=${page}&t=false`
-  return client.get(url).then(res => convertResults(res.data.results))
+  return client.get(url).then(res => convertResults(res.data))
 }
 
 export default {

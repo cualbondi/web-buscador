@@ -25,6 +25,7 @@ html,
   margin: 0;
   font-family: Roboto;
   background: #F5F5F5;
+  overflow: hidden !important;
 }
 
 .row {
