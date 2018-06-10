@@ -17,6 +17,7 @@ const module: Module<State, RootState> = {
       return geolocationObservable.takeFirst().catch(e => {
         dispatch('message', 'No se pudo acceder a la geolocalizacion')
         console.error(e)
+        return Promise.reject(e)
       })
     },
     initGeolocation({ commit, dispatch }) {

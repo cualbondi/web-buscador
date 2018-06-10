@@ -25,9 +25,11 @@ export const geobufToLatlngs = function(base64str: string) {
 
 type OnPermissionChangedCallback = (status: string) => void
 
-export function checkGeolocationPermission(onPermissionChanged: OnPermissionChangedCallback) {
+export function checkGeolocationPermission(
+  onPermissionChanged: OnPermissionChangedCallback,
+) {
   // Check for Geolocation API permissions
-  (navigator as any).permissions
+  ;(navigator as any).permissions
     .query({ name: 'geolocation' })
     .then(function(permissionStatus: any) {
       onPermissionChanged(permissionStatus.state)
@@ -50,13 +52,14 @@ class GeolocationObservable {
 
   private started: boolean
   private watchId: number
+  private listenerId: number = 0
   private lastCoordinate: Coordinates | null
   // array of observers of every update
-  private takeManyObservers: Observer[]
+  private takeManyObservers: { [id: number]: Observer }
   // array of observers for next value
   private takeFirstObservers: Array<{
     resolve: any
-    reject: any,
+    reject: any
   }>
 
   private constructor() {
@@ -64,12 +67,11 @@ class GeolocationObservable {
     this.takeFirstObservers = []
     this.lastCoordinate = null
   }
-
   public start() {
     if (!this.started) {
       this.watchId = navigator.geolocation.watchPosition(
         position => this.update(position.coords),
-        err => console.error(err),
+        err => this.reject(err),
         { enableHighAccuracy: true, maximumAge: 2000 },
       )
       this.started = true
@@ -83,7 +85,7 @@ class GeolocationObservable {
     // save for cache
     this.lastCoordinate = position
     // notify observers
-    for (const observer of this.takeManyObservers) {
+    for (const observer of Object.values(this.takeManyObservers)) {
       observer(position)
     }
     // resolve one time promises
@@ -94,7 +96,15 @@ class GeolocationObservable {
     this.takeFirstObservers = []
   }
   public addListener(observer: Observer) {
-    this.takeManyObservers.push(observer)
+    const id = this.listenerId
+    this.takeManyObservers[id] = observer
+    this.listenerId++
+    return id
+  }
+  public removeListener(id: number) {
+    if (this.takeManyObservers.hasOwnProperty(id)) {
+      delete this.takeManyObservers[id]
+    }
   }
   public takeFirst(cache = true): Promise<Coordinates> {
     const lastCoordinate = this.lastCoordinate
@@ -115,6 +125,11 @@ class GeolocationObservable {
         resolve,
       })
     })
+  }
+  private reject(error: PositionError) {
+    for (const observer of this.takeFirstObservers) {
+      observer.reject(error)
+    }
   }
 }
 export const geolocationObservable = GeolocationObservable.getInstance()
