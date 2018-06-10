@@ -51,6 +51,8 @@ export default class Home extends Vue {
   @Prop() public selectedIndex: number
   @Prop() public small: boolean
 
+  directionRight = true
+
   toggleSmallResults() {
     this.$store.dispatch('toggleSmallResults')
   }
@@ -70,8 +72,6 @@ export default class Home extends Vue {
   get resultsMore() {
     return this.$store.getters.getResultsMore
   }
-
-  directionRight = true
 
 }
 </script>
