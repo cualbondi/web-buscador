@@ -22,7 +22,7 @@
       </span>
     </div>
     <v-list :two-line="true" class="results">
-      <v-list-tile v-for="(result, $index) in results" :key="result.id" @click="$emit('update:selectedIndex', $index)" ripple :class="{selected: selectedIndex === $index}">
+      <v-list-tile v-for="(result, $index) in results" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
         <v-list-tile-avatar>
           <img v-if="result.itinerario.length === 1" :src="`/static/img/micros/30x35/${result.itinerario[0].foto}.png`" />
           <span v-if="result.itinerario.length === 2" title="Transbordo">T</span>

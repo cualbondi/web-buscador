@@ -15,7 +15,7 @@
         </l-marker>
       </slot>
 
-      <l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" />
+      <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
 
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon: aIcon}" />
       <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon: bIcon}" />
