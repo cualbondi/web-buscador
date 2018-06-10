@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import absearch from '@/modules/absearch'
 import ui from '@/modules/ui'
+import core from '@/modules/core'
 import analyticsMiddleware from '@/middleware/analytics'
 import { isProd } from '@/config'
 
@@ -18,6 +19,7 @@ export default new Vuex.Store<RootState>({
   modules: {
     absearch,
     ui,
+    core,
   },
   strict: isProd,
   plugins: [analyticsMiddleware],

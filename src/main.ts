@@ -10,6 +10,7 @@ import { isProd, GA_KEY, SENTRY_URL } from '@/config'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
+
 if (SENTRY_URL) {
   Raven
     .config(SENTRY_URL)

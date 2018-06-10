@@ -16,8 +16,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component({
-})
+@Component({})
 export default class App extends Vue {
   get messageActive() {
     return this.$store.getters.messageActive
@@ -30,6 +29,9 @@ export default class App extends Vue {
   }
   get messageText() {
     return this.$store.getters.messageText
+  }
+  mounted() {
+    this.$store.dispatch('initGeolocation')
   }
 }
 </script>
@@ -44,7 +46,7 @@ html,
   height: 100%;
   margin: 0;
   font-family: Roboto;
-  background: #F5F5F5;
+  background: #f5f5f5;
 }
 
 .row {
@@ -56,7 +58,7 @@ html,
 }
 .column {
   display: flex;
-  flex-direction: column
+  flex-direction: column;
 }
 .justify-center {
   justify-content: center;

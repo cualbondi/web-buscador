@@ -1,10 +1,8 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
-import { geolocate, LatLng } from '@/utils'
 
 interface State {
   sideMenuOpen: boolean
-  geolocation: LatLng | null
   messageText: string
   messageActive: boolean
 }
@@ -12,7 +10,6 @@ interface State {
 const module: Module<State, RootState> = {
   state: {
     sideMenuOpen: false,
-    geolocation: null,
     messageText: '',
     messageActive: false,
   },
@@ -30,21 +27,10 @@ const module: Module<State, RootState> = {
     setMessageActive({ commit }, active: boolean) {
       commit('setMessageActive', active)
     },
-    geolocate({ commit, dispatch }) {
-      return geolocate().then(latlng => {
-        commit('setGeolocation', latlng)
-        return latlng
-      }).catch(() => {
-        dispatch('message', 'No se pudo acceder a la geolocalizacion')
-      })
-    },
   },
   mutations: {
     setSideMenu(state, open: boolean) {
       state.sideMenuOpen = open
-    },
-    setGeolocation(state, geolocation: LatLng) {
-      state.geolocation = geolocation
     },
     setMessageText(state, text: string) {
       state.messageText = text
@@ -56,9 +42,6 @@ const module: Module<State, RootState> = {
   getters: {
     sideMenuOpen(state) {
       return state.sideMenuOpen
-    },
-    geolocation(state) {
-      return state.geolocation
     },
     messageActive(state) {
       return state.messageActive
