@@ -1,18 +1,19 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
-import { geolocate, LatLng } from '@/utils'
 
 interface State {
   sideMenuOpen: boolean
-  geolocation: LatLng | null
   smallResults: boolean
+  messageText: string
+  messageActive: boolean
 }
 
 const module: Module<State, RootState> = {
   state: {
     sideMenuOpen: false,
-    geolocation: null,
     smallResults: false,
+    messageText: '',
+    messageActive: false,
   },
   actions: {
     toggleSmallResults({ commit }) {
@@ -24,11 +25,12 @@ const module: Module<State, RootState> = {
     openSideMenu({ commit }) {
       commit('setSideMenu', true)
     },
-    geolocate({ commit }) {
-      return geolocate().then(latlng => {
-        commit('setGeolocation', latlng)
-        return latlng
-      })
+    message({ commit }, text: string) {
+      commit('setMessageText', text)
+      commit('setMessageActive', true)
+    },
+    setMessageActive({ commit }, active: boolean) {
+      commit('setMessageActive', active)
     },
   },
   mutations: {
@@ -38,8 +40,11 @@ const module: Module<State, RootState> = {
     setSideMenu(state, open: boolean) {
       state.sideMenuOpen = open
     },
-    setGeolocation(state, geolocation: LatLng) {
-      state.geolocation = geolocation
+    setMessageText(state, text: string) {
+      state.messageText = text
+    },
+    setMessageActive(state, active: boolean) {
+      state.messageActive = active
     },
   },
   getters: {
@@ -49,8 +54,11 @@ const module: Module<State, RootState> = {
     sideMenuOpen(state) {
       return state.sideMenuOpen
     },
-    geolocation(state) {
-      return state.geolocation
+    messageActive(state) {
+      return state.messageActive
+    },
+    messageText(state) {
+      return state.messageText
     },
   },
 }

@@ -2,6 +2,13 @@
   <v-app>
     <div id="root">
       <router-view/>
+      <v-snackbar
+        :timeout="5000"
+        v-model="messageActive"
+      >
+        {{ messageText }}
+        <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
+      </v-snackbar>
     </div>
   </v-app>
 </template>
@@ -9,9 +16,24 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
-@Component({
-})
-export default class App extends Vue {}
+@Component({})
+export default class App extends Vue {
+  get messageActive() {
+    return this.$store.getters.messageActive
+  }
+  set messageActive(val) {
+    this.$store.dispatch('setMessageActive', val)
+  }
+  closeMessage() {
+    this.$store.dispatch('setMessageActive', false)
+  }
+  get messageText() {
+    return this.$store.getters.messageText
+  }
+  mounted() {
+    this.$store.dispatch('initGeolocation')
+  }
+}
 </script>
 
 <style lang="scss">
@@ -37,7 +59,7 @@ html,
 }
 .column {
   display: flex;
-  flex-direction: column
+  flex-direction: column;
 }
 .justify-center {
   justify-content: center;

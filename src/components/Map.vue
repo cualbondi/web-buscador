@@ -20,7 +20,7 @@
       <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon: aIcon}" />
       <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon: bIcon}" />
 
-      <l-marker v-if="geolocation" :latLng="geolocation" :icon="locationIcon"/>
+      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
 
     </l-map>
   </div>
@@ -80,6 +80,15 @@ export default class Map extends Vue {
     weight: 5,
   }
 
+  public markerOptions = {
+    draggable: false,
+    radius: 0,
+    icon: new L.DivIcon({ className: 'location-marker' }),
+    opacity: 0,
+    fillOpacity: 0.1,
+    fillColor: 'red'
+  }
+
   public backPolyStyle = {
     color: '#555',
     opacity: 0.9,
@@ -92,11 +101,7 @@ export default class Map extends Vue {
     weight: 8,
   }
 
-  public patterns = [
-    decoratorArrow1,
-    decoratorArrow2,
-    decoratorArrow3,
-  ]
+  public patterns = [decoratorArrow1, decoratorArrow2, decoratorArrow3]
 
   public locationIcon = LocationIcon
   public stopIcon = StopIcon
@@ -134,23 +139,59 @@ export default class Map extends Vue {
     this.$store.dispatch('clickMap', e.latlng)
   }
   get geolocation() {
-    return this.$store.getters.geolocation
+    const coordinates: Coordinates = this.$store.getters.geolocation
+    if (coordinates === null) return null
+    return {
+      lat: coordinates.latitude,
+      lng: coordinates.longitude,
+      precision: coordinates.accuracy,
+    }
   }
 }
 </script>
 
 
 <style lang="scss" scoped>
-  .mapContainer {
-    height: 100%;
-    path.leaflet-interactive {
-      cursor: inherit;
-    }
+.mapContainer {
+  height: 100%;
+  path.leaflet-interactive {
+    cursor: inherit;
   }
+}
 </style>
 <style lang="scss">
-  .osmTileLayer {
-    opacity: 0.9 !important;
-    filter: saturate(90%);
+.osmTileLayer {
+  opacity: 0.9 !important;
+  filter: saturate(90%);
+}
+div.location-marker {
+  border: 1px solid #428bca;
+  background-color: #5bc0de;
+  height: 16px !important;
+  width: 16px !important;
+  border-radius: 8px;
+  margin: -8px 0 0 -8px !important;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.5s infinite alternate;
+}
+
+div.location-marker.red {
+  background-color: red;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 1;
   }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
 </style>
