@@ -15,8 +15,8 @@ export default (store: Store<RootState>) => {
     let d = [mutation.type]
 
     switch (mutation.type) {
-      case 'setllA': d = ['map', 'setll', 'A']; break
-      case 'setllB': d = ['map', 'setll', 'B']; break
+      case 'setA': d = ['map', 'setll', 'A']; break
+      case 'setB': d = ['map', 'setll', 'B']; break
       case 'clickMap': d = ['map', 'click']; break
       case 'setRadius': d = ['menu', 'setRadius', 'AB', mutation.payload]; break
     }

@@ -7,7 +7,8 @@
                 </v-btn>
                 <v-text-field
                 class="input"
-                v-model="location"
+               :value="location"
+               @input="setLocation"
                 :label="inputLabel"
                 flat
                 solo
@@ -20,10 +21,20 @@
             @selection="onGeoSelection"
             ></result-list>
 
-            <result-list 
+            <result-list
+            v-if="!location"
             class="previous-searches" 
             title="Ayer" 
             :results="results"
+            @selection="onLocationSelection"
+            ></result-list>
+
+             <result-list
+            v-if="location"
+            class="results" 
+            title="Resultados" 
+            :results="geocoderResults"
+            @selection="onLocationSelection"
             ></result-list>
 
         </div>
@@ -35,6 +46,9 @@
 import { Component, Vue } from 'vue-property-decorator'
 import ResultList, { Result } from '@/components/ResultList.vue'
 import Map from '@/components/Map.vue'
+import debounce from 'lodash/debounce'
+import { GeocoderResponse } from '@/api/schema'
+import { GeocoderResult } from '@/modules/absearch'
 
 @Component({
   components: {
@@ -43,7 +57,7 @@ import Map from '@/components/Map.vue'
   },
 })
 export default class Home extends Vue {
-  public location = ''
+  private location = ''
   public fixedResults: Result[] = [
     {
       id: 1,
@@ -97,6 +111,20 @@ export default class Home extends Vue {
     },
   ]
 
+  constructor() {
+    super()
+    this.searchGeocoder = debounce(this.searchGeocoder, 500)
+  }
+
+  setLocation(value: string) {
+    this.location = value
+    this.searchGeocoder(value)
+  }
+
+  searchGeocoder(query: string) {
+    this.$store.dispatch('geocode', query)
+  }
+
   get originOrDestination() {
     return this.$route.params.point
   }
@@ -110,7 +138,7 @@ export default class Home extends Vue {
       this.$store
         .dispatch('fromGeoLocation', this.originOrDestination)
         .then(() => this.$router.push({ name: 'absearch' }))
-        // .catch(err => console.error(err))
+      // .catch(err => console.error(err))
     } else {
       this.$router.push({
         name: 'map-location',
@@ -119,8 +147,40 @@ export default class Home extends Vue {
     }
   }
 
+  public onLocationSelection(selection: Result) {
+    const result: GeocoderResponse = this.$store.getters.geocoderResults[
+      selection.id
+    ]
+    const geocoderResult: GeocoderResult = {
+      lat: result.geom.coordinates[1],
+      lng: result.geom.coordinates[0],
+      type: 'geocoder',
+      name: result.nombre,
+    }
+    this.$store
+      .dispatch('fromGeocoder', {
+        source: this.originOrDestination,
+        result: geocoderResult,
+      })
+      .then(() => this.$router.push({ name: 'absearch' }))
+  }
+
   public goBack() {
     this.$router.back()
+  }
+
+  get geocoderResults(): Result[] {
+    const results: GeocoderResponse[] = this.$store.getters.geocoderResults
+    if (results.length === 0) {
+      return []
+    }
+    return results.map((result, index) => ({
+      id: index,
+      icon: {
+        name: 'access_time',
+      },
+      text: result.nombre,
+    }))
   }
 }
 </script>

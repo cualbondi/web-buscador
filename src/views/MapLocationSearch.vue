@@ -16,14 +16,14 @@ export default class extends Vue {
 
   get latlng() {
     const latlng = this.$route.params.point === 'origin'
-      ? this.$store.getters.llA
-      : this.$store.getters.llB
+      ? this.$store.getters.A
+      : this.$store.getters.B
     return latlng || L.latLng(-34.9205, -57.953646)
   }
   setLatlng(val: L.LatLng) {
     this.$route.params.point === 'origin'
-      ? this.$store.dispatch('setllA', val)
-      : this.$store.dispatch('setllB', val)
+      ? this.$store.dispatch('setA', val)
+      : this.$store.dispatch('setB', val)
   }
   locationPicked(center: L.LatLng){
     this.setLatlng(center)

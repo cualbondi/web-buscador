@@ -2,6 +2,7 @@ import Pbf from 'pbf'
 import geobuf from 'geobuf'
 import store from './store'
 
+
 export const geobufToLatlngs = function(base64str: string) {
   // convert base64str to Uint8Array
   const raw = atob(base64str)
