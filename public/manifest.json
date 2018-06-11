@@ -33,7 +33,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/index.html",
+  "start_url": "/web-buscador/index.html",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#FFFFFF",
