@@ -8,22 +8,24 @@ import { BASE_URL } from '@/config'
 
 Vue.use(Router)
 
+console.log(BASE_URL)
+
 export default new Router({
   mode: 'history',
   base: BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/:ciudadSlug/',
       name: 'absearch',
       component: ABSearch,
     },
     {
-      path: '/location/:point(origin|destination)',
+      path: '/:ciudadSlug/location/:point(origin|destination)',
       name: 'location',
       component: LocationSearch,
     },
     {
-      path: '/location/:point(origin|destination)/map',
+      path: '/:ciudadSlug/location/:point(origin|destination)/map',
       name: 'map-location',
       component: MapLocationSearch,
     },
