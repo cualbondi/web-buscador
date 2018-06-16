@@ -15,8 +15,19 @@ const productionPlugins = [
 
 module.exports = {
   baseUrl: BASE_URL,
-  lintOnSave: false,
   configureWebpack: {
     plugins: production ? productionPlugins : developmentPlugins,
-  }
+  },
+  lintOnSave: false,
+  pwa: {
+    workboxOptions: {
+      runtimeCaching: [
+        {
+          handler: 'networkFirst',
+          urlPattern: new RegExp('.*'),
+        },
+      ],
+      skipWaiting: true,
+    },
+  },
 }
