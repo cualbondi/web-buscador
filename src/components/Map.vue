@@ -1,6 +1,6 @@
 <template>
   <div class="mapContainer">
-    <l-map :zoom="11" :center="center" @click="onClick" :options="options">
+    <l-map :zoom="zoom" :center="center" @click="onClick" :options="options">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
 
       <slot v-if="recorrido">
@@ -28,7 +28,7 @@
 
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker, LPolyline, LPopup } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
@@ -69,7 +69,13 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
   },
 })
 export default class Map extends Vue {
-  public center = L.latLng(-34.9205, -57.953646)
+
+  @Prop({ default: () => L.latLng(-35.9205, -57.953646) })
+  center: L.LatLng
+
+  @Prop({ default: 11 })
+  zoom: number
+
   public options = {
     zoomControl: false,
   }

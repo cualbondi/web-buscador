@@ -30,6 +30,9 @@ export default class App extends Vue {
   get messageText() {
     return this.$store.getters.messageText
   }
+  created() {
+    this.$store.dispatch('setCiudad', this.$route.params.ciudadSlug)
+  }
   mounted() {
     this.$store.dispatch('initGeolocation')
   }
