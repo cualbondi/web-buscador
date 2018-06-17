@@ -2,7 +2,7 @@
   <div class="main" :class="withResults">
     <side-menu></side-menu>
     <a-b-search-fields class="top"></a-b-search-fields>
-    <Map class="middle" />
+    <Map class="middle" :center="center" :zoom="zoom" />
     <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :class="{small: smallResults}" />
   </div>
 </template>
@@ -13,6 +13,7 @@ import ABSearchFields from '@/components/ABSearchFields.vue'
 import Map from '@/components/Map.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import RecorridosResultList from '@/components/RecorridosResultList.vue'
+import L from 'leaflet'
 
 @Component({
   components: {
@@ -23,6 +24,12 @@ import RecorridosResultList from '@/components/RecorridosResultList.vue'
   },
 })
 export default class Home extends Vue {
+  get center() {
+    return L.latLng(this.$store.getters.getCiudadLatlng)
+  }
+  get zoom() {
+    return this.$store.getters.getCiudadZoom
+  }
   get smallResults() {
     return this.$store.getters.getSmallResults
   }

@@ -1,7 +1,7 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const production = process.env.NODE_ENV === 'production'
-const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : (production ? '/web-buscador/' : '/')
+const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '/mapa_nuevo/'
 
 const developmentPlugins = []
 const productionPlugins = [
@@ -15,8 +15,19 @@ const productionPlugins = [
 
 module.exports = {
   baseUrl: BASE_URL,
-  lintOnSave: false,
   configureWebpack: {
-    plugins: production ? productionPlugins : developmentPlugins
-  }
+    plugins: production ? productionPlugins : developmentPlugins,
+  },
+  lintOnSave: false,
+  pwa: {
+    workboxOptions: {
+      runtimeCaching: [
+        {
+          handler: 'networkFirst',
+          urlPattern: new RegExp('.*'),
+        },
+      ],
+      skipWaiting: true,
+    },
+  },
 }

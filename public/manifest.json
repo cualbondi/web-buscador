@@ -33,7 +33,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/web-buscador",
+  "start_url": "/mapa_nuevo",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#FFFFFF",
