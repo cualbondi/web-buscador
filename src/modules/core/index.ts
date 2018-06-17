@@ -12,7 +12,7 @@ interface Ciudad {
 interface State {
   geolocation: Coordinates | null
   geolocationPermission: string
-  ciudad: Ciudad
+  ciudad: Ciudad | null
 }
 
 export const CIUDADES = [
