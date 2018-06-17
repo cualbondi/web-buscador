@@ -70,11 +70,11 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
 })
 export default class Map extends Vue {
 
-  @Prop({ default: () => L.latLng(-35.9205, -57.953646) })
-  center: L.LatLng
+  @Prop({ default: function(){ return (this as any).center } })
+  centerLocal: L.LatLng
 
-  @Prop({ default: 11 })
-  zoom: number
+  @Prop({ default: function(){ return (this as any).zoom } })
+  zoomLocal: number
 
   public options = {
     zoomControl: false,
@@ -113,6 +113,13 @@ export default class Map extends Vue {
   public stopIcon = StopIcon
   public aIcon = AIcon
   public bIcon = BIcon
+
+  get center() {
+    return L.latLng(this.$store.getters.getCiudadLatlng)
+  }
+  get zoom() {
+    return this.$store.getters.getCiudadZoom
+  }
 
   get recorridos() {
     return this.$store.getters.getRecorridos
