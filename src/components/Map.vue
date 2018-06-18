@@ -17,8 +17,8 @@
 
       <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
 
-      <l-editablecirclemarker v-if="llA" :latLng.sync="llA" :rad="radius" :options="{icon: aIcon}" />
-      <l-editablecirclemarker v-if="llB" :latLng.sync="llB" :rad="radius" :options="{icon: bIcon}" />
+      <l-editablecirclemarker v-if="A" :latLng.sync="A" :rad="radius" :options="{icon: aIcon}" />
+      <l-editablecirclemarker v-if="B" :latLng.sync="B" :rad="radius" :options="{icon: bIcon}" />
 
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
 
@@ -133,17 +133,39 @@ export default class Map extends Vue {
   get recorrido() {
     return this.$store.getters.getRecorridoSelected
   }
-  get llA() {
-    return this.$store.getters.llA
+  get A() {
+    const a = this.$store.getters.A
+    if (!a) { return null }
+    if (a.type !== 'geolocation'){
+      return a
+    }
+    return this.geolocation
   }
-  set llA(val) {
-    this.$store.dispatch('setllA', val)
+  set A(val) {
+    const A = this.$store.getters.A
+    if (A.type !== 'geolocation'){
+      if (A.lat !== val.lat || A.lng !== val.lng){
+        val.type = 'latlng'
+        this.$store.dispatch('setA', val)
+      }
+    }
   }
-  get llB() {
-    return this.$store.getters.llB
+  get B() {
+    const b = this.$store.getters.B
+    if (!b) { return null }
+    if (b.type !== 'geolocation'){
+      return b
+    }
+    return this.geolocation
   }
-  set llB(val) {
-    this.$store.dispatch('setllB', val)
+  set B(val) {
+    const B = this.$store.getters.B
+    if (B.type !== 'geolocation'){
+      if (B.lat !== val.lat || B.lng !== val.lng){
+        val.type = 'latlng'
+        this.$store.dispatch('setB', val)
+      }
+    }
   }
   get radius() {
     return this.$store.getters.radius

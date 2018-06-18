@@ -29,3 +29,12 @@ export interface ApiResponse<Result> {
   page_count: number
   results: Result[]
 }
+export interface GeocoderResponse {
+  nombre: string
+  geom: {
+    type: string
+    coordinates: number[]
+  }
+  precision: number
+  tipo: string
+}

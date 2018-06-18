@@ -13,7 +13,7 @@
       {{ locationDestination }}
     </div>
 
-    <v-btn class="swap" flat icon dark>
+    <v-btn class="swap" flat icon dark @click="swap">
       <v-icon dark>swap_vert</v-icon>
     </v-btn>
   
@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { Location } from '@/modules/absearch'
 
 @Component({})
 export default class Home extends Vue {
@@ -30,19 +31,31 @@ export default class Home extends Vue {
   }
 
   get locationOrigin() {
-    const coords = this.$store.getters.llA
-    if (!coords) {
-      return 'Your location'
+    const location: Location | null = this.$store.getters.A
+    if (location === null) {
+      return 'Selecciona un origen'
     }
-    return `${coords.lat}, ${coords.lng}`
+    if (location.type === 'geolocation') {
+      return 'Tu ubicacion'
+    }
+    if (location.type === 'geocoder') {
+      return location.name
+    }
+    return `${location.lat}, ${location.lng}`
   }
 
   get locationDestination() {
-    const coords = this.$store.getters.llB
-    if (!coords) {
-      return 'Select destination'
+    const location: Location | null = this.$store.getters.B
+    if (location === null) {
+      return 'Selecciona un destino'
     }
-    return `${coords.lat},${coords.lng}`
+    if (location.type === 'geolocation') {
+      return 'Tu ubicacion'
+    }
+    if (location.type === 'geocoder') {
+      return location.name
+    }
+    return `${location.lat}, ${location.lng}`
   }
 
   public searchOrigin() {
@@ -51,6 +64,10 @@ export default class Home extends Vue {
 
   public searchDestination() {
     this.$router.push({ name: 'location', params: { point: 'destination' } })
+  }
+
+  public swap(){
+    this.$store.dispatch('swapAB')
   }
 }
 </script>

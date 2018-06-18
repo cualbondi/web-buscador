@@ -36,11 +36,7 @@ export default class Home extends Vue {
   @Prop() public title?: string
 
   get hasSubtext() {
-    return (
-      this.results &&
-      this.results.length &&
-      this.results[0].hasOwnProperty('subtext')
-    )
+    return this.results && !!this.results.length && this.results[0].hasOwnProperty('subtext')
   }
 
   public shouldDivide(index: number) {

@@ -6,13 +6,27 @@ import { Recorrido } from '@/api/schema'
 interface LatLng {
   lat: number
   lng: number
+  type: 'latlng'
 }
 
+interface Geolocation {
+  type: 'geolocation'
+}
+
+export interface GeocoderResult {
+  lat: number
+  lng: number
+  type: 'geocoder'
+  name: string
+}
+
+export type Location = LatLng | Geolocation | GeocoderResult
+
 interface State {
-  llA: LatLng | null
-  llB: LatLng | null
-  radius: number
+  A: Location | null
+  B: Location | null
   results: Recorrido[]
+  radius: number
   resultSelected: number
   resultsLoading: boolean
   resultsPage: number
@@ -22,8 +36,8 @@ interface State {
 
 const module: Module<State, RootState> = {
   state: {
-    llA: null,
-    llB: null,
+    A: null,
+    B: null,
     radius: 300,
     results: [],
     resultSelected: 0,
@@ -34,75 +48,97 @@ const module: Module<State, RootState> = {
   },
 
   actions: {
-    query({ commit, state }) {
-      if (state.llA && state.llB) {
-        commit('startLoadingResults')
-        api
-          .recorridos(
-            state.llA.lng,
-            state.llA.lat,
-            state.llB.lng,
-            state.llB.lat,
-            state.radius,
-            state.resultsPage,
-          )
-          .then(
-            data => {
-              if (data.next) {
-                commit('setResultsMore', false)
-              }
-              commit('setResults', data.results)
-            }
-          )
-          // .catch(err => notification?)
-          .then(data => commit('finishLoadingResults'))
+    async getAB({ dispatch, state }) {
+      if (!state.A || !state.B) {
+        return
+      }
+      let lngA
+      let latA
+      let lngB
+      let latB
+      if (state.A.type === 'geolocation') {
+        const latlngA = await dispatch('geolocate')
+        lngA = latlngA.longitude
+        latA = latlngA.latitude
+      } else {
+        lngA = state.A.lng
+        latA = state.A.lat
+      }
+      if (state.B.type === 'geolocation') {
+        const latlngB = await dispatch('geolocate')
+        lngB = latlngB.longitude
+        latB = latlngB.latitude
+      } else {
+        lngB = state.B.lng
+        latB = state.B.lat
+      }
+      return { lngA, latA, lngB, latB }
+    },
+    async query({ dispatch, commit, state }) {
+      if (!state.A || !state.B) {
+        return
+      }
+      const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      const params = {
+        lngA,
+        latA,
+        lngB,
+        latB,
+        rad: state.radius,
+        page: state.resultsPage,
+      }
+      try {
+        const data = await api.recorridos(params)
+        if (data.next) {
+          commit('setResultsMore', false)
+        }
+        commit('setResults', data.results)
+      } catch (err) {
+        // TODO: handle api error
+      } finally {
+        commit('finishLoadingResults')
       }
     },
-    getNextPage({ commit, state, dispatch }) {
+    async getNextPage({ commit, state, dispatch }) {
       commit('startLoadingMoreResults')
-      return new Promise((resolve, reject) => {
-        if (state.llA && state.llB) {
-          api
-            .recorridos(
-              state.llA.lng,
-              state.llA.lat,
-              state.llB.lng,
-              state.llB.lat,
-              state.radius,
-              state.resultsPage + 1,
-            )
-            .then(
-              data => {
-                commit('appendResults', data.results)
-                commit('finishLoadingMoreResults')
-                if (data.next) {
-                  commit('setResultsMore', true)
-                }
-                resolve(!!data.next)
-              }
-            )
-            .catch(() => {
-              commit('finishLoadingMoreResults')
-            })
+      if (!state.A || !state.B) {
+        return
+      }
+      const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      const params = {
+        lngA,
+        latA,
+        lngB,
+        latB,
+        rad: state.radius,
+        page: state.resultsPage + 1,
+      }
+      try {
+        const data = await api.recorridos(params)
+        if (data.next) {
+          commit('setResultsMore', true)
         }
-      })
+        commit('appendResults', data.results)
+      } catch (err) {
+        // TODO: handle api error
+      } finally {
+        commit('finishLoadingMoreResults')
+      }
     },
     clickMap({ commit, state, dispatch }, ll: LatLng) {
-      if (!state.llA) {
-        commit('setllA', ll)
-      } else {
-        if (!state.llB) {
-          commit('setllB', ll)
-          dispatch('query')
-        }
+      if (state.A === null) {
+        commit('setA', ll)
+      } else if (state.B === null) {
+        commit('setB', ll)
+        dispatch('query')
       }
     },
-    setllA({ commit, dispatch }, ll: LatLng) {
-      commit('setllA', ll)
+    setA({ commit, dispatch }, ll: LatLng) {
+      commit('setA', ll)
       dispatch('query')
     },
-    setllB({ commit, dispatch }, ll: LatLng) {
-      commit('setllB', ll)
+    setB({ commit, dispatch }, ll: LatLng) {
+      commit('setB', ll)
       dispatch('query')
     },
     setRadius({ state, commit, dispatch }, meters: number) {
@@ -112,28 +148,47 @@ const module: Module<State, RootState> = {
       commit('setRadius', meters)
       dispatch('query')
     },
-    setRecorridoSelectedIndex({ state, commit, dispatch }, index: number) {
-      if (index < state.results.length ) {
+    async setRecorridoSelectedIndex(
+      { state, commit, dispatch },
+      index: number,
+    ) {
+      if (index < state.results.length) {
         commit('setRecorridoSelectedIndex', index)
-      } else {
-        if (state.resultsMore) {
-          dispatch('getNextPage').then(count => {
-            if (count > 0) {
-              commit('setRecorridoSelectedIndex', index)
-            }
-          })
-        }
+      } else if (state.resultsMore) {
+        await dispatch('getNextPage')
+        commit('setRecorridoSelectedIndex', index)
       }
     },
     fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
-      return dispatch('geolocate').then(latlng => {
-        const ll = {lat: latlng.latitude, lng: latlng.longitude}
-        if (source === 'origin') {
-          return dispatch('setllA', ll)
-        } else {
-          return dispatch('setllB', ll)
-        }
-      })
+      dispatch('geolocate')
+      const ll = {
+        type: 'geolocation',
+      }
+      if (source === 'origin') {
+        return dispatch('setA', ll)
+      } else {
+        return dispatch('setB', ll)
+      }
+    },
+    fromGeocoder(
+      { dispatch },
+      {
+        source,
+        result,
+      }: { source: 'origin' | 'destination'; result: GeocoderResult },
+    ) {
+      if (source === 'origin') {
+        return dispatch('setA', result)
+      } else {
+        return dispatch('setB', result)
+      }
+    },
+    swapAB({ commit, state, dispatch }) {
+      const A = state.A
+      const B = state.B
+      commit('setA', B)
+      commit('setB', A)
+      dispatch('query')
     },
   },
 
@@ -171,17 +226,16 @@ const module: Module<State, RootState> = {
     finishLoadingMoreResults(state) {
       state.resultsMoreLoading = false
     },
-    setllA(state, ll: LatLng) {
-      state.llA = ll
+    setA(state, ll: Location) {
+      state.A = ll
     },
-    setllB(state, ll: LatLng) {
-      state.llB = ll
+    setB(state, ll: Location) {
+      state.B = ll
     },
     setRadius(state, meters: number) {
       state.radius = meters
     },
   },
-
   getters: {
     getRecorridos(state) {
       return state.results
@@ -201,17 +255,16 @@ const module: Module<State, RootState> = {
     getResultsMoreLoading(state) {
       return state.resultsMoreLoading
     },
-    llA(state) {
-      return state.llA
+    A(state) {
+      return state.A
     },
-    llB(state) {
-      return state.llB
+    B(state) {
+      return state.B
     },
     radius(state) {
       return state.radius
     },
   },
 }
-
 
 export default module
