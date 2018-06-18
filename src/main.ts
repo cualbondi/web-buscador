@@ -23,6 +23,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueAnalytics from 'vue-analytics'
+import vueHeadful from 'vue-headful'
 import './registerServiceWorker'
 
 import 'vuetify/src/stylus/app.styl'
@@ -37,6 +38,8 @@ if (SENTRY_URL) {
     .addPlugin(RavenVue, Vue)
     .install()
 }
+
+Vue.component('vue-headful', vueHeadful);
 
 Vue.use(Vuetify, {
   components: {
@@ -82,6 +85,8 @@ const vueInstance: VueExtended = new Vue({
   router,
   store,
   render: h => h(App),
-}).$mount('#app')
-
+})
+document.addEventListener('DOMContentLoaded', function () {
+  vueInstance.$mount('#app')
+})
 export default vueInstance

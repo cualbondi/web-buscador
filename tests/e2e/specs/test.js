@@ -6,7 +6,7 @@ describe('My First Test', () => {
     cy.server();
     cy.route("GET", /recorridos/).as("getRecorridos");
 
-    cy.visit('/')
+    cy.visit('/la-plata/')
     cy.viewport(360, 640)
 
     cy.get('.mapContainer').click(5, 186)

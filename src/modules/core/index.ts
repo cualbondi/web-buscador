@@ -1,18 +1,34 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
 import { geolocationObservable, checkGeolocationPermission } from '@/utils'
+import * as CIUDADES from '@/ciudades'
+
+interface Ciudad {
+  slug: string
+  nombre: string
+  latlng: [number]
+  zoom: number
+}
+
+const CS: Ciudad[] = CIUDADES
 
 interface State {
   geolocation: Coordinates | null
   geolocationPermission: string
+  ciudad: Ciudad | null
 }
 
 const module: Module<State, RootState> = {
   state: {
     geolocation: null,
     geolocationPermission: 'prompt',
+    ciudad: null,
   },
   actions: {
+    setCiudad({ commit }, slug) {
+      const ciudad = CS.find(c => c.slug === slug)
+      commit('setCiudad', ciudad)
+    },
     geolocate({ commit, dispatch }) {
       return geolocationObservable.takeFirst().catch(e => {
         dispatch('message', 'No se pudo acceder a la geolocalizacion')
@@ -37,6 +53,9 @@ const module: Module<State, RootState> = {
     },
   },
   mutations: {
+    setCiudad(state, ciudad: Ciudad) {
+      state.ciudad = ciudad
+    },
     setGeolocation(state, geolocation: Coordinates) {
       state.geolocation = geolocation
     },
@@ -45,6 +64,18 @@ const module: Module<State, RootState> = {
     },
   },
   getters: {
+    getCiudad(state) {
+      return state.ciudad
+    },
+    getCiudadLatlng(state) {
+      return state.ciudad && state.ciudad.latlng
+    },
+    getCiudadNombre(state) {
+      return state.ciudad && state.ciudad.nombre
+    },
+    getCiudadZoom(state) {
+      return state.ciudad && state.ciudad.zoom
+    },
     geolocation(state) {
       return state.geolocation
     },
