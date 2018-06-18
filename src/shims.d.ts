@@ -8,3 +8,8 @@ declare module 'vue2-leaflet-polylinedecorator'
 declare module 'vue2-leaflet-editablecirclemarker'
 declare module 'vue-analytics'
 declare module 'raven-js/plugins/vue'
+declare module 'vuetify'
+declare module 'vuetify/es5/components/*' {
+}
+
+declare module 'vuetify/es5/directives'
