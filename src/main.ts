@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueAnalytics from 'vue-analytics'
+import vueHeadful from 'vue-headful'
 import './registerServiceWorker'
 import 'vuetify/dist/vuetify.min.css'
 import { isProd, GA_KEY, SENTRY_URL } from '@/config'
@@ -20,6 +21,7 @@ if (SENTRY_URL) {
 
 // TODO: Import only the components that are used instead of everything
 // TODO: use a stylus loader to tree-shake unused css
+Vue.component('vue-headful', vueHeadful);
 
 Vue.use(Vuetify, {
   theme: {
@@ -45,6 +47,8 @@ const vueInstance: VueExtended = new Vue({
   router,
   store,
   render: h => h(App),
-}).$mount('#app')
-
+})
+document.addEventListener('DOMContentLoaded', function () {
+  vueInstance.$mount('#app')
+})
 export default vueInstance
