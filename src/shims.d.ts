@@ -8,9 +8,16 @@ declare module 'vue2-leaflet-polylinedecorator'
 declare module 'vue2-leaflet-editablecirclemarker'
 declare module 'vue-analytics'
 declare module 'raven-js/plugins/vue'
-declare module 'vuetify'
-declare module 'vuetify/es5/components/*'
-declare module 'vuetify/es5/directives'
 declare module 'vue-headful'
+
+// from https://github.com/vuetifyjs/vuetify/issues/3943#issuecomment-388034052
+declare module 'vuetify/es5/components/*' {
+    import { PluginFunction } from 'vue'
+    module Component {
+        const install: PluginFunction<never>
+    }
+    export default Component
+}
+declare module 'vuetify/es5/directives'
 
 declare module '@/ciudades'
