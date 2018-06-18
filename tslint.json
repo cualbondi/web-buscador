@@ -20,6 +20,7 @@
     "arrow-parens": [true, "ban-single-arg-parens"],
     "no-empty-interface": false,
     "no-unused-variable": true,
-    "no-console": false
+    "no-console": false,
+    "member-ordering": false
   }
 }
