@@ -6,7 +6,6 @@ import {
   VNavigationDrawer,
   VFooter,
   VToolbar,
-  transitions,
   VTextField,
   VBtn,
   VIcon,
@@ -17,7 +16,7 @@ import {
   VSlider,
   VGrid,
 } from 'vuetify'
-import { Ripple } from 'vuetify/es5/directives'
+import * as directives from 'vuetify/es5/directives'
 
 import App from './App.vue'
 import router from './router'
@@ -47,7 +46,6 @@ Vue.use(Vuetify, {
     VNavigationDrawer,
     VFooter,
     VToolbar,
-    transitions,
     VTextField,
     VBtn,
     VIcon,
@@ -58,10 +56,7 @@ Vue.use(Vuetify, {
     VSlider,
     VGrid,
   },
-  directives: {
-    Ripple,
-  },
-  transitions,
+  directives,
   theme: {
     primary: '#4285F4',
   },
