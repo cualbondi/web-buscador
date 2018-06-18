@@ -1,5 +1,9 @@
 <template>
   <div class="main" :class="withResults">
+    <vue-headful
+      :title="headfulTitle"
+      :description="headfulDescription"
+    />
     <side-menu></side-menu>
     <a-b-search-fields class="top"></a-b-search-fields>
     <Map class="middle" :center="center" :zoom="zoom" />
@@ -24,6 +28,15 @@ import L from 'leaflet'
   },
 })
 export default class Home extends Vue {
+  get headfulTitle() {
+    return `${this.ciudadNombre} - Buscador de Cualbondi`
+  }
+  get headfulDescription() {
+    return `Buscador de recorridos de bondis, colectivos, micros en ${this.ciudadNombre}`
+  }
+  get ciudadNombre() {
+    return this.$store.getters.getCiudadNombre
+  }
   get center() {
     return L.latLng(this.$store.getters.getCiudadLatlng)
   }
