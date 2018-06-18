@@ -30,6 +30,12 @@ module.exports = {
 
   configureWebpack: {
     plugins: production ? productionPlugins : developmentPlugins,
+
+    //output: {
+      //dir: path.join(__dirname, 'dist/' + BASE_URL),
+      //publicPath: path.join(__dirname, 'dist/' + BASE_URL)
+      //path: path.join(__dirname, 'dist/' + BASE_URL)
+    //}
   },
   lintOnSave: false,
   pwa: {

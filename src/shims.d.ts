@@ -10,5 +10,14 @@ declare module 'vue-analytics'
 declare module 'raven-js/plugins/vue'
 declare module 'vue-headful'
 
-declare module '@/ciudades'
+// from https://github.com/vuetifyjs/vuetify/issues/3943#issuecomment-388034052
+declare module 'vuetify/es5/components/*' {
+    import { PluginFunction } from 'vue'
+    module Component {
+        const install: PluginFunction<never>
+    }
+    export default Component
+}
+declare module 'vuetify/es5/directives'
 
+declare module '@/ciudades'

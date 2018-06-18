@@ -1,33 +1,65 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueAnalytics from 'vue-analytics'
 import vueHeadful from 'vue-headful'
 import './registerServiceWorker'
-import 'vuetify/dist/vuetify.min.css'
+
+import 'vuetify/src/stylus/app.styl'
+
 import { isProd, GA_KEY, SENTRY_URL } from '@/config'
+
+import Vuetify from 'vuetify/es5/components/Vuetify'
+import VApp from 'vuetify/es5/components/VApp'
+import { Ripple } from 'vuetify/es5/directives'
+import VNavigationDrawer from 'vuetify/es5/components/VNavigationDrawer'
+import VList from 'vuetify/es5/components/VList'
+import VBtn from 'vuetify/es5/components/VBtn'
+import VIcon from 'vuetify/es5/components/VIcon'
+import VDivider from 'vuetify/es5/components/VDivider'
+import VSlider from 'vuetify/es5/components/VSlider'
+import VSnackbar from 'vuetify/es5/components/VSnackbar'
+import VTextField from 'vuetify/es5/components/VTextField'
+import VSubheader from 'vuetify/es5/components/VSubheader'
+import VToolbar from 'vuetify/es5/components/VToolbar'
+import VGrid from 'vuetify/es5/components/VGrid'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
 
 if (SENTRY_URL) {
-  Raven
-    .config(SENTRY_URL)
+  Raven.config(SENTRY_URL)
     .addPlugin(RavenVue, Vue)
     .install()
 }
 
-// TODO: Import only the components that are used instead of everything
-// TODO: use a stylus loader to tree-shake unused css
 Vue.component('vue-headful', vueHeadful);
 
 Vue.use(Vuetify, {
+  components: {
+    VApp,
+    Vuetify,
+    VNavigationDrawer,
+    VIcon,
+    VBtn,
+    VList,
+    VDivider,
+    VSlider,
+    VSnackbar,
+    VTextField,
+    VSubheader,
+    VToolbar,
+    VGrid,
+  },
+  directives: {
+    Ripple,
+  },
   theme: {
     primary: '#4285F4',
   },
 })
+
 
 Vue.use(VueAnalytics, {
   id: GA_KEY,
