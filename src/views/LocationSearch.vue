@@ -7,6 +7,7 @@
                 </v-btn>
                 <v-text-field
                 class="input"
+                :clearable="true"
                :value="location"
                @input="setLocation"
                 :label="inputLabel"
@@ -16,6 +17,7 @@
             </div>
 
             <result-list 
+            v-if="!location"
             class="geolocation"
             :results="fixedResults"
             @selection="onGeoSelection"
@@ -30,8 +32,8 @@
             ></result-list>
 
              <result-list
-            v-if="location"
-            class="results" 
+            v-if="location && geocoderResults.length !== 0"
+            class="results"
             title="Resultados" 
             :results="geocoderResults"
             @selection="onLocationSelection"
@@ -135,9 +137,8 @@ export default class Home extends Vue {
 
   public onGeoSelection(result: Result) {
     if (result.id === 1) {
-      this.$store
-        .dispatch('fromGeoLocation', this.originOrDestination)
-        .then(() => this.$router.push({ name: 'absearch' }))
+      this.$store.dispatch('fromGeoLocation', this.originOrDestination)
+      this.$router.push({ name: 'absearch' })
       // .catch(err => console.error(err))
     } else {
       this.$router.push({

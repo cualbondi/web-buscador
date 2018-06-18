@@ -121,19 +121,38 @@ export default class Map extends Vue {
     return this.$store.getters.getRecorridoSelected
   }
   get A() {
-    console.log('a', this.$store.getters.A)
-    return this.$store.getters.A
+    const a = this.$store.getters.A
+    if (!a) { return null }
+    if (a.type !== 'geolocation'){
+      return a
+    }
+    return this.geolocation
   }
   set A(val) {
-    val.type = 'latlng'
-    this.$store.dispatch('setA', val)
+    const A = this.$store.getters.A
+    if (A.type !== 'geolocation'){
+      if (A.lat !== val.lat || A.lng !== val.lng){
+        val.type = 'latlng'
+        this.$store.dispatch('setA', val)
+      }
+    }
   }
   get B() {
-    return this.$store.getters.B
+    const b = this.$store.getters.B
+    if (!b) { return null }
+    if (b.type !== 'geolocation'){
+      return b
+    }
+    return this.geolocation
   }
   set B(val) {
-    val.type = 'latlng'
-    this.$store.dispatch('setB', val)
+    const B = this.$store.getters.B
+    if (B.type !== 'geolocation'){
+      if (B.lat !== val.lat || B.lng !== val.lng){
+        val.type = 'latlng'
+        this.$store.dispatch('setB', val)
+      }
+    }
   }
   get radius() {
     return this.$store.getters.radius

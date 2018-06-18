@@ -13,7 +13,7 @@
       {{ locationDestination }}
     </div>
 
-    <v-btn class="swap" flat icon dark>
+    <v-btn class="swap" flat icon dark @click="swap">
       <v-icon dark>swap_vert</v-icon>
     </v-btn>
   
@@ -64,6 +64,10 @@ export default class Home extends Vue {
 
   public searchDestination() {
     this.$router.push({ name: 'location', params: { point: 'destination' } })
+  }
+
+  public swap(){
+    this.$store.dispatch('swapAB')
   }
 }
 </script>
