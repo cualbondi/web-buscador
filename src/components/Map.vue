@@ -135,36 +135,30 @@ export default class Map extends Vue {
   }
   get A() {
     const a = this.$store.getters.A
-    if (!a) { return null }
-    if (a.type !== 'geolocation'){
+    if (!a || a.type !== 'geolocation'){
       return a
     }
     return this.geolocation
   }
   set A(val) {
-    const A = this.$store.getters.A
-    if (A.type !== 'geolocation'){
-      if (A.lat !== val.lat || A.lng !== val.lng){
-        val.type = 'latlng'
-        this.$store.dispatch('setA', val)
-      }
+    const A = this.A
+    const type = this.$store.getters.A.type
+    if (A.lat !== val.lat || A.lng !== val.lng){
+      this.$store.dispatch('setA', {...val, type: 'latlng'})
     }
   }
   get B() {
     const b = this.$store.getters.B
-    if (!b) { return null }
-    if (b.type !== 'geolocation'){
+    if (!b || b.type !== 'geolocation'){
       return b
     }
     return this.geolocation
   }
   set B(val) {
-    const B = this.$store.getters.B
-    if (B.type !== 'geolocation'){
-      if (B.lat !== val.lat || B.lng !== val.lng){
-        val.type = 'latlng'
-        this.$store.dispatch('setB', val)
-      }
+    const B = this.B
+    const type = this.$store.getters.B.type
+    if (B.lat !== val.lat || B.lng !== val.lng){
+      this.$store.dispatch('setB', {...val, type: 'latlng'})
     }
   }
   get radius() {
