@@ -142,7 +142,6 @@ export default class Map extends Vue {
   }
   set A(val) {
     const A = this.A
-    const type = this.$store.getters.A.type
     if (A.lat !== val.lat || A.lng !== val.lng){
       this.$store.dispatch('setA', {...val, type: 'latlng'})
     }
@@ -156,7 +155,6 @@ export default class Map extends Vue {
   }
   set B(val) {
     const B = this.B
-    const type = this.$store.getters.B.type
     if (B.lat !== val.lat || B.lng !== val.lng){
       this.$store.dispatch('setB', {...val, type: 'latlng'})
     }
