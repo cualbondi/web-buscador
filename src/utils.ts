@@ -1,7 +1,17 @@
 import Pbf from 'pbf'
 import geobuf from 'geobuf'
 import store from './store'
+import debounce from 'lodash/debounce'
 
+export function debounceMethod(time: number) {
+  return function(target: any, name: any, descriptor: any){
+    const original = descriptor.value;
+    if (typeof original === 'function') {
+      descriptor.value = debounce(original, time)
+    }
+    return descriptor;
+  }
+}
 
 export const geobufToLatlngs = function(base64str: string) {
   // convert base64str to Uint8Array

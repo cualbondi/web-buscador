@@ -48,9 +48,9 @@
 import { Component, Vue } from 'vue-property-decorator'
 import ResultList, { Result } from '@/components/ResultList.vue'
 import Map from '@/components/Map.vue'
-import debounce from 'lodash/debounce'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
+import { debounceMethod } from '@/utils'
 
 @Component({
   components: {
@@ -113,16 +113,12 @@ export default class Home extends Vue {
     },
   ]
 
-  constructor() {
-    super()
-    this.searchGeocoder = debounce(this.searchGeocoder, 500)
-  }
-
   setLocation(value: string) {
     this.location = value
     this.searchGeocoder(value)
   }
 
+  @debounceMethod(500)
   searchGeocoder(query: string) {
     this.$store.dispatch('geocode', query)
   }

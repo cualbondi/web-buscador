@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
 import { geolocationObservable, checkGeolocationPermission } from '@/utils'
-import * as CIUDADES from '@/ciudades'
+import CIUDADES from '@/ciudades'
 
 interface Ciudad {
   slug: string
@@ -66,6 +66,9 @@ const module: Module<State, RootState> = {
   getters: {
     getCiudad(state) {
       return state.ciudad
+    },
+    getCiudades(state) {
+      return CIUDADES
     },
     getCiudadLatlng(state) {
       return state.ciudad && state.ciudad.latlng

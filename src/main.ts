@@ -24,6 +24,7 @@ import VTextField from 'vuetify/es5/components/VTextField'
 import VSubheader from 'vuetify/es5/components/VSubheader'
 import VToolbar from 'vuetify/es5/components/VToolbar'
 import VGrid from 'vuetify/es5/components/VGrid'
+import VSelect from 'vuetify/es5/components/VSelect'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
@@ -51,6 +52,7 @@ Vue.use(Vuetify, {
     VSubheader,
     VToolbar,
     VGrid,
+    VSelect,
   },
   directives: {
     Ripple,
