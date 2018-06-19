@@ -63,3 +63,9 @@ export default class Home extends Vue {
 
 <style lang="scss" src="./ABSearch.scss" scoped>
 </style>
+
+<style lang="scss">
+  .main > .v-overlay--active {
+    z-index: 10000;
+  }
+</style>
