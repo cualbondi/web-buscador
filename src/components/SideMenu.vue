@@ -4,12 +4,19 @@
       v-model="sideMenuOpen"
       temporary
       absolute
+      :touchless="true"
     >
-      <v-list class="pa-1">
-        <v-list-tile>
+      <v-toolbar color="primary">
+        <v-spacer></v-spacer>
+        <v-toolbar-title class="white--text">
           <img :src="logo" />
-        </v-list-tile>
-      </v-list>
+          </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="sideMenuOpen = false" class="white--text">
+          <v-icon dark>close</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-divider></v-divider>
       <v-list>
         <v-list-tile>
           <v-select
@@ -29,11 +36,7 @@
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>location_city</v-icon></div></div>
           Ver mas informaci&oacute;n
         </v-list-tile>
-      </v-list>
-      <v-list class="pt-0" dense>
         <v-divider></v-divider>
-      </v-list>
-      <v-list>
         <v-list-tile>
           <v-slider
             @change="setRadius"
@@ -47,18 +50,18 @@
             :ticks="true"
           />
         </v-list-tile>
-      </v-list>
-      <v-list class="pt-0" dense>
         <v-divider></v-divider>
-      </v-list>
-      <v-list>
         <v-list-tile @click="openExternalLink(`https://cualbondi.com.ar/agradecimientos/`)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>star</v-icon></div></div>
           Top usuarios
         </v-list-tile>
         <v-list-tile @click="openExternalLink(`https://spreadsheets.google.com/spreadsheet/viewform?formkey=dFJERlREQjUyaE1iSkFDYnhOa2Nnbmc6MQ+`, true)">
-          <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>edit</v-icon></div></div>
+          <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>comment</v-icon></div></div>
           Sugerencias
+        </v-list-tile>
+        <v-list-tile @click="openExternalLink(`https://github.com/cualbondi`, true)">
+          <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>usb</v-icon></div></div>
+          Github
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
@@ -109,9 +112,32 @@ export default class Home extends Vue {
     font-size: 14px;
   }
   .v-slider__thumb {
-    width: 50px;
-    height: 50px;
-    left: -25px;
+    width: 70px;
+    height: 70px;
+    left: -35px;
+    top: initial;
+    &.primary {
+      background-color: transparent !important;
+    }
+  }
+  .v-slider__thumb-container:after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    left: -12px;
+    top: 50%;
+    border-radius: 50%;
+    background: #4285f4;
+    -webkit-transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    -webkit-transform: translateY(-50%) scale(0.6);
+    transform: translateY(-50%) scale(0.6);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    display: block;
   }
 }
 </style>
