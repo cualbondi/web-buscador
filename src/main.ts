@@ -35,7 +35,7 @@ if (SENTRY_URL) {
     .install()
 }
 
-Vue.component('vue-headful', vueHeadful);
+Vue.component('vue-headful', vueHeadful)
 
 Vue.use(Vuetify, {
   components: {
@@ -62,7 +62,6 @@ Vue.use(Vuetify, {
   },
 })
 
-
 Vue.use(VueAnalytics, {
   id: GA_KEY,
   router,
@@ -82,7 +81,7 @@ const vueInstance: VueExtended = new Vue({
   store,
   render: h => h(App),
 })
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   vueInstance.$mount('#app')
 })
 export default vueInstance

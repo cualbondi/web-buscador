@@ -34,7 +34,6 @@ import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import { LocationIcon } from '@/components/icons'
 
-
 @Component({
   components: {
     LMap,
@@ -49,7 +48,7 @@ export default class Map extends Vue {
   public icon = LocationIcon
   public options = { zoomControl: false }
 
-  center = {...this.initialCenter}
+  center = { ...this.initialCenter }
   zoom = 13
 
   markerOptions = {
@@ -58,12 +57,12 @@ export default class Map extends Vue {
     icon: new L.DivIcon({ className: 'location-marker' }),
     opacity: 0,
     fillOpacity: 0.1,
-    fillColor: 'red'
+    fillColor: 'red',
   }
 
   updatingGeolocation = false
   move(e: LeafletMouseEvent) {
-    if (!this.updatingGeolocation){
+    if (!this.updatingGeolocation) {
       this.center = e.target.getCenter()
     }
   }
@@ -86,7 +85,7 @@ export default class Map extends Vue {
     }
   }
 
-  geolocate(){
+  geolocate() {
     this.$store.dispatch('geolocate').then(position => {
       this.updatingGeolocation = true
       this.center = {
@@ -96,7 +95,7 @@ export default class Map extends Vue {
       this.zoom = 16
     })
   }
-  moveend(){
+  moveend() {
     this.updatingGeolocation = false
   }
 }

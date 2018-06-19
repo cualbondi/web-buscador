@@ -72,7 +72,6 @@ export default class Home extends Vue {
   get resultsMore() {
     return this.$store.getters.getResultsMore
   }
-
 }
 </script>
 
@@ -82,8 +81,7 @@ export default class Home extends Vue {
   display: grid;
   grid-template-columns: 10% 1fr 10%;
   grid-template-rows: 100%;
-  grid-template-areas:
-    "left card right";
+  grid-template-areas: 'left card right';
   > span.arrow-left {
     grid-area: left;
     background: white;
@@ -109,9 +107,9 @@ export default class Home extends Vue {
       grid-template-columns: 35px 1fr;
       grid-template-rows: 43% 25% 25%;
       grid-template-areas:
-        "avatar title"
-        "description description"
-        "distances distances";
+        'avatar title'
+        'description description'
+        'distances distances';
       > span.avatar {
         grid-area: avatar;
         align-self: center;
@@ -155,11 +153,11 @@ export default class Home extends Vue {
   }
 }
 
-
 $speed: 0.2s;
 
 .directionRight {
-  &.fade-enter-active, &.fade-leave-active {
+  &.fade-enter-active,
+  &.fade-leave-active {
     right: -100%;
     animation: slideRight $speed forwards;
   }
@@ -177,10 +175,14 @@ $speed: 0.2s;
   }
 }
 @keyframes slideRight {
-    100% { right: -100%; }
+  100% {
+    right: -100%;
+  }
 }
 @keyframes slideRightBack {
-    100% { right: 0; }
+  100% {
+    right: 0;
+  }
 }
 
 .directionLeft {
@@ -202,10 +204,14 @@ $speed: 0.2s;
   }
 }
 @keyframes slideLeft {
-    100% { left: -100%; }
+  100% {
+    left: -100%;
+  }
 }
 @keyframes slideLeftBack {
-    100% { left: 0; }
+  100% {
+    left: 0;
+  }
 }
 
 .results {
@@ -220,6 +226,6 @@ $speed: 0.2s;
   height: 25px;
 }
 .selected {
-  background: #DEF
+  background: #def;
 }
 </style>

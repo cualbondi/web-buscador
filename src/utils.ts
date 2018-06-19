@@ -1,6 +1,5 @@
 import Pbf from 'pbf'
 import geobuf from 'geobuf'
-import store from './store'
 import debounce from 'lodash/debounce'
 
 export function debounceMethod(time: number) {

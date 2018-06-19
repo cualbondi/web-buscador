@@ -12,11 +12,11 @@ declare module 'vue-headful'
 
 // from https://github.com/vuetifyjs/vuetify/issues/3943#issuecomment-388034052
 declare module 'vuetify/es5/components/*' {
-    import { PluginFunction } from 'vue'
-    module Component {
-        const install: PluginFunction<never>
-    }
-    export default Component
+  import { PluginFunction } from 'vue'
+  namespace Component {
+    const install: PluginFunction<never>
+  }
+  export default Component
 }
 declare module 'vuetify/es5/directives'
 

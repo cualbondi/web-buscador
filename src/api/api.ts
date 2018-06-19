@@ -32,7 +32,7 @@ interface RecorridosParams {
 }
 
 function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
-  const {lngA, latA, lngB, latB, rad, page = 1} = params
+  const { lngA, latA, lngB, latB, rad, page = 1 } = params
   const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=la-plata&page=${page}&t=false`
   return client.get(url).then(res => convertResults(res.data))
 }

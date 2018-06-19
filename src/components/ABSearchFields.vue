@@ -66,7 +66,7 @@ export default class Home extends Vue {
     this.$router.push({ name: 'location', params: { point: 'destination' } })
   }
 
-  public swap(){
+  public swap() {
     this.$store.dispatch('swapAB')
   }
 }
