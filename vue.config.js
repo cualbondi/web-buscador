@@ -39,6 +39,10 @@ module.exports = {
   },
   lintOnSave: false,
   pwa: {
+    name: "Cualbondi",
+    themeColor: "#4285F4",
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
     workboxOptions: {
       runtimeCaching: [
         {
