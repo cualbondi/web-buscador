@@ -85,7 +85,7 @@ export default class Home extends Vue {
     this.$store.dispatch('setRadius', value)
   }
   public openExternalLink(href: string, inTab: boolean) {
-    window.open(href, inTab ? '_blank' : '_self');
+    window.open(href, inTab ? '_blank' : '_self')
   }
   get ciudad() {
     return this.$store.getters.getCiudad
@@ -101,10 +101,15 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss">
-.theme--light .v-text-field .v-input__slot:before, .application .theme--light.v-text-field .v-input__slot:before,
-.theme--light .v-text-field:not(.v-input--has-state):hover .v-input__slot:before, .application .theme--light.v-text-field:not(.v-input--has-state):hover .v-input__slot:before,
-.v-text-field .v-input__slot:after
-{
+.theme--light .v-text-field .v-input__slot:before,
+.application .theme--light.v-text-field .v-input__slot:before,
+.theme--light
+  .v-text-field:not(.v-input--has-state):hover
+  .v-input__slot:before,
+.application
+  .theme--light.v-text-field:not(.v-input--has-state):hover
+  .v-input__slot:before,
+.v-text-field .v-input__slot:after {
   background-color: transparent !important;
 }
 .navigation {

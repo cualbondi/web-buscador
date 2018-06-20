@@ -13,6 +13,11 @@ interface Geolocation {
   type: 'geolocation'
 }
 
+interface LatLngGeolocation extends Geolocation {
+  lat: number | null
+  lng: number | null
+}
+
 export interface GeocoderResult {
   lat: number
   lng: number
@@ -20,11 +25,12 @@ export interface GeocoderResult {
   name: string
 }
 
-export type Location = LatLng | Geolocation | GeocoderResult
+export type Location = LatLng | Geolocation | GeocoderResult | null
+export type LatLngLocation = LatLng | LatLngGeolocation | GeocoderResult | null
 
 interface State {
-  A: Location | null
-  B: Location | null
+  A: Location
+  B: Location
   results: Recorrido[]
   radius: number
   resultSelected: number
@@ -48,31 +54,15 @@ const module: Module<State, RootState> = {
   },
 
   actions: {
-    async getAB({ dispatch, state }) {
-      if (!state.A || !state.B) {
-        return
+    async getAB({ state, dispatch, getters }) {
+      if (state.A === null || state.B === null ) { return }
+      // we need to resolve geolocation before querying
+      if (state.A.type === 'geolocation' || state.B.type === 'geolocation') {
+        await dispatch('geolocate')
       }
-      let lngA
-      let latA
-      let lngB
-      let latB
-      if (state.A.type === 'geolocation') {
-        const latlngA = await dispatch('geolocate')
-        lngA = latlngA.longitude
-        latA = latlngA.latitude
-      } else {
-        lngA = state.A.lng
-        latA = state.A.lat
-      }
-      if (state.B.type === 'geolocation') {
-        const latlngB = await dispatch('geolocate')
-        lngB = latlngB.longitude
-        latB = latlngB.latitude
-      } else {
-        lngB = state.B.lng
-        latB = state.B.lat
-      }
-      return { lngA, latA, lngB, latB }
+      const A = getters.A
+      const B = getters.B
+      return { lngA: A.lng, latA: A.lat, lngB: B.lng, latB: B.lat }
     },
     async query({ dispatch, commit, state }) {
       if (!state.A || !state.B) {
@@ -125,7 +115,7 @@ const module: Module<State, RootState> = {
         commit('finishLoadingMoreResults')
       }
     },
-    clickMap({ commit, state, dispatch }, ll: LatLng) {
+    clickMap({ commit, state, dispatch }, ll: Location) {
       if (state.A === null) {
         commit('setA', ll)
       } else if (state.B === null) {
@@ -133,11 +123,11 @@ const module: Module<State, RootState> = {
         dispatch('query')
       }
     },
-    setA({ commit, dispatch }, ll: LatLng) {
+    setA({ commit, dispatch }, ll: Location) {
       commit('setA', ll)
       dispatch('query')
     },
-    setB({ commit, dispatch }, ll: LatLng) {
+    setB({ commit, dispatch }, ll: Location) {
       commit('setB', ll)
       dispatch('query')
     },
@@ -159,6 +149,7 @@ const module: Module<State, RootState> = {
         commit('setRecorridoSelectedIndex', index)
       }
     },
+    // sets A or B from geolocation
     fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
       dispatch('geolocate')
       const ll = {
@@ -170,6 +161,7 @@ const module: Module<State, RootState> = {
         return dispatch('setB', ll)
       }
     },
+    // sets A or B from a geocoder result
     fromGeocoder(
       { dispatch },
       {
@@ -255,10 +247,33 @@ const module: Module<State, RootState> = {
     getResultsMoreLoading(state) {
       return state.resultsMoreLoading
     },
-    A(state) {
+    // extends A or B so they have geolocation info if available
+    A(state, rootState): LatLngLocation {
+      const geolocation: Coordinates = rootState.geolocation
+      if (state.A === null) {
+        return null
+      }
+      if (state.A.type === 'geolocation') {
+        return {
+          ...state.A,
+          lat: geolocation ? geolocation.latitude : null,
+          lng: geolocation ? geolocation.longitude : null,
+        }
+      }
       return state.A
     },
-    B(state) {
+    B(state, rootState): LatLngLocation {
+      const geolocation: Coordinates = rootState.geolocation
+      if (state.B === null) {
+        return null
+      }
+      if (state.B.type === 'geolocation') {
+        return {
+          ...state.B,
+          lat: geolocation ? geolocation.latitude : null,
+          lng: geolocation ? geolocation.longitude : null,
+        }
+      }
       return state.B
     },
     radius(state) {

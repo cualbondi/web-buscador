@@ -3,7 +3,7 @@
     <l-map :zoom="zoom" :center="center" @click="onClick" :options="options">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
 
-      <slot v-if="recorrido">
+      <template v-if="recorrido">
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[0].ruta_corta]" />
@@ -13,7 +13,7 @@
         <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIcon">
           <l-popup>{{recorrido.itinerario[0].p2.nombre}}</l-popup>
         </l-marker>
-      </slot>
+      </template>
 
       <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
 
@@ -69,19 +69,13 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
   },
 })
 export default class Map extends Vue {
-  @Prop({
-    default: function() {
-      return (this as any).center
-    },
-  })
-  centerLocal: L.LatLng
+  @Prop()
+  center: {
+    lat: number
+    lng: number
+  }
 
-  @Prop({
-    default: function() {
-      return (this as any).zoom
-    },
-  })
-  zoomLocal: number
+  @Prop() zoom: number
 
   public options = {
     zoomControl: false,
@@ -121,13 +115,6 @@ export default class Map extends Vue {
   public aIcon = AIcon
   public bIcon = BIcon
 
-  get center() {
-    return L.latLng(this.$store.getters.getCiudadLatlng)
-  }
-  get zoom() {
-    return this.$store.getters.getCiudadZoom
-  }
-
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
@@ -141,29 +128,31 @@ export default class Map extends Vue {
     return this.$store.getters.getRecorridoSelected
   }
   get A() {
-    const a = this.$store.getters.A
-    if (!a || a.type !== 'geolocation') {
-      return a
-    }
-    return this.geolocation
+    return this.$store.getters.A
   }
+  // This is a hack that prevents double updating location
+  // due to events in the map triggering twice
   set A(val) {
     const A = this.A
     if (A.lat !== val.lat || A.lng !== val.lng) {
-      this.$store.dispatch('setA', { ...val, type: 'latlng' })
+      this.$store.dispatch('setA', {
+        lat: val.lat,
+        lng: val.lng,
+        type: 'latlng',
+      })
     }
   }
   get B() {
-    const b = this.$store.getters.B
-    if (!b || b.type !== 'geolocation') {
-      return b
-    }
-    return this.geolocation
+    return this.$store.getters.B
   }
   set B(val) {
     const B = this.B
     if (B.lat !== val.lat || B.lng !== val.lng) {
-      this.$store.dispatch('setB', { ...val, type: 'latlng' })
+      this.$store.dispatch('setB', {
+        lat: val.lat,
+        lng: val.lng,
+        type: 'latlng',
+      })
     }
   }
   get radius() {

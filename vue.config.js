@@ -14,7 +14,7 @@ const productionPlugins = [
   new PrerenderSPAPlugin({
     staticDir: path.join(__dirname, 'dist'),
     indexPath: path.join(__dirname, 'dist', BASE_URL, 'index.html'),
-    routes: CIUDADES.map(c => BASE_URL + c.slug),
+    routes: [BASE_URL].concat(CIUDADES.map(c => BASE_URL + c.slug)),
   }),
   // bundle analyzer
   new BundleAnalyzerPlugin({
@@ -30,15 +30,13 @@ module.exports = {
 
   configureWebpack: {
     plugins: production ? productionPlugins : developmentPlugins,
-
-    //output: {
-      //dir: path.join(__dirname, 'dist/' + BASE_URL),
-      //publicPath: path.join(__dirname, 'dist/' + BASE_URL)
-      //path: path.join(__dirname, 'dist/' + BASE_URL)
-    //}
   },
   lintOnSave: false,
   pwa: {
+    name: "Cualbondi",
+    themeColor: "#4285F4",
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
     workboxOptions: {
       runtimeCaching: [
         {
