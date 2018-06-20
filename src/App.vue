@@ -49,7 +49,7 @@ html,
   height: 100%;
   margin: 0;
   font-family: Roboto;
-  background: #F5F5F5;
+  background: #f5f5f5;
   overflow: hidden !important;
 }
 

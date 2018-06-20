@@ -69,11 +69,18 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
   },
 })
 export default class Map extends Vue {
-
-  @Prop({ default: function(){ return (this as any).center } })
+  @Prop({
+    default: function() {
+      return (this as any).center
+    },
+  })
   centerLocal: L.LatLng
 
-  @Prop({ default: function(){ return (this as any).zoom } })
+  @Prop({
+    default: function() {
+      return (this as any).zoom
+    },
+  })
   zoomLocal: number
 
   public options = {
@@ -92,7 +99,7 @@ export default class Map extends Vue {
     icon: new L.DivIcon({ className: 'location-marker' }),
     opacity: 0,
     fillOpacity: 0.1,
-    fillColor: 'red'
+    fillColor: 'red',
   }
 
   public backPolyStyle = {
@@ -135,28 +142,28 @@ export default class Map extends Vue {
   }
   get A() {
     const a = this.$store.getters.A
-    if (!a || a.type !== 'geolocation'){
+    if (!a || a.type !== 'geolocation') {
       return a
     }
     return this.geolocation
   }
   set A(val) {
     const A = this.A
-    if (A.lat !== val.lat || A.lng !== val.lng){
-      this.$store.dispatch('setA', {...val, type: 'latlng'})
+    if (A.lat !== val.lat || A.lng !== val.lng) {
+      this.$store.dispatch('setA', { ...val, type: 'latlng' })
     }
   }
   get B() {
     const b = this.$store.getters.B
-    if (!b || b.type !== 'geolocation'){
+    if (!b || b.type !== 'geolocation') {
       return b
     }
     return this.geolocation
   }
   set B(val) {
     const B = this.B
-    if (B.lat !== val.lat || B.lng !== val.lng){
-      this.$store.dispatch('setB', {...val, type: 'latlng'})
+    if (B.lat !== val.lat || B.lng !== val.lng) {
+      this.$store.dispatch('setB', { ...val, type: 'latlng' })
     }
   }
   get radius() {

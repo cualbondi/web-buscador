@@ -24,9 +24,9 @@ const module: Module<State, RootState> = {
     },
   },
   getters: {
-      geocoderResults(state){
-        return state.results
-      },
+    geocoderResults(state) {
+      return state.results
+    },
   },
 }
 export default module

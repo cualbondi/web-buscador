@@ -4,10 +4,16 @@
       :title="headfulTitle"
       :description="headfulDescription"
     />
+    
     <side-menu></side-menu>
+    
     <a-b-search-fields class="top"></a-b-search-fields>
+    
     <Map class="middle" :center="center" :zoom="zoom" />
-    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :class="{small: smallResults}" />
+    
+    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" 
+    :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :class="{small: smallResults}" />
+  
   </div>
 </template>
 
@@ -32,7 +38,9 @@ export default class Home extends Vue {
     return `${this.ciudadNombre} - Buscador de Cualbondi`
   }
   get headfulDescription() {
-    return `Buscador de recorridos de bondis, colectivos, micros en ${this.ciudadNombre}`
+    return `Buscador de recorridos de bondis, colectivos, micros en ${
+      this.ciudadNombre
+    }`
   }
   get ciudadNombre() {
     return this.$store.getters.getCiudadNombre
@@ -65,7 +73,7 @@ export default class Home extends Vue {
 </style>
 
 <style lang="scss">
-  .main > .v-overlay--active {
-    z-index: 10000;
-  }
+.main > .v-overlay--active {
+  z-index: 10000;
+}
 </style>

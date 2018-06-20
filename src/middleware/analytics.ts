@@ -15,10 +15,18 @@ export default (store: Store<RootState>) => {
     let d = [mutation.type]
 
     switch (mutation.type) {
-      case 'setA': d = ['map', 'setll', 'A']; break
-      case 'setB': d = ['map', 'setll', 'B']; break
-      case 'clickMap': d = ['map', 'click']; break
-      case 'setRadius': d = ['menu', 'setRadius', 'AB', mutation.payload]; break
+      case 'setA':
+        d = ['map', 'setll', 'A']
+        break
+      case 'setB':
+        d = ['map', 'setll', 'B']
+        break
+      case 'clickMap':
+        d = ['map', 'click']
+        break
+      case 'setRadius':
+        d = ['menu', 'setRadius', 'AB', mutation.payload]
+        break
     }
 
     if (d[0] && d[1]) {
@@ -33,6 +41,5 @@ export default (store: Store<RootState>) => {
         console.warn('action not tracked', mutation)
       }
     }
-
   })
 }
