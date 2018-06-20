@@ -43,7 +43,11 @@ import { LocationIcon } from '@/components/icons'
   },
 })
 export default class Map extends Vue {
-  @Prop() initialCenter!: L.LatLng
+  @Prop()
+  initialCenter!: {
+    lat: number
+    lng: number
+  }
 
   public icon = LocationIcon
   public options = { zoomControl: false }

@@ -29,6 +29,7 @@ const module: Module<State, RootState> = {
       const ciudad = CS.find(c => c.slug === slug)
       commit('setCiudad', ciudad)
     },
+    // geolocate promise that can be resolved from cache
     geolocate({ commit, dispatch }) {
       return geolocationObservable.takeFirst().catch(e => {
         dispatch('message', 'No se pudo acceder a la geolocalizacion')
