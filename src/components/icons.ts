@@ -1,6 +1,5 @@
 import iconUrl from '@/assets/marker-icon.png'
 import iconRetinaUrl from '@/assets/marker-icon-2x.png'
-import shadowUrl from '@/assets/marker-shadow.png'
 import stopIconUrl from '@/assets/marker-stop.png'
 import L from 'leaflet'
 

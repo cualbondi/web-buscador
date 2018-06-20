@@ -21,3 +21,8 @@ declare module 'vuetify/es5/components/*' {
 declare module 'vuetify/es5/directives'
 
 declare module '@/ciudades'
+
+interface LatLng {
+  lat: number
+  lng: number
+}
