@@ -3,12 +3,12 @@ import geobuf from 'geobuf'
 import debounce from 'lodash/debounce'
 
 export function debounceMethod(time: number) {
-  return function(target: any, name: any, descriptor: any){
-    const original = descriptor.value;
+  return function(target: any, name: any, descriptor: any) {
+    const original = descriptor.value
     if (typeof original === 'function') {
       descriptor.value = debounce(original, time)
     }
-    return descriptor;
+    return descriptor
   }
 }
 
@@ -39,14 +39,16 @@ export function checkGeolocationPermission(
   onPermissionChanged: OnPermissionChangedCallback,
 ) {
   // Check for Geolocation API permissions
-  ;(navigator as any).permissions
-    .query({ name: 'geolocation' })
-    .then(function(permissionStatus: any) {
-      onPermissionChanged(permissionStatus.state)
-      permissionStatus.onchange = function() {
-        onPermissionChanged(this.state)
-      }
-    })
+  if ('permissions' in navigator) {
+    ;(navigator as any).permissions
+      .query({ name: 'geolocation' })
+      .then(function(permissionStatus: any) {
+        onPermissionChanged(permissionStatus.state)
+        permissionStatus.onchange = function() {
+          onPermissionChanged(this.state)
+        }
+      })
+  }
 }
 
 type Observer = (position: Coordinates) => void
