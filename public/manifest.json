@@ -33,7 +33,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/mapa_nuevo/la-plata",
+  "start_url": "/mapa_nuevo/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",

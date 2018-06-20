@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Root from '@/views/Root.vue'
 import ABSearch from '@/views/ABSearch.vue'
-import Recorridos from '@/views/Recorridos.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
 import { BASE_URL } from '@/config'
-import * as CIUDADES from '@/ciudades'
+import CIUDADES from '@/ciudades'
 
 Vue.use(Router)
 
@@ -17,6 +17,11 @@ export default new Router({
   mode: 'history',
   base: BASE_URL,
   routes: [
+    {
+      path: `/`,
+      name: 'root',
+      component: Root,
+    },
     {
       path: `/:ciudadSlug(${ciudadesRegex})/`,
       name: 'absearch',
