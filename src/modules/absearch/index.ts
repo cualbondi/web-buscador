@@ -54,9 +54,12 @@ const module: Module<State, RootState> = {
   },
 
   actions: {
-    async getAB({ dispatch, getters }) {
+    async getAB({ state, dispatch, getters }) {
+      if (state.A === null || state.B === null ) { return }
       // we need to resolve geolocation before querying
-      await dispatch('geolocate')
+      if (state.A.type === 'geolocation' || state.B.type === 'geolocation') {
+        await dispatch('geolocate')
+      }
       const A = getters.A
       const B = getters.B
       return { lngA: A.lng, latA: A.lat, lngB: B.lng, latB: B.lat }
@@ -159,7 +162,12 @@ const module: Module<State, RootState> = {
       }
     },
     // sets A or B from a geocoder result
-    fromGeocoder({ dispatch }, { source, result}: { source: 'origin' | 'destination'; result: GeocoderResult },
+    fromGeocoder(
+      { dispatch },
+      {
+        source,
+        result,
+      }: { source: 'origin' | 'destination'; result: GeocoderResult },
     ) {
       if (source === 'origin') {
         return dispatch('setA', result)
