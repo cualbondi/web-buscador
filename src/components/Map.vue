@@ -1,6 +1,6 @@
 <template>
   <div class="mapContainer">
-    <l-map :zoom="zoom" :center="center" @click="onClick" :options="options">
+    <l-map :zoom="zoom" :center="center" @click="onClick" :options="options" ref="mapref">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
 
       <template v-if="recorrido">
@@ -37,6 +37,7 @@ import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
+import { LatLngLocation } from '@/modules/absearch';
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -168,6 +169,23 @@ export default class Map extends Vue {
       lat: coordinates.latitude,
       lng: coordinates.longitude,
       precision: coordinates.accuracy,
+    }
+  }
+  mounted(){
+    const A = this.A
+    const B = this.B
+
+    let bounds = L.latLngBounds([])
+    if (A && A.lat !== null && A.lng !== null){
+      bounds.extend({lat: A.lat, lng: A.lng})
+    }
+    if (B && B.lat !== null && B.lng !== null){
+      bounds.extend({lat: B.lat, lng: B.lng})
+    }
+    
+    if (bounds.isValid()){
+      bounds = bounds.pad(0.1)
+      this.$refs.mapref.mapObject.flyToBounds(bounds, {maxZoom: 14, animate: false})
     }
   }
 }
