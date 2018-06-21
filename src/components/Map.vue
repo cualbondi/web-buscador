@@ -185,7 +185,8 @@ export default class Map extends Vue {
     
     if (bounds.isValid()){
       bounds = bounds.pad(0.1)
-      this.$refs.mapref.mapObject.flyToBounds(bounds, {maxZoom: 14, animate: false})
+      const mapref: any = this.$refs.mapref
+      mapref.mapObject.flyToBounds(bounds, {maxZoom: 14, animate: false})
     }
   }
 }
