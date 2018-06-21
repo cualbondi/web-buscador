@@ -15,7 +15,7 @@ import { LatLngLocation } from '@/modules/absearch'
 })
 export default class extends Vue {
   get center() {
-    const fallback = L.latLng(-34.9205, -57.953646)
+    const fallback = this.ciudadLatLng
     const location: LatLngLocation =
       this.$route.params.point === 'origin'
         ? this.$store.getters.A
@@ -38,6 +38,9 @@ export default class extends Vue {
   locationPicked(center: LatLng) {
     this.setLatlng(center)
     this.$router.push({ name: 'absearch' })
+  }
+  get ciudadLatLng() {
+    return L.latLng(this.$store.getters.getCiudadLatlng)
   }
 }
 </script>
