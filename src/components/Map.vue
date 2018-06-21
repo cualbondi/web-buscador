@@ -17,10 +17,10 @@
 
       <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
 
+      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
+
       <l-editablecirclemarker v-if="A" :latLng.sync="A" :rad="radius" :options="{icon: aIcon}" />
       <l-editablecirclemarker v-if="B" :latLng.sync="B" :rad="radius" :options="{icon: bIcon}" />
-
-      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
 
     </l-map>
   </div>
@@ -94,7 +94,7 @@ export default class Map extends Vue {
     icon: new L.DivIcon({ className: 'location-marker' }),
     opacity: 0,
     fillOpacity: 0.1,
-    fillColor: 'red',
+    fillColor: '#4285f4',
   }
 
   public backPolyStyle = {
@@ -207,33 +207,39 @@ export default class Map extends Vue {
   filter: saturate(90%);
 }
 div.location-marker {
-  border: 1px solid #428bca;
-  background-color: #5bc0de;
+  background-color: white;
   height: 16px !important;
   width: 16px !important;
-  border-radius: 8px;
+  border-radius: 50%;
   margin: -8px 0 0 -8px !important;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.5s infinite alternate;
+  // animation: fadeIn 0.5s infinite alternate;
+
+  &::after {
+    display: block;
+    position: relative;
+    content: '';
+    height: 10px;
+    width: 10px;
+    top: 3px;
+    left: 3px;
+    background-color: #4285f4 ;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite alternate;
+  }
 }
+
 
 div.location-marker.red {
   background-color: red;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  75% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.5;
-  }
+@keyframes pulse {
+  from {
+        transform: scale(0.95, 0.95);
+   }
+   to {
+       transform: scale(1.2, 1.2);
+   }
 }
 </style>
