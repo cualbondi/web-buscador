@@ -29,16 +29,17 @@ interface RecorridosParams {
   latB: number
   rad: number
   page: number
+  ciudadSlug: string
 }
 
 function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
-  const { lngA, latA, lngB, latB, rad, page = 1 } = params
-  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=la-plata&page=${page}&t=false`
+  const { lngA, latA, lngB, latB, rad, page = 1, ciudadSlug } = params
+  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=${ciudadSlug}&page=${page}&t=false`
   return client.get(url).then(res => convertResults(res.data))
 }
 
-function geocoder(query: string): Promise<GeocoderResponse[]> {
-  const url = `/geocoder/?q=${query}&c=la-plata)`
+function geocoder(query: string, ciudadSlug: string): Promise<GeocoderResponse[]> {
+  const url = `/geocoder/?q=${query}&c=${ciudadSlug}`
   return client.get(url).then(res => res.data)
 }
 
