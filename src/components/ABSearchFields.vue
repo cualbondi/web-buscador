@@ -6,10 +6,12 @@
     </v-btn>
     
     <div class="input-location origin" @click="searchOrigin">
+      <div class="cue"></div>
       {{ locationOrigin }}
     </div>
 
     <div class="input-location destination" @click="searchDestination">
+      <div class="cue"></div>
       {{ locationDestination }}
     </div>
 

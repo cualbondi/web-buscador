@@ -13,12 +13,7 @@
   justify-content: center;
   align-items: center;
 }
-.origin {
-  grid-area: origin;
-}
-.destination {
-  grid-area: destination;
-}
+
 .menubtn {
   grid-area: menu;
 }
@@ -36,4 +31,31 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  cursor: text;
+  &.origin {
+    grid-area: origin;
+    position: relative;
+    .cue {
+      position: absolute;
+      display: block;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      background-color: #AC3622;
+    }
+  }
+  &.destination {
+    grid-area: destination;
+    position: relative;
+    .cue {
+      position: absolute;
+      display: block;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      background-color: rgb(75, 180, 5);
+    }
+  }
 }

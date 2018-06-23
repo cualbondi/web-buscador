@@ -1,5 +1,5 @@
 <template>
-  <MapLocationPicker :initialCenter="center" @locationPicked="locationPicked" />
+  <MapLocationPicker :initialCenter="center" @locationPicked="locationPicked" :icon="icon"/>
 </template>
 
 <script lang="ts">
@@ -7,6 +7,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import MapLocationPicker from '@/components/MapLocationPicker.vue'
 import L from 'leaflet'
 import { LatLngLocation } from '@/modules/absearch'
+import { geoLocationIcon, AIconDragging, BIconDragging } from '@/components/icons'
+
 
 @Component({
   components: {
@@ -14,6 +16,15 @@ import { LatLngLocation } from '@/modules/absearch'
   },
 })
 export default class extends Vue {
+  public icon: any = null
+  mounted() {
+    if (this.$route.params.point === 'origin') {
+      this.icon = AIconDragging
+    }
+    else {
+      this.icon = BIconDragging
+    }
+  }
   get center() {
     const fallback = this.ciudadLatLng
     const location: LatLngLocation =

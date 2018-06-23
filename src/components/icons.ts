@@ -1,14 +1,9 @@
-import iconUrl from '@/assets/marker-icon.png'
-import iconRetinaUrl from '@/assets/marker-icon-2x.png'
 import stopIconUrl from '@/assets/marker-stop.png'
 import L from 'leaflet'
 
-export const LocationIcon = L.icon(
-  Object.assign({}, L.Icon.Default.prototype.options, {
-    iconUrl,
-    iconRetinaUrl,
-  }),
-)
+export const geoLocationIcon = new L.DivIcon({
+  className: 'location-marker'
+})
 
 export const StopIcon = L.icon(
   Object.assign({}, L.Icon.Default.prototype.options, {
@@ -20,16 +15,22 @@ export const StopIcon = L.icon(
   }),
 )
 
-export const AIcon = L.icon(
-  Object.assign({}, L.Icon.Default.prototype.options, {
-    iconUrl,
-    iconRetinaUrl,
-  }),
-)
+export const AIcon = new L.DivIcon({
+  className: 'markerAB markerA',
+  popupAnchor: [0, -40]
+})
 
-export const BIcon = L.icon(
-  Object.assign({}, L.Icon.Default.prototype.options, {
-    iconUrl,
-    iconRetinaUrl,
-  }),
-)
+export const BIcon = new L.DivIcon({
+  className: 'markerAB markerB',
+  popupAnchor: [0, -40]
+})
+
+export const AIconDragging = new L.DivIcon({
+  className: 'markerAB markerA drag',
+  popupAnchor: [0, -40]
+})
+
+export const BIconDragging = new L.DivIcon({
+  className: 'markerAB markerA drag',
+  popupAnchor: [0, -40]
+})
