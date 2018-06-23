@@ -64,11 +64,12 @@ const module: Module<State, RootState> = {
       const B = getters.B
       return { lngA: A.lng, latA: A.lat, lngB: B.lng, latB: B.lat }
     },
-    async query({ dispatch, commit, state }) {
+    async query({ dispatch, commit, state, getters }) {
       if (!state.A || !state.B) {
         return
       }
       const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      const ciudadSlug = getters.getCiudad.slug
       const params = {
         lngA,
         latA,
@@ -76,6 +77,7 @@ const module: Module<State, RootState> = {
         latB,
         rad: state.radius,
         page: state.resultsPage,
+        ciudadSlug,
       }
       try {
         const data = await api.recorridos(params)
@@ -89,12 +91,13 @@ const module: Module<State, RootState> = {
         commit('finishLoadingResults')
       }
     },
-    async getNextPage({ commit, state, dispatch }) {
+    async getNextPage({ commit, state, dispatch, getters }) {
       commit('startLoadingMoreResults')
       if (!state.A || !state.B) {
         return
       }
       const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      const ciudadSlug = getters.getCiudad.slug
       const params = {
         lngA,
         latA,
@@ -102,6 +105,7 @@ const module: Module<State, RootState> = {
         latB,
         rad: state.radius,
         page: state.resultsPage + 1,
+        ciudadSlug,
       }
       try {
         const data = await api.recorridos(params)

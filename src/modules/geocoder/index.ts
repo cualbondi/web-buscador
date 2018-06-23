@@ -12,8 +12,9 @@ const module: Module<State, RootState> = {
     results: [],
   },
   actions: {
-    geocode({ commit }, query) {
-      return api.geocoder(query).then(results => {
+    geocode({ commit, getters }, query) {
+      const ciudadSlug = getters.getCiudad.slug
+      return api.geocoder(query, ciudadSlug).then(results => {
         commit('setGeocoderResults', results)
       })
     },
