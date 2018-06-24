@@ -68,6 +68,7 @@ const module: Module<State, RootState> = {
       if (!state.A || !state.B) {
         return
       }
+      commit('setResults', [])
       const { lngA, latA, lngB, latB } = await dispatch('getAB')
       const ciudadSlug = getters.getCiudad.slug
       const params = {
