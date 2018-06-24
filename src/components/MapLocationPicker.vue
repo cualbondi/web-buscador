@@ -1,7 +1,7 @@
 <template>
   <div class="map-picker">
 
-    <v-toolbar dark color="primary">
+    <v-toolbar class="toolbar" dark color="primary">
       <v-toolbar-side-icon @click="goBack">
         <v-icon dark>arrow_back</v-icon>
       </v-toolbar-side-icon>
@@ -18,7 +18,7 @@
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
 
-    <v-btn class="mylocation" fab color="white" @click="geolocate">
+    <v-btn class="mylocation" fab color="white" :style="{color: locatemeColor}" @click="geolocate">
         <v-icon>my_location</v-icon>
     </v-btn>
   </div>
@@ -102,6 +102,14 @@ export default class Map extends Vue {
   moveend() {
     this.updatingGeolocation = false
   }
+  
+  get locatemeColor(){
+    const geolocation = this.geolocation
+    if (geolocation !== null && this.center.lat === geolocation.lat && this.center.lng === geolocation.lng){
+      return "#4285f4"
+    }
+    return "#4a4a4a"
+  }
 }
 </script>
 
@@ -112,10 +120,18 @@ export default class Map extends Vue {
   display: grid;
   grid-template-rows: auto 1fr;
 }
+.toolbar { 
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+  z-index: 1000;
+}
 .mylocation {
   position: absolute !important;
   right: 0;
   bottom: 15px;
   z-index: 1000;
+  i {
+    border-radius: 50%;
+    background-color: white;
+  }
 }
 </style>

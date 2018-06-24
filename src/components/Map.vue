@@ -213,19 +213,18 @@ div.location-marker {
   border-radius: 50%;
   margin: -8px 0 0 -8px !important;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-  // animation: fadeIn 0.5s infinite alternate;
 
   &::after {
     display: block;
     position: relative;
     content: '';
-    height: 10px;
-    width: 10px;
-    top: 3px;
-    left: 3px;
+    height: 12px;
+    width: 12px;
+    top: 2px;
+    left: 2px;
     background-color: #4285f4 ;
     border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite alternate;
+    animation: pulse 1.5s ease-in-out 0.5s infinite alternate;
   }
 }
 
@@ -236,10 +235,10 @@ div.location-marker.red {
 
 @keyframes pulse {
   from {
-        transform: scale(0.95, 0.95);
+    transform: scale(1, 1);
    }
    to {
-       transform: scale(1.2, 1.2);
+    transform: scale(0.8, 0.8);
    }
 }
 </style>
