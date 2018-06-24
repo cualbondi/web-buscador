@@ -252,6 +252,12 @@ const module: Module<State, RootState> = {
     getResultsMoreLoading(state) {
       return state.resultsMoreLoading
     },
+    hasNextResult(state){
+      return state.resultsMore || state.resultSelected < state.results.length - 1
+    },
+    hasPrevResult(state){
+      return !(state.resultSelected === 0)
+    },
     // extends A or B so they have geolocation info if available
     A(state, rootState): LatLngLocation {
       const geolocation: Coordinates = rootState.geolocation

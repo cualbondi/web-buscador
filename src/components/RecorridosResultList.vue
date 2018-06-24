@@ -4,7 +4,7 @@
       Buscando ...
     </div>
     <div class="single-result">
-      <span class="arrow-left" v-ripple @click="$emit('update:selectedIndex', selectedIndex - 1); directionRight = false">
+      <span :class="{'arrow-left': true, disabled: !hasPrevResult}" :v-ripple="hasPrevResult" @click="$emit('update:selectedIndex', selectedIndex - 1); directionRight = false">
         <v-icon>chevron_left</v-icon>
       </span>
       <span class="card" @click="toggleSmallResults">
@@ -17,7 +17,7 @@
           </span>
         </transition>
       </span>
-      <span class="arrow-right" v-ripple @click="$emit('update:selectedIndex', selectedIndex + 1); directionRight = true">
+      <span :class="{'arrow-right': true, disabled: !hasNextResult}" :v-ripple="hasNextResult" @click="$emit('update:selectedIndex', selectedIndex + 1); directionRight = true">
         <v-icon>chevron_right</v-icon>
       </span>
     </div>
@@ -72,6 +72,15 @@ export default class Home extends Vue {
   get resultsMore() {
     return this.$store.getters.getResultsMore
   }
+
+  get hasNextResult(){
+    return this.$store.getters.hasNextResult
+  }
+
+  get hasPrevResult(){
+    return this.$store.getters.hasPrevResult
+  }
+  
 }
 </script>
 
