@@ -11,9 +11,7 @@
     
     <Map class="middle" :center="center" :zoom="zoom" />
     
-    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" 
-    :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :class="{small: smallResults}" />
-  
+    <a-b-search-results class="bottom results-container" :class="{small: smallResults}" v-if="searchRequested"/>
   </div>
 </template>
 
@@ -22,7 +20,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import ABSearchFields from '@/components/ABSearchFields.vue'
 import Map from '@/components/Map.vue'
 import SideMenu from '@/components/SideMenu.vue'
-import RecorridosResultList from '@/components/RecorridosResultList.vue'
+import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import L from 'leaflet'
 
 @Component({
@@ -30,7 +28,7 @@ import L from 'leaflet'
     ABSearchFields,
     Map,
     SideMenu,
-    RecorridosResultList,
+    ABSearchResults,
   },
 })
 export default class Home extends Vue {
@@ -51,20 +49,17 @@ export default class Home extends Vue {
   get zoom() {
     return this.$store.getters.getCiudadZoom
   }
-  get smallResults() {
-    return this.$store.getters.getSmallResults
-  }
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
-  get recorridoSelectedIndex() {
-    return this.$store.getters.getRecorridoSelectedIndex
-  }
-  set recorridoSelectedIndex(val) {
-    this.$store.dispatch('setRecorridoSelectedIndex', val)
-  }
   get withResults() {
-    return this.recorridos.length > 0 ? 'with-results' : 'no-results'
+    return this.searchRequested ? 'with-results' : 'no-results'
+  }
+  get searchRequested() {
+    return this.$store.getters.searchRequested
+  }
+  get smallResults() {
+    return this.$store.getters.getSmallResults
   }
 }
 </script>
@@ -72,7 +67,7 @@ export default class Home extends Vue {
 <style lang="scss" src="./ABSearch.scss" scoped>
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main > .v-overlay--active {
   z-index: 10000;
 }

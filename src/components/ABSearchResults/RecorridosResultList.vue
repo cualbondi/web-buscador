@@ -4,10 +4,17 @@
       Buscando ...
     </div>
     <div class="single-result">
-      <span class="arrow-left" :class="{disabled: !hasPrevResult}" :v-ripple="hasPrevResult" @click="$emit('update:selectedIndex', selectedIndex - 1); directionRight = false">
+      
+      <span class="arrow-left" :class="{disabled: !hasPrevResult}" :v-ripple="hasPrevResult" @click="prevResult">
         <v-icon>chevron_left</v-icon>
       </span>
-      <span class="card" @click="toggleSmallResults">
+      
+      <span class="card" 
+        @click="toggleSmallResults"
+        v-touch="{
+          left: nextResult,
+          right: prevResult
+        }">
         <transition name="fade">
           <span class="animated" :class="{directionRight: directionRight, directionLeft: !directionRight}" v-for="(result, $index) in results" :key="result.id" v-if="selectedIndex == $index">
             <span class="avatar"><v-icon>directions_bus</v-icon></span>
@@ -16,10 +23,13 @@
             <span class="distances"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_bondi/100)/10}}km</span>
           </span>
         </transition>
+      
       </span>
-      <span class="arrow-right" :class="{disabled: !hasNextResult}" :v-ripple="hasNextResult" @click="$emit('update:selectedIndex', selectedIndex + 1); directionRight = true">
+      
+      <span class="arrow-right" :class="{disabled: !hasNextResult}" :v-ripple="hasNextResult" @click="nextResult">
         <v-icon>chevron_right</v-icon>
       </span>
+
     </div>
     <v-list :two-line="true" class="results">
       <v-list-tile v-for="(result, $index) in results" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
@@ -46,7 +56,7 @@ import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
 import { Recorrido } from '@/api/schema'
 
 @Component({})
-export default class Home extends Vue {
+export default class RecorridosResultList extends Vue {
   @Prop() public results!: Recorrido[]
   @Prop() public selectedIndex: number
   @Prop() public small: boolean
@@ -73,14 +83,21 @@ export default class Home extends Vue {
     return this.$store.getters.getResultsMore
   }
 
-  get hasNextResult(){
+  get hasNextResult() {
     return this.$store.getters.hasNextResult
   }
 
-  get hasPrevResult(){
+  get hasPrevResult() {
     return this.$store.getters.hasPrevResult
   }
-  
+  nextResult() {
+    this.$emit('update:selectedIndex', this.selectedIndex + 1)
+    this.directionRight = true
+  }
+  prevResult() {
+    this.$emit('update:selectedIndex', this.selectedIndex - 1)
+    this.directionRight = false
+  }
 }
 </script>
 

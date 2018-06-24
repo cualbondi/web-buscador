@@ -104,13 +104,17 @@ export default class Map extends Vue {
   moveend() {
     this.updatingGeolocation = false
   }
-  
-  get locatemeColor(){
+
+  get locatemeColor() {
     const geolocation = this.geolocation
-    if (geolocation !== null && this.center.lat === geolocation.lat && this.center.lng === geolocation.lng){
-      return "#4285f4"
+    if (
+      geolocation !== null &&
+      this.center.lat === geolocation.lat &&
+      this.center.lng === geolocation.lng
+    ) {
+      return '#4285f4'
     }
-    return "#4a4a4a"
+    return '#4a4a4a'
   }
 }
 </script>
@@ -122,7 +126,7 @@ export default class Map extends Vue {
   display: grid;
   grid-template-rows: auto 1fr;
 }
-.toolbar { 
+.toolbar {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
   z-index: 1000;
 }
