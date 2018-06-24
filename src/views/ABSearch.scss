@@ -3,6 +3,7 @@
 }
 .main {
   height: 100%;
+  width: 100%;
   display: grid;
 }
 .top,
@@ -21,7 +22,7 @@
 
 @media (max-width: 600px) {
   .main {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100vw;
     &.no-results {
       grid-template-rows: 120px 1fr;
       grid-template-areas: 'top' 'map';

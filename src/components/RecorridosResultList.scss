@@ -1,0 +1,148 @@
+.single-result {
+  height: 90px;
+  display: grid;
+  grid-template-columns: 10% 1fr 10%;
+  grid-template-rows: 100%;
+  grid-template-areas: 'left card right';
+  border-bottom: 1px solid #ddd;
+  >span.arrow-left, >span.arrow-right {
+    background: white;
+    z-index: 10;
+    display: grid;
+    cursor: pointer;
+  }
+  >span.arrow-left {
+    grid-area: left;
+    border-right: 1px solid #ddd;
+  }
+  >span.arrow-right {
+    grid-area: right;
+    border-left: 1px solid #ddd;
+  }
+  >span.card {
+    background: white;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    span.animated {
+      background: white;
+      position: absolute;
+      grid-area: card;
+      display: grid;
+      height: 100%;
+      width: 100%;
+      padding-top: 3px;
+      grid-template-columns: 35px 1fr;
+      grid-template-rows: 43% 25% 25%;
+      align-items: center;
+      grid-template-areas: 'avatar title' 'description description' 'distances distances';
+      >span.avatar {
+        grid-area: avatar;
+        justify-self: center;
+      }
+      >span.title {
+        grid-area: title;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      >span.description {
+        grid-area: description;
+        margin-left: 10px;
+      }
+      >span.distances {
+        grid-area: distances;
+        margin-left: 8px;
+        .v-icon {
+          font-size: 17px;
+          vertical-align: text-top;
+        }
+      }
+    }
+  }
+  
+}
+
+@media (min-width: 601px) {
+  .single-result {
+    display: none;
+  }
+}
+
+$speed: 0.2s;
+.directionRight {
+  &.fade-enter-active,
+  &.fade-leave-active {
+    right: -100%;
+    animation: slideRight $speed forwards;
+  }
+  &.fade-leave-to {
+    right: 0px;
+    animation: slideRight $speed forwards;
+  }
+  &.fade-enter-active {
+    right: -100%;
+    animation: slideRightBack $speed forwards;
+  }
+  &.fade-enter {
+    right: 0px;
+    animation: slideRightBack $speed forwards;
+  }
+}
+
+.directionLeft {
+  &.fade-leave-active {
+    left: -100%;
+    animation: slideLeft $speed forwards;
+  }
+  &.fade-leave-to {
+    left: 0px;
+    animation: slideLeft $speed forwards;
+  }
+  &.fade-enter-active {
+    left: -100%;
+    animation: slideLeftBack $speed forwards;
+  }
+  &.fade-enter {
+    left: 0px;
+    animation: slideLeftBack $speed forwards;
+  }
+}
+@keyframes slideRight {
+  100% {
+    right: -100%;
+  }
+}
+
+@keyframes slideRightBack {
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes slideLeft {
+  100% {
+    left: -100%;
+  }
+}
+
+@keyframes slideLeftBack {
+  100% {
+    left: 0;
+  }
+}
+
+.results {
+  margin-top: 5px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  height: 100%;
+  overflow: auto;
+  margin: 0;
+}
+
+.subheader {
+  height: 25px;
+}
+
+.selected {
+  background: #def;
+}
