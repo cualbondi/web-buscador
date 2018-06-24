@@ -22,8 +22,8 @@
   margin-left: 20px;
 }
 .input-location {
-  background-color: #5a8ff9;
-  color: white;
+  background-color: #3331;
+  color: #eee;
   height: 34px;
   padding: 8px 12px;
   display: flex;
@@ -42,7 +42,7 @@
       bottom: 0;
       left: 0;
       width: 4px;
-      background-color: #AC3622;
+      background-color: #FFB703;
     }
   }
   &.destination {
@@ -55,7 +55,7 @@
       bottom: 0;
       left: 0;
       width: 4px;
-      background-color: rgb(75, 180, 5);
+      background-color: #B72815;
     }
   }
 }

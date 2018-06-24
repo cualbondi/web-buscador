@@ -99,12 +99,12 @@ export default class Map extends Vue {
 
   public backPolyStyle = {
     color: '#555',
-    opacity: 0.9,
+    opacity: 0.75,
     weight: 10,
   }
 
   public polyStyle = {
-    color: '#4285f4',
+    color: '#51B2E0',
     opacity: 0.9,
     weight: 8,
   }
@@ -116,17 +116,17 @@ export default class Map extends Vue {
     draggable: true,
     icon: AIcon,
     weight: 1,
-    opacity: 0.8,
-    fillOpacity: 0.2,
-    color: '#ef5734'
+    opacity: 0.7,
+    fillOpacity: 0.25,
+    color: '#FFB703'
   }
   public bOptions = {
     draggable: true,
     icon: BIcon,
     weight: 1,
-    opacity: 0.8,
-    fillOpacity: 0.2,
-    color: '#74b843'
+    opacity: 0.3,
+    fillOpacity: 0.15,
+    color: '#B72815'
   }
 
   get recorridos() {
@@ -260,13 +260,13 @@ div.location-marker.red {
 <style lang="scss">
 .leaflet-map-pane:not(.leaflet-zoom-anim) div.leaflet-marker-icon.markerAB {
   transition: height .4s ease;
-  transition: margin .4s ease;
+  transition: margin-top .4s ease;
 }
 .leaflet-map-pane div.leaflet-marker-icon.markerAB {
-  margin-left: -25px !important;
-  margin-top: -60px !important;
-  width: 50px !important;
-  height: 60px !important;
+  margin-left: -22px !important;
+  margin-top: -63px !important;
+  width: 44px !important;
+  height: 63px !important;
   opacity: 1 !important;
 }
 div.leaflet-marker-icon.markerA {
@@ -285,9 +285,9 @@ div.leaflet-marker-icon.markerB.leaflet-drag-target,
 }
 div.leaflet-marker-icon.leaflet-drag-target.markerAB,
 .leaflet-dragging div.leaflet-marker-icon.markerAB.drag {
-    margin-left: -25px !important;
-    margin-top: -51px !important;
-    width: 50px !important;
-    height: 60px !important;
+    margin-left: -5px !important;
+    margin-top: -64px !important;
+    width: 52px !important;
+    height: 71px !important;
 }
 </style>
