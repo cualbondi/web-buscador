@@ -38,7 +38,10 @@ function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
   return client.get(url).then(res => convertResults(res.data))
 }
 
-function geocoder(query: string, ciudadSlug: string): Promise<GeocoderResponse[]> {
+function geocoder(
+  query: string,
+  ciudadSlug: string,
+): Promise<GeocoderResponse[]> {
   const url = `/geocoder/?q=${query}&c=${ciudadSlug}`
   return client.get(url).then(res => res.data)
 }

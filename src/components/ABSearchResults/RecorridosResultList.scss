@@ -5,7 +5,8 @@
   grid-template-rows: 100%;
   grid-template-areas: 'left card right';
   border-bottom: 1px solid #ddd;
-  >span.arrow-left, >span.arrow-right {
+  > span.arrow-left,
+  > span.arrow-right {
     background: white;
     z-index: 10;
     display: grid;
@@ -15,16 +16,15 @@
       opacity: 0.5;
     }
   }
-  >span.arrow-left {
+  > span.arrow-left {
     grid-area: left;
     border-right: 1px solid #ddd;
   }
-  >span.arrow-right {
+  > span.arrow-right {
     grid-area: right;
     border-left: 1px solid #ddd;
-
   }
-  >span.card {
+  > span.card {
     background: white;
     position: relative;
     overflow: hidden;
@@ -41,20 +41,20 @@
       grid-template-rows: 43% 25% 25%;
       align-items: center;
       grid-template-areas: 'avatar title' 'description description' 'distances distances';
-      >span.avatar {
+      > span.avatar {
         grid-area: avatar;
         justify-self: center;
       }
-      >span.title {
+      > span.title {
         grid-area: title;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      >span.description {
+      > span.description {
         grid-area: description;
         margin-left: 10px;
       }
-      >span.distances {
+      > span.distances {
         grid-area: distances;
         margin-left: 8px;
         .v-icon {
@@ -64,7 +64,6 @@
       }
     }
   }
-  
 }
 
 @media (min-width: 601px) {
@@ -138,7 +137,8 @@ $speed: 0.2s;
 
 .results {
   margin-top: 5px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
   height: 100%;
   overflow: auto;
   margin: 0;

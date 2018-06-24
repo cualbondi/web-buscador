@@ -52,7 +52,7 @@ export default class Root extends Vue {
   height: 105vh;
   overflow: auto;
   .v-list__tile__content {
-    color: #003B5C;
+    color: #003b5c;
   }
 }
 .logo-container {

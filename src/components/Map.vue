@@ -37,7 +37,7 @@ import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
-import { LatLngLocation } from '@/modules/absearch';
+import { LatLngLocation } from '@/modules/absearch'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -171,22 +171,22 @@ export default class Map extends Vue {
       precision: coordinates.accuracy,
     }
   }
-  mounted(){
+  mounted() {
     const A = this.A
     const B = this.B
 
     let bounds = L.latLngBounds([])
-    if (A && A.lat !== null && A.lng !== null){
-      bounds.extend({lat: A.lat, lng: A.lng})
+    if (A && A.lat !== null && A.lng !== null) {
+      bounds.extend({ lat: A.lat, lng: A.lng })
     }
-    if (B && B.lat !== null && B.lng !== null){
-      bounds.extend({lat: B.lat, lng: B.lng})
+    if (B && B.lat !== null && B.lng !== null) {
+      bounds.extend({ lat: B.lat, lng: B.lng })
     }
-    
-    if (bounds.isValid()){
+
+    if (bounds.isValid()) {
       bounds = bounds.pad(0.1)
       const mapref: any = this.$refs.mapref
-      mapref.mapObject.flyToBounds(bounds, {maxZoom: 14, animate: false})
+      mapref.mapObject.flyToBounds(bounds, { maxZoom: 14, animate: false })
     }
   }
 }
@@ -222,12 +222,11 @@ div.location-marker {
     width: 12px;
     top: 2px;
     left: 2px;
-    background-color: #4285f4 ;
+    background-color: #4285f4;
     border-radius: 50%;
     animation: pulse 1.5s ease-in-out 0.5s infinite alternate;
   }
 }
-
 
 div.location-marker.red {
   background-color: red;
@@ -236,9 +235,9 @@ div.location-marker.red {
 @keyframes pulse {
   from {
     transform: scale(1, 1);
-   }
-   to {
+  }
+  to {
     transform: scale(0.8, 0.8);
-   }
+  }
 }
 </style>
