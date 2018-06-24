@@ -31,6 +31,6 @@ export const AIconDragging = new L.DivIcon({
 })
 
 export const BIconDragging = new L.DivIcon({
-  className: 'markerAB markerA drag',
+  className: 'markerAB markerB drag',
   popupAnchor: [0, -40]
 })

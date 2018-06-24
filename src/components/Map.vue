@@ -263,11 +263,12 @@ div.location-marker.red {
   transition: margin-top .4s ease;
 }
 .leaflet-map-pane div.leaflet-marker-icon.markerAB {
-  margin-left: -22px !important;
-  margin-top: -63px !important;
-  width: 44px !important;
-  height: 63px !important;
+  margin-left: -15px !important;
+  margin-top: -43px !important;
+  width: 30px !important;
+  height: 43px !important;
   opacity: 1 !important;
+  background-size: contain;
 }
 div.leaflet-marker-icon.markerA {
   background: url('../assets/markerA.png');
@@ -285,9 +286,9 @@ div.leaflet-marker-icon.markerB.leaflet-drag-target,
 }
 div.leaflet-marker-icon.leaflet-drag-target.markerAB,
 .leaflet-dragging div.leaflet-marker-icon.markerAB.drag {
-    margin-left: -5px !important;
-    margin-top: -64px !important;
-    width: 52px !important;
-    height: 71px !important;
+    margin-left: -4px !important;
+    margin-top: -46px !important;
+    width: 36px !important;
+    height: 49px !important;
 }
 </style>
