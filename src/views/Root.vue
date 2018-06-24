@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex sm6 xs12>
         <div class="logo-container">
-          <img src="img/isologo-min.png" />
+          <img src="../assets/isologo-min.png" />
         </div>
       </v-flex>
       <v-flex sm6 xs12>

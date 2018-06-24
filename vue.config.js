@@ -27,7 +27,27 @@ const productionPlugins = [
 module.exports = {
   baseUrl: BASE_URL,
   outputDir: 'dist' + BASE_URL,
-
+  chainWebpack: config => {
+    config.plugin('prefetch').tap(options => {
+      options[0].include = 'allAssets'
+      options[0].as = function (entry) {
+        if (/\.css$/.test(entry)) return 'style';
+        if (/\.woff$/.test(entry)) return 'font';
+        if (/\.png$/.test(entry)) return 'image';
+        return 'script';
+      }
+      return options
+    })
+    config.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
+      .use('url-loader')
+      .loader('url-loader')
+      .options({
+        limit: 128,
+        name: 'img/[name].[hash:8].[ext]'
+      })
+  },
   configureWebpack: {
     plugins: production ? productionPlugins : developmentPlugins,
   },

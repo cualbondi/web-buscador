@@ -270,18 +270,18 @@ div.location-marker.red {
   opacity: 1 !important;
 }
 div.leaflet-marker-icon.markerA {
-  background: url('/mapa_nuevo/img/markerA.png');
+  background: url('../assets/markerA.png');
 }
 div.leaflet-marker-icon.markerA.leaflet-drag-target,
 .leaflet-dragging div.leaflet-marker-icon.markerA.drag {
-  background: url('/mapa_nuevo/img/markerA-drag.png');
+  background: url('../assets/markerA-drag.png');
 }
 div.leaflet-marker-icon.markerB {
-  background: url('/mapa_nuevo/img/markerB.png');
+  background: url('../assets/markerB.png');
 }
 div.leaflet-marker-icon.markerB.leaflet-drag-target,
 .leaflet-dragging div.leaflet-marker-icon.markerB.drag {
-  background: url('/mapa_nuevo/img/markerB-drag.png');
+  background: url('../assets/markerB-drag.png');
 }
 div.leaflet-marker-icon.leaflet-drag-target.markerAB,
 .leaflet-dragging div.leaflet-marker-icon.markerAB.drag {
