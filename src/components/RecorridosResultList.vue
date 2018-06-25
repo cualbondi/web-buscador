@@ -34,7 +34,7 @@
             <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
-        <div v-if="($index > 0) && ($index%4 === 1)" :key="result.id + '_ad'" style="height: initial">
+        <!--div v-if="($index > 0) && ($index%4 === 1)" :key="result.id + '_ad'" style="height: initial">
           <InFeedAdsense
             data-ad-client="ca-pub-1193419141108967"
             data-ad-slot="2366883515"
@@ -42,7 +42,7 @@
             data-ad-format="fluid"
           >
           </InFeedAdsense>
-        </div>
+        </div-->
       </template>
       <v-list-tile>
         <v-btn v-if="resultsMore" @click="getNextPage">Buscar mas resultados</v-btn>
