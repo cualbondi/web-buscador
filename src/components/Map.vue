@@ -17,10 +17,10 @@
 
       <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
 
-      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
+      <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="geoMarkerOptions"/>
 
-      <l-editablecirclemarker v-if="A" :latLng.sync="A" :rad="radius" :options="{icon: aIcon}" />
-      <l-editablecirclemarker v-if="B" :latLng.sync="B" :rad="radius" :options="{icon: bIcon}" />
+      <l-editablecirclemarker v-if="A" :latLng.sync="A" :rad="radius" :options="aOptions" />
+      <l-editablecirclemarker v-if="B" :latLng.sync="B" :rad="radius" :options="bOptions" />
 
     </l-map>
   </div>
@@ -36,8 +36,8 @@ import 'leaflet-polylinedecorator'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-import { LocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
 import { LatLngLocation } from '@/modules/absearch';
+import { geoLocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -88,33 +88,46 @@ export default class Map extends Vue {
     weight: 5,
   }
 
-  public markerOptions = {
+  public geoMarkerOptions = {
     draggable: false,
     radius: 0,
-    icon: new L.DivIcon({ className: 'location-marker' }),
+    icon: geoLocationIcon,
     opacity: 0,
-    fillOpacity: 0.1,
+    fillOpacity: 0.2,
     fillColor: '#4285f4',
   }
 
   public backPolyStyle = {
     color: '#555',
-    opacity: 0.9,
+    opacity: 0.75,
     weight: 10,
   }
 
   public polyStyle = {
-    color: '#4285f4',
+    color: '#51B2E0',
     opacity: 0.9,
     weight: 8,
   }
 
   public patterns = [decoratorArrow1, decoratorArrow2, decoratorArrow3]
 
-  public locationIcon = LocationIcon
   public stopIcon = StopIcon
-  public aIcon = AIcon
-  public bIcon = BIcon
+  public aOptions = {
+    draggable: true,
+    icon: AIcon,
+    weight: 1,
+    opacity: 0.7,
+    fillOpacity: 0.25,
+    color: '#FFB703'
+  }
+  public bOptions = {
+    draggable: true,
+    icon: BIcon,
+    weight: 1,
+    opacity: 0.3,
+    fillOpacity: 0.15,
+    color: '#B72815'
+  }
 
   get recorridos() {
     return this.$store.getters.getRecorridos
@@ -182,7 +195,7 @@ export default class Map extends Vue {
     if (B && B.lat !== null && B.lng !== null){
       bounds.extend({lat: B.lat, lng: B.lng})
     }
-    
+
     if (bounds.isValid()){
       bounds = bounds.pad(0.1)
       const mapref: any = this.$refs.mapref
@@ -240,5 +253,41 @@ div.location-marker.red {
    to {
     transform: scale(0.8, 0.8);
    }
+}
+</style>
+
+<style lang="scss">
+.leaflet-map-pane:not(.leaflet-zoom-anim) div.leaflet-marker-icon.markerAB {
+  transition: height .4s ease;
+  transition: margin-top .4s ease;
+}
+.leaflet-map-pane div.leaflet-marker-icon.markerAB {
+  margin-left: -15px !important;
+  margin-top: -43px !important;
+  width: 30px !important;
+  height: 43px !important;
+  opacity: 1 !important;
+  background-size: contain;
+}
+div.leaflet-marker-icon.markerA {
+  background: url('../assets/markerA.png');
+}
+div.leaflet-marker-icon.markerA.leaflet-drag-target,
+.leaflet-dragging div.leaflet-marker-icon.markerA.drag {
+  background: url('../assets/markerA-drag.png');
+}
+div.leaflet-marker-icon.markerB {
+  background: url('../assets/markerB.png');
+}
+div.leaflet-marker-icon.markerB.leaflet-drag-target,
+.leaflet-dragging div.leaflet-marker-icon.markerB.drag {
+  background: url('../assets/markerB-drag.png');
+}
+div.leaflet-marker-icon.leaflet-drag-target.markerAB,
+.leaflet-dragging div.leaflet-marker-icon.markerAB.drag {
+    margin-left: -4px !important;
+    margin-top: -46px !important;
+    width: 36px !important;
+    height: 49px !important;
 }
 </style>

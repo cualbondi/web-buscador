@@ -58,7 +58,7 @@ Vue.use(Vuetify, {
     Ripple,
   },
   theme: {
-    primary: '#4285F4',
+    primary: '#51B2E0',
   },
 })
 

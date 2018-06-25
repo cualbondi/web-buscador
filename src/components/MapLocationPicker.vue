@@ -14,7 +14,7 @@
 
     <l-map :zoom="zoom" :center="center" ref="mapRef" :options="options" @move="move" @moveend="moveend">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
-      <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon, draggable: false}" />
+      <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon: icon, draggable: false}" />
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
 
@@ -32,7 +32,7 @@ import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
-import { LocationIcon } from '@/components/icons'
+import { geoLocationIcon } from '@/components/icons'
 
 @Component({
   components: {
@@ -49,7 +49,9 @@ export default class Map extends Vue {
     lng: number
   }
 
-  public icon = LocationIcon
+  @Prop()
+  icon!: any
+
   public options = { zoomControl: false }
 
   center = { ...this.initialCenter }
@@ -58,7 +60,7 @@ export default class Map extends Vue {
   markerOptions = {
     draggable: false,
     radius: 0,
-    icon: new L.DivIcon({ className: 'location-marker' }),
+    icon: geoLocationIcon,
     opacity: 0,
     fillOpacity: 0.1,
     fillColor: 'red',
