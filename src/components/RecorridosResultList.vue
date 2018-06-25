@@ -38,7 +38,7 @@
           <InFeedAdsense
             data-ad-client="ca-pub-1193419141108967"
             data-ad-slot="2366883515"
-            data-ad-layout="-6t+ed+2i-1n-4w"
+            data-ad-layout-key="-6t+ed+2i-1n-4w"
             data-ad-format="fluid"
           >
           </InFeedAdsense>
