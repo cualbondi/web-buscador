@@ -13,6 +13,7 @@
                 :label="inputLabel"
                 flat
                 solo
+                autofocus
                 ></v-text-field>
             </div>
 
