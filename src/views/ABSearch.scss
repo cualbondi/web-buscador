@@ -5,6 +5,8 @@
   height: 100%;
   width: 100%;
   display: grid;
+  min-height: 0;
+  min-width: 0;
 }
 .top,
 .bottom {
@@ -12,12 +14,18 @@
 }
 .top {
   grid-area: top;
+  min-height: 0;
+  min-width: 0;
 }
 .middle {
   grid-area: map;
+  min-height: 0;
+  min-width: 0;
 }
 .bottom {
   grid-area: bottom;
+  min-height: 0;
+  min-width: 0;
 }
 
 @media (max-width: 600px) {
