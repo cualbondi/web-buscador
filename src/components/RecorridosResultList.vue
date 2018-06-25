@@ -22,17 +22,28 @@
       </span>
     </div>
     <v-list :two-line="true" class="results">
-      <v-list-tile v-for="(result, $index) in results" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
-        <v-list-tile-avatar>
-          <img v-if="result.itinerario.length === 1" :src="`/static/img/micros/30x35/${result.itinerario[0].foto}.png`" />
-          <span v-if="result.itinerario.length === 2" title="Transbordo">T</span>
-        </v-list-tile-avatar>
-        <v-list-tile-content>
-          <v-list-tile-title v-html="result.itinerario[0].nombre"></v-list-tile-title>
-          <v-list-tile-sub-title>de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-tile-sub-title>
-          <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
+      <template v-for="(result, $index) in results">
+        <v-list-tile :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
+          <v-list-tile-avatar>
+            <img v-if="result.itinerario.length === 1" :src="`/static/img/micros/30x35/${result.itinerario[0].foto}.png`" />
+            <span v-if="result.itinerario.length === 2" title="Transbordo">T</span>
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title v-html="result.itinerario[0].nombre"></v-list-tile-title>
+            <v-list-tile-sub-title>de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-tile-sub-title>
+            <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <div v-if="($index > 0) && ($index%4 === 1)" :key="result.id + '_ad'" style="height: initial">
+          <InFeedAdsense
+            data-ad-client="ca-pub-1193419141108967"
+            data-ad-slot="2366883515"
+            data-ad-layout="-6t+ed+2i-1n-4w"
+            data-ad-format="fluid"
+          >
+          </InFeedAdsense>
+        </div>
+      </template>
       <v-list-tile>
         <v-btn v-if="resultsMore" @click="getNextPage">Buscar mas resultados</v-btn>
         <span v-if="resultsMoreLoading">Buscando mas ...</span>
