@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="results-container">
   <RecorridosResultList 
     v-if="hayResultados"
     :results="recorridos" 
@@ -7,11 +7,12 @@
   />
   
   <div v-if="!loadingResults && !hayResultados" class="no-results">
-    No se encontraron resultados
+    <div class="description">No se encontraron resultados</div>
+    <v-btn color="primary" dark @click="buscarConTransbordo">Buscar con transbordo</v-btn>
   </div>
 
-  <div class="progress">
-  <v-progress-circular v-if="loadingResults" indeterminate color="primary"/>
+  <div v-if="loadingResults" class="progress">
+    <v-progress-circular  indeterminate color="primary"/>
   </div>
 </div>
 </template>
@@ -41,6 +42,9 @@ export default class ABSearchResults extends Vue {
   get loadingResults() {
     return this.$store.getters.getRecorridosLoading
   }
+  buscarConTransbordo(){
+    this.$store.dispatch('query', {transbordo: true})
+  }
 }
 </script>
 
@@ -56,7 +60,9 @@ export default class ABSearchResults extends Vue {
 }
 .no-results {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   font-size: 16px;
+  padding: 10px 0;
 }
 </style>

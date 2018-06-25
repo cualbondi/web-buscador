@@ -30,11 +30,21 @@ interface RecorridosParams {
   rad: number
   page: number
   ciudadSlug: string
+  transbordo?: boolean
 }
 
 function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
-  const { lngA, latA, lngB, latB, rad, page = 1, ciudadSlug } = params
-  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=${ciudadSlug}&page=${page}&t=false`
+  const {
+    lngA,
+    latA,
+    lngB,
+    latB,
+    rad,
+    page = 1,
+    ciudadSlug,
+    transbordo = false,
+  } = params
+  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
   return client.get(url).then(res => convertResults(res.data))
 }
 

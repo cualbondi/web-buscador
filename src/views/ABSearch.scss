@@ -32,14 +32,15 @@
       grid-template-areas: 'top' 'map' 'bottom';
     }
   }
+  $space-top: 270px;
   .bottom {
-    height: calc(100vh - 120px - 150px);
+    height: calc(100vh - $space-top);
     background: white;
   }
   .bottom.small {
     position: absolute;
     width: 100%;
-    top: 170px;
+    top: $space-top;
   }
 }
 @media (min-width: 601px) {

@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <div v-if="resultsLoading && results.length == 0">
-      Buscando ...
-    </div>
+  <div class="result-list-container">
     <div class="single-result">
-      
       <span class="arrow-left" :class="{disabled: !hasPrevResult}" :v-ripple="hasPrevResult" @click="prevResult">
         <v-icon>chevron_left</v-icon>
       </span>
