@@ -13,7 +13,14 @@
     
     <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" 
     :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :class="{small: smallResults}" />
-  
+
+    <div class="footerad">
+      <Adsense
+        data-ad-client="ca-pub-1193419141108967"
+        data-ad-slot="9086127115"
+      />
+    </div>
+
   </div>
 </template>
 

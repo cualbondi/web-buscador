@@ -19,21 +19,26 @@
 .bottom {
   grid-area: bottom;
 }
+.footerad {
+  grid-area: ad;
+  z-index: 20000;
+  background: gray;
+}
 
 @media (max-width: 600px) {
   .main {
     grid-template-columns: 100vw;
     &.no-results {
-      grid-template-rows: 120px 1fr;
-      grid-template-areas: 'top' 'map';
+      grid-template-rows: 120px 1fr 50px;
+      grid-template-areas: 'top' 'map' 'ad';
     }
     &.with-results {
-      grid-template-rows: 120px 1fr 90px;
-      grid-template-areas: 'top' 'map' 'bottom';
+      grid-template-rows: 120px 1fr 90px 50px;
+      grid-template-areas: 'top' 'map' 'bottom' 'ad';
     }
   }
   .bottom {
-    height: calc(100vh - 120px - 150px);
+    height: calc(100vh - 120px - 150px - 50px);
     background: white;
   }
   .bottom.small {
@@ -44,8 +49,8 @@
 }
 @media (min-width: 601px) {
   .main {
-    grid-template-areas: 'top map' 'bottom map';
-    grid-template-rows: 130px 1fr;
+    grid-template-areas: 'top map' 'bottom map' 'ad map';
+    grid-template-rows: 130px 1fr 50px;
     grid-template-columns: 400px 1fr;
   }
 }

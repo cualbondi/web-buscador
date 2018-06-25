@@ -41,6 +41,7 @@ if (SENTRY_URL) {
 Vue.component('vue-headful', vueHeadful)
 
 Vue.use(VueScript2)
+Vue.use(VueAds.Adsense)
 Vue.use(VueAds.InFeedAdsense)
 
 Vue.use(Vuetify, {
