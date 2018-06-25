@@ -11,7 +11,7 @@
     
     <Map class="middle" :center="center" :zoom="zoom" />
     
-    <a-b-search-results class="bottom results-container" :class="{small: smallResults}" v-if="searchRequested"/>
+    <a-b-search-results class="bottom" :class="{small: smallResults}" v-if="searchRequested"/>
   </div>
 </template>
 

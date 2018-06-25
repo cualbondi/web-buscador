@@ -68,7 +68,7 @@ const module: Module<State, RootState> = {
       const B = getters.B
       return { lngA: A.lng, latA: A.lat, lngB: B.lng, latB: B.lat }
     },
-    async query({ dispatch, commit, state, getters }) {
+    async query({ dispatch, commit, state, getters }, opts = {transbordo: false}) {
       if (!state.A || !state.B) {
         return
       }
@@ -84,6 +84,7 @@ const module: Module<State, RootState> = {
         rad: state.radius,
         page: state.resultsPage,
         ciudadSlug,
+        transbordo: opts.transbordo,
       }
       try {
         const data = await api.recorridos(params)
