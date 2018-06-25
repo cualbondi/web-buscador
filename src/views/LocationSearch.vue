@@ -23,13 +23,13 @@
             @selection="onGeoSelection"
             ></result-list>
 
-            <result-list
+            <!--result-list
             v-if="!location"
             class="previous-searches" 
             title="Ayer" 
             :results="results"
             @selection="onLocationSelection"
-            ></result-list>
+            ></result-list-->
 
              <result-list
             v-if="location && geocoderResults.length !== 0"
@@ -78,40 +78,7 @@ export default class Home extends Vue {
     },
   ]
 
-  public results: Result[] = [
-    {
-      id: 3,
-      icon: {
-        name: 'access_time',
-      },
-      text: 'Plaza Moreno',
-      subtext: 'Calle 12, La Plata, Buenos Aires',
-    },
-    {
-      id: 4,
-      icon: {
-        name: 'access_time',
-      },
-      text: 'Plaza Moreno',
-      subtext: 'Calle 12, La Plata, Buenos Aires',
-    },
-    {
-      id: 5,
-      icon: {
-        name: 'access_time',
-      },
-      text: 'Plaza Moreno',
-      subtext: 'Calle 12, La Plata, Buenos Aires',
-    },
-    {
-      id: 6,
-      icon: {
-        name: 'access_time',
-      },
-      text: 'Plaza Moreno',
-      subtext: 'Calle 12, La Plata, Buenos Aires',
-    },
-  ]
+  public results: Result[] = []
 
   setLocation(value: string) {
     this.location = value
