@@ -1,7 +1,7 @@
 .navigation {
   z-index: 10000;
 }
-.main {
+.absearch {
   height: 100%;
   width: 100%;
   display: grid;
@@ -18,17 +18,20 @@
 }
 .bottom {
   grid-area: bottom;
+  min-height: 0;
 }
 
+$searchfieldsHeight: 120px;
+
 @media (max-width: 600px) {
-  .main {
+  .absearch {
     grid-template-columns: 100vw;
     &.no-results {
-      grid-template-rows: 120px 1fr;
+      grid-template-rows: $searchfieldsHeight 1fr;
       grid-template-areas: 'top' 'map';
     }
     &.with-results {
-      grid-template-rows: 120px 1fr 90px;
+      grid-template-rows: $searchfieldsHeight 1fr 90px;
       grid-template-areas: 'top' 'map' 'bottom';
     }
   }
@@ -44,9 +47,9 @@
   }
 }
 @media (min-width: 601px) {
-  .main {
+  .absearch {
     grid-template-areas: 'top map' 'bottom map';
-    grid-template-rows: 130px 1fr;
+    grid-template-rows: $searchfieldsHeight calc(100vh - #{$searchfieldsHeight});
     grid-template-columns: 400px 1fr;
   }
 }

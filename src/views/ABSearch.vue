@@ -1,54 +1,36 @@
 <template>
-  <div class="main" :class="withResults">
-    <vue-headful
-      :title="headfulTitle"
-      :description="headfulDescription"
-    />
+  <div class="absearch" :class="withResults">
     
-    <side-menu></side-menu>
+    <CityHeader />
+
+    <SideMenu />
     
-    <a-b-search-fields class="top"></a-b-search-fields>
+    <ABSearchFields class="top" />
     
-    <Map class="middle" :center="center" :zoom="zoom" />
+    <ABMap class="middle"/>
     
-    <a-b-search-results class="bottom" :class="{small: smallResults}" v-if="searchRequested"/>
+    <ABSearchResults class="bottom" :class="{small: smallResults}" v-if="searchRequested"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import ABSearchFields from '@/components/ABSearchFields.vue'
-import Map from '@/components/Map.vue'
+import ABMap from '@/components/ABMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
-import L from 'leaflet'
+import CityHeader from '@/components/CityHeader.vue'
 
 @Component({
   components: {
     ABSearchFields,
-    Map,
+    ABMap,
     SideMenu,
     ABSearchResults,
+    CityHeader,
   },
 })
 export default class Home extends Vue {
-  get headfulTitle() {
-    return `${this.ciudadNombre} - Buscador de Cualbondi`
-  }
-  get headfulDescription() {
-    return `Buscador de recorridos de bondis, colectivos, micros en ${
-      this.ciudadNombre
-    }`
-  }
-  get ciudadNombre() {
-    return this.$store.getters.getCiudadNombre
-  }
-  get center() {
-    return L.latLng(this.$store.getters.getCiudadLatlng)
-  }
-  get zoom() {
-    return this.$store.getters.getCiudadZoom
-  }
   get recorridos() {
     return this.$store.getters.getRecorridos
   }

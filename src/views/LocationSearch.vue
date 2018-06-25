@@ -40,14 +40,14 @@
             ></result-list>
 
         </div>
-        <Map class="map" />
+        <ABMap class="map"/>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import ResultList, { Result } from '@/components/ResultList.vue'
-import Map from '@/components/Map.vue'
+import ABMap from '@/components/ABMap.vue'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
 import { debounceMethod } from '@/utils'
@@ -55,7 +55,7 @@ import { debounceMethod } from '@/utils'
 @Component({
   components: {
     ResultList,
-    Map,
+    ABMap,
   },
 })
 export default class Home extends Vue {

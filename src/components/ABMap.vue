@@ -70,13 +70,6 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
   },
 })
 export default class Map extends Vue {
-  @Prop()
-  center: {
-    lat: number
-    lng: number
-  }
-
-  @Prop() zoom: number
 
   public options = {
     zoomControl: false,
@@ -128,7 +121,13 @@ export default class Map extends Vue {
     fillOpacity: 0.15,
     color: '#B72815'
   }
-
+  
+  get center() {
+    return L.latLng(this.$store.getters.getCiudadLatlng)
+  }
+  get zoom() {
+    return this.$store.getters.getCiudadZoom
+  }
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
