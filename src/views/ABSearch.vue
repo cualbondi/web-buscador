@@ -21,7 +21,6 @@
         style="display:inline-block;width:320px;height:50px"
         data-ad-client="ca-pub-1193419141108967"
         data-ad-slot="9086127115"
-        data-ad-test="on"
         ></ins>
       <script2>
         (adsbygoogle = window.adsbygoogle || []).push({});
