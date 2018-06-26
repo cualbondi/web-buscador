@@ -5,6 +5,8 @@
   height: 100%;
   width: 100%;
   display: grid;
+  min-height: 0;
+  min-width: 0;
 }
 .top,
 .bottom {
@@ -12,12 +14,18 @@
 }
 .top {
   grid-area: top;
+  min-height: 0;
+  min-width: 0;
 }
 .middle {
   grid-area: map;
+  min-height: 0;
+  min-width: 0;
 }
 .bottom {
   grid-area: bottom;
+  min-height: 0;
+  min-width: 0;
 }
 .footerad {
   grid-area: ad;
@@ -39,7 +47,7 @@
     }
   }
   .bottom {
-    height: calc(100vh - 120px - 170px - 50px + 40px);
+    height: calc(100% - 170px - 90px - 50px);
     background: white;
   }
   .bottom.small {
