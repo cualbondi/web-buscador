@@ -25,7 +25,6 @@
     "vue": "^2.5.16",
     "vue-analytics": "^5.12.2",
     "vue-class-component": "^6.0.0",
-    "vue-google-adsense": "^1.2.0",
     "vue-headful": "^2.0.1",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",

@@ -38,7 +38,7 @@
     }
   }
   .bottom {
-    height: calc(100vh - 120px - 150px - 50px);
+    height: calc(100vh - 120px - 170px - 50px + 40px);
     background: white;
   }
   .bottom.small {
@@ -53,4 +53,9 @@
     grid-template-rows: 130px 1fr 50px;
     grid-template-columns: 400px 1fr;
   }
+}
+.footerad > .adswrapper > .adsbygoogle {
+  display: inline-block !important;
+  width: 320px !important;
+  height: 50px !important;
 }
