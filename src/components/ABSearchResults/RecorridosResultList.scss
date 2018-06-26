@@ -1,3 +1,14 @@
+.result-list-container {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background-color: white;
+}
+.results {
+  margin-top: 5px;
+  overflow: auto;
+  margin: 0;
+}
 .single-result {
   height: 90px;
   display: grid;
@@ -5,7 +16,8 @@
   grid-template-rows: 100%;
   grid-template-areas: 'left card right';
   border-bottom: 1px solid #ddd;
-  >span.arrow-left, >span.arrow-right {
+  > span.arrow-left,
+  > span.arrow-right {
     background: white;
     z-index: 10;
     display: grid;
@@ -13,18 +25,19 @@
 
     &.disabled {
       opacity: 0.5;
+      background: #fefefe;
+      color: #eee !important;
     }
   }
-  >span.arrow-left {
+  > span.arrow-left {
     grid-area: left;
     border-right: 1px solid #ddd;
   }
-  >span.arrow-right {
+  > span.arrow-right {
     grid-area: right;
     border-left: 1px solid #ddd;
-
   }
-  >span.card {
+  > span.card {
     background: white;
     position: relative;
     overflow: hidden;
@@ -37,24 +50,24 @@
       height: 100%;
       width: 100%;
       padding-top: 3px;
+      align-items: center;
       grid-template-columns: 35px 1fr;
       grid-template-rows: 43% 25% 25%;
-      align-items: center;
       grid-template-areas: 'avatar title' 'description description' 'distances distances';
-      >span.avatar {
+      > span.avatar {
         grid-area: avatar;
         justify-self: center;
       }
-      >span.title {
+      > span.title {
         grid-area: title;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      >span.description {
+      > span.description {
         grid-area: description;
         margin-left: 10px;
       }
-      >span.distances {
+      > span.distances {
         grid-area: distances;
         margin-left: 8px;
         .v-icon {
@@ -64,7 +77,44 @@
       }
     }
   }
-  
+}
+
+.transbordo .single-result {
+  height: 180px;
+  > span.card {
+    span.animated {
+      grid-template-rows: 21.5% 12.5% 12.5% 21.5% 12.5% 12.5%;
+      grid-template-areas:
+        'avatar title'
+        'description description'
+        'distances distances'
+        'avatar2 title2'
+        'description2 description2'
+        'distances2 distances2'
+      ;
+      > span.avatar2 {
+        grid-area: avatar2;
+        justify-self: center;
+      }
+      > span.title2 {
+        grid-area: title2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      > span.description2 {
+        grid-area: description2;
+        margin-left: 10px;
+      }
+      > span.distances2 {
+        grid-area: distances2;
+        margin-left: 8px;
+        .v-icon {
+          font-size: 17px;
+          vertical-align: text-top;
+        }
+      }
+    }
+  }
 }
 
 @media (min-width: 601px) {
@@ -136,13 +186,7 @@ $speed: 0.2s;
   }
 }
 
-.results {
-  margin-top: 5px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  height: 100%;
-  overflow: auto;
-  margin: 0;
-}
+
 
 .subheader {
   height: 25px;
@@ -150,4 +194,16 @@ $speed: 0.2s;
 
 .selected {
   background: #def;
+}
+
+.first {
+  border-bottom: 1px solid lightgray;
+}
+.transbordo {
+  .first {
+    border-bottom: none;
+  }
+  .second {
+    border-bottom: 1px solid lightgray;
+  }
 }

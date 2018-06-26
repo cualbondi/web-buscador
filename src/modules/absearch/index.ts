@@ -38,6 +38,8 @@ interface State {
   resultsPage: number
   resultsMore: boolean
   resultsMoreLoading: boolean
+  searchRequested: boolean
+  transbordo: boolean
 }
 
 const module: Module<State, RootState> = {
@@ -51,11 +53,15 @@ const module: Module<State, RootState> = {
     resultsPage: 1,
     resultsMore: true,
     resultsMoreLoading: false,
+    searchRequested: false,
+    transbordo: false,
   },
 
   actions: {
     async getAB({ state, dispatch, getters }) {
-      if (state.A === null || state.B === null ) { return }
+      if (state.A === null || state.B === null) {
+        return
+      }
       // we need to resolve geolocation before querying
       if (state.A.type === 'geolocation' || state.B.type === 'geolocation') {
         await dispatch('geolocate')
@@ -68,7 +74,8 @@ const module: Module<State, RootState> = {
       if (!state.A || !state.B) {
         return
       }
-      commit('setResults', [])
+      dispatch('searchRequested')
+      commit('startLoadingResults')
       const { lngA, latA, lngB, latB } = await dispatch('getAB')
       const ciudadSlug = getters.getCiudad.slug
       const params = {
@@ -79,6 +86,7 @@ const module: Module<State, RootState> = {
         rad: state.radius,
         page: state.resultsPage,
         ciudadSlug,
+        transbordo: state.transbordo,
       }
       try {
         const data = await api.recorridos(params)
@@ -93,10 +101,10 @@ const module: Module<State, RootState> = {
       }
     },
     async getNextPage({ commit, state, dispatch, getters }) {
-      commit('startLoadingMoreResults')
       if (!state.A || !state.B) {
         return
       }
+      commit('startLoadingMoreResults')
       const { lngA, latA, lngB, latB } = await dispatch('getAB')
       const ciudadSlug = getters.getCiudad.slug
       const params = {
@@ -107,6 +115,7 @@ const module: Module<State, RootState> = {
         rad: state.radius,
         page: state.resultsPage + 1,
         ciudadSlug,
+        transbordo: state.transbordo,
       }
       try {
         const data = await api.recorridos(params)
@@ -125,15 +134,18 @@ const module: Module<State, RootState> = {
         commit('setA', ll)
       } else if (state.B === null) {
         commit('setB', ll)
+        commit('setTransbordo', false)
         dispatch('query')
       }
     },
     setA({ commit, dispatch }, ll: Location) {
       commit('setA', ll)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     setB({ commit, dispatch }, ll: Location) {
       commit('setB', ll)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     setRadius({ state, commit, dispatch }, meters: number) {
@@ -141,6 +153,7 @@ const module: Module<State, RootState> = {
         return
       }
       commit('setRadius', meters)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     async setRecorridoSelectedIndex(
@@ -166,6 +179,9 @@ const module: Module<State, RootState> = {
         return dispatch('setB', ll)
       }
     },
+    setTransbordo({ commit }, value) {
+      commit('setTransbordo', value)
+    },
     // sets A or B from a geocoder result
     fromGeocoder(
       { dispatch },
@@ -185,11 +201,20 @@ const module: Module<State, RootState> = {
       const B = state.B
       commit('setA', B)
       commit('setB', A)
+      commit('setTransbordo', false)
       dispatch('query')
+    },
+    searchRequested({ commit, state }) {
+      if (!state.searchRequested) {
+        commit('setSearchRequested')
+      }
     },
   },
 
   mutations: {
+    setSearchRequested(state) {
+      state.searchRequested = true
+    },
     startLoadingResults(state) {
       state.resultsLoading = true
       state.results = []
@@ -232,8 +257,14 @@ const module: Module<State, RootState> = {
     setRadius(state, meters: number) {
       state.radius = meters
     },
+    setTransbordo(state, value: boolean) {
+      state.transbordo = value
+    },
   },
   getters: {
+    searchRequested(state) {
+      return state.searchRequested
+    },
     getRecorridos(state) {
       return state.results
     },
@@ -252,10 +283,12 @@ const module: Module<State, RootState> = {
     getResultsMoreLoading(state) {
       return state.resultsMoreLoading
     },
-    hasNextResult(state){
-      return state.resultsMore || state.resultSelected < state.results.length - 1
+    hasNextResult(state) {
+      return (
+        state.resultsMore || state.resultSelected < state.results.length - 1
+      )
     },
-    hasPrevResult(state){
+    hasPrevResult(state) {
       return !(state.resultSelected === 0)
     },
     // extends A or B so they have geolocation info if available
@@ -289,6 +322,9 @@ const module: Module<State, RootState> = {
     },
     radius(state) {
       return state.radius
+    },
+    transbordo(state) {
+      return state.transbordo
     },
   },
 }

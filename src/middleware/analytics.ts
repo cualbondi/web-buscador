@@ -38,7 +38,7 @@ export default (store: Store<RootState>) => {
       })
     } else {
       if (!isProd) {
-        console.warn('action not tracked', mutation)
+        // console.warn('action not tracked', mutation)
       }
     }
   })

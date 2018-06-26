@@ -15,7 +15,7 @@ import { isProd, GA_KEY, SENTRY_URL } from '@/config'
 
 import Vuetify from 'vuetify/es5/components/Vuetify'
 import VApp from 'vuetify/es5/components/VApp'
-import { Ripple } from 'vuetify/es5/directives'
+import { Ripple, Touch } from 'vuetify/es5/directives'
 import VNavigationDrawer from 'vuetify/es5/components/VNavigationDrawer'
 import VList from 'vuetify/es5/components/VList'
 import VBtn from 'vuetify/es5/components/VBtn'
@@ -28,6 +28,7 @@ import VSubheader from 'vuetify/es5/components/VSubheader'
 import VToolbar from 'vuetify/es5/components/VToolbar'
 import VGrid from 'vuetify/es5/components/VGrid'
 import VSelect from 'vuetify/es5/components/VSelect'
+import VProgressCircular from 'vuetify/es5/components/VProgressCircular'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
@@ -58,9 +59,11 @@ Vue.use(Vuetify, {
     VToolbar,
     VGrid,
     VSelect,
+    VProgressCircular,
   },
   directives: {
     Ripple,
+    Touch,
   },
   theme: {
     primary: '#51B2E0',

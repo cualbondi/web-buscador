@@ -1,18 +1,15 @@
 <template>
-  <div class="main" :class="withResults">
-    <vue-headful
-      :title="headfulTitle"
-      :description="headfulDescription"
-    />
+  <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo}">
     
-    <side-menu></side-menu>
+    <CityHeader />
+
+    <SideMenu />
     
-    <a-b-search-fields class="top"></a-b-search-fields>
+    <ABSearchFields class="top" />
     
-    <Map class="middle" :center="center" :zoom="zoom" />
+    <ABMap class="middle"/>
     
-    <RecorridosResultList v-if="recorridos.length > 0" :results="recorridos" 
-    :selectedIndex.sync="recorridoSelectedIndex" class="bottom" :class="{small: smallResults}" />
+    <ABSearchResults class="bottom" :class="{small: smallResults}" v-if="searchRequested"/>
 
     <div class="footerad">
       <script2 type="text/javascript" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script2>
@@ -33,51 +30,32 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import ABSearchFields from '@/components/ABSearchFields.vue'
-import Map from '@/components/Map.vue'
+import ABMap from '@/components/ABMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
-import RecorridosResultList from '@/components/RecorridosResultList.vue'
-import L from 'leaflet'
+import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
+import CityHeader from '@/components/CityHeader.vue'
 
 @Component({
   components: {
     ABSearchFields,
-    Map,
+    ABMap,
     SideMenu,
-    RecorridosResultList,
+    ABSearchResults,
+    CityHeader,
   },
 })
 export default class Home extends Vue {
-  get headfulTitle() {
-    return `${this.ciudadNombre} - Buscador de Cualbondi`
+  get recorridos() {
+    return this.$store.getters.getRecorridos
   }
-  get headfulDescription() {
-    return `Buscador de recorridos de bondis, colectivos, micros en ${
-      this.ciudadNombre
-    }`
-  }
-  get ciudadNombre() {
-    return this.$store.getters.getCiudadNombre
-  }
-  get center() {
-    return L.latLng(this.$store.getters.getCiudadLatlng)
-  }
-  get zoom() {
-    return this.$store.getters.getCiudadZoom
+  get searchRequested() {
+    return this.$store.getters.searchRequested
   }
   get smallResults() {
     return this.$store.getters.getSmallResults
   }
-  get recorridos() {
-    return this.$store.getters.getRecorridos
-  }
-  get recorridoSelectedIndex() {
-    return this.$store.getters.getRecorridoSelectedIndex
-  }
-  set recorridoSelectedIndex(val) {
-    this.$store.dispatch('setRecorridoSelectedIndex', val)
-  }
-  get withResults() {
-    return this.recorridos.length > 0 ? 'with-results' : 'no-results'
+  get transbordo() {
+    return this.$store.getters.transbordo
   }
 }
 </script>
@@ -85,7 +63,7 @@ export default class Home extends Vue {
 <style lang="scss" src="./ABSearch.scss" scoped>
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main > .v-overlay--active {
   z-index: 10000;
 }

@@ -1,12 +1,10 @@
 .navigation {
   z-index: 10000;
 }
-.main {
+.absearch {
   height: 100%;
   width: 100%;
   display: grid;
-  min-height: 0;
-  min-width: 0;
 }
 .top,
 .bottom {
@@ -14,18 +12,13 @@
 }
 .top {
   grid-area: top;
-  min-height: 0;
-  min-width: 0;
 }
 .middle {
   grid-area: map;
-  min-height: 0;
-  min-width: 0;
 }
 .bottom {
   grid-area: bottom;
   min-height: 0;
-  min-width: 0;
 }
 .footerad {
   grid-area: ad;
@@ -34,32 +27,39 @@
   text-align: center;
 }
 
+$searchfieldsHeight: 120px;
+$footerAdsHeight: 50px;
+$space-top: 170px;
+
 @media (max-width: 600px) {
-  .main {
+  .absearch {
     grid-template-columns: 100vw;
     &.no-results {
-      grid-template-rows: 120px 1fr 50px;
+      grid-template-rows: $searchfieldsHeight 1fr $footerAdsHeight;
       grid-template-areas: 'top' 'map' 'ad';
     }
     &.with-results {
-      grid-template-rows: 120px 1fr 90px 50px;
+      grid-template-rows: $searchfieldsHeight 1fr 90px $footerAdsHeight;
+      &.transbordo {
+        grid-template-rows: $searchfieldsHeight 1fr 180px $footerAdsHeight;
+      }
       grid-template-areas: 'top' 'map' 'bottom' 'ad';
     }
   }
   .bottom {
-    height: calc(100% - 170px - 90px - 50px);
+    height: calc(100% - #{$space-top} - #{$footerAdsHeight});
     background: white;
   }
   .bottom.small {
     position: absolute;
     width: 100%;
-    top: 170px;
+    top: $space-top;
   }
 }
 @media (min-width: 601px) {
-  .main {
+  .absearch {
     grid-template-areas: 'top map' 'bottom map' 'ad map';
-    grid-template-rows: 130px 1fr 50px;
+    grid-template-rows: $searchfieldsHeight calc(100% - #{$searchfieldsHeight} - #{$footerAdsHeight}) $footerAdsHeight;
     grid-template-columns: 400px 1fr;
   }
 }

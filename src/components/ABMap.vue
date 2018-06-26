@@ -15,7 +15,25 @@
         </l-marker>
       </template>
 
-      <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
+      <template v-if="recorrido && recorrido.itinerario.length == 2">
+        <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
+        <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
+        <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[1].ruta_corta]" />
+        <l-marker v-if="recorrido.itinerario[1].p1" :latLng="recorrido.itinerario[1].p1.latlng" :icon="stopIcon">
+          <l-popup>{{recorrido.itinerario[1].p1.nombre}}</l-popup>
+        </l-marker>
+        <l-marker v-if="recorrido.itinerario[1].p2" :latLng="recorrido.itinerario[1].p2.latlng" :icon="stopIcon">
+          <l-popup>{{recorrido.itinerario[1].p2.nombre}}</l-popup>
+        </l-marker>
+
+        <!-- agregar icono de bajada y de subida (transbordos) -->
+        <l-marker :latLng="recorrido.itinerario[0].ruta_corta[recorrido.itinerario[0].ruta_corta.length-1]" :icon="downIcon">
+          <l-popup>Bajar del bondi {{recorrido.itinerario[0].nombre}}</l-popup>
+        </l-marker>
+        <l-marker :latLng="recorrido.itinerario[1].ruta_corta[0]" :icon="upIcon">
+          <l-popup>Subir al bondi {{recorrido.itinerario[1].nombre}}</l-popup>
+        </l-marker>
+      </template>
 
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="geoMarkerOptions"/>
 
@@ -37,7 +55,7 @@ import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch';
-import { geoLocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
+import { geoLocationIcon, StopIcon, DownIcon, UpIcon, AIcon, BIcon } from '@/components/icons'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -70,13 +88,6 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
   },
 })
 export default class Map extends Vue {
-  @Prop()
-  center: {
-    lat: number
-    lng: number
-  }
-
-  @Prop() zoom: number
 
   public options = {
     zoomControl: false,
@@ -112,6 +123,8 @@ export default class Map extends Vue {
   public patterns = [decoratorArrow1, decoratorArrow2, decoratorArrow3]
 
   public stopIcon = StopIcon
+  public downIcon = DownIcon
+  public upIcon = UpIcon
   public aOptions = {
     draggable: true,
     icon: AIcon,
@@ -128,7 +141,13 @@ export default class Map extends Vue {
     fillOpacity: 0.15,
     color: '#B72815'
   }
-
+  
+  get center() {
+    return L.latLng(this.$store.getters.getCiudadLatlng)
+  }
+  get zoom() {
+    return this.$store.getters.getCiudadZoom
+  }
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
@@ -184,22 +203,22 @@ export default class Map extends Vue {
       precision: coordinates.accuracy,
     }
   }
-  mounted(){
+  mounted() {
     const A = this.A
     const B = this.B
 
     let bounds = L.latLngBounds([])
-    if (A && A.lat !== null && A.lng !== null){
-      bounds.extend({lat: A.lat, lng: A.lng})
+    if (A && A.lat !== null && A.lng !== null) {
+      bounds.extend({ lat: A.lat, lng: A.lng })
     }
-    if (B && B.lat !== null && B.lng !== null){
-      bounds.extend({lat: B.lat, lng: B.lng})
+    if (B && B.lat !== null && B.lng !== null) {
+      bounds.extend({ lat: B.lat, lng: B.lng })
     }
 
-    if (bounds.isValid()){
+    if (bounds.isValid()) {
       bounds = bounds.pad(0.1)
       const mapref: any = this.$refs.mapref
-      mapref.mapObject.flyToBounds(bounds, {maxZoom: 14, animate: false})
+      mapref.mapObject.flyToBounds(bounds, { maxZoom: 14, animate: false })
     }
   }
 }
@@ -235,12 +254,11 @@ div.location-marker {
     width: 12px;
     top: 2px;
     left: 2px;
-    background-color: #4285f4 ;
+    background-color: #4285f4;
     border-radius: 50%;
     animation: pulse 1.5s ease-in-out 0.5s infinite alternate;
   }
 }
-
 
 div.location-marker.red {
   background-color: red;
@@ -249,10 +267,10 @@ div.location-marker.red {
 @keyframes pulse {
   from {
     transform: scale(1, 1);
-   }
-   to {
+  }
+  to {
     transform: scale(0.8, 0.8);
-   }
+  }
 }
 </style>
 

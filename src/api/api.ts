@@ -30,15 +30,29 @@ interface RecorridosParams {
   rad: number
   page: number
   ciudadSlug: string
+  transbordo?: boolean
 }
 
 function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
-  const { lngA, latA, lngB, latB, rad, page = 1, ciudadSlug } = params
-  const url = `/recorridos/?l=${lngA},${latA},${rad}|${lngB},${latB},${rad}&c=${ciudadSlug}&page=${page}&t=false`
+  const {
+    lngA,
+    latA,
+    lngB,
+    latB,
+    rad,
+    page = 1,
+    ciudadSlug,
+    transbordo = false,
+  } = params
+  const l = `${lngA},${latA},${rad}|${lngB},${latB},${rad}`
+  const url =`/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
   return client.get(url).then(res => convertResults(res.data))
 }
 
-function geocoder(query: string, ciudadSlug: string): Promise<GeocoderResponse[]> {
+function geocoder(
+  query: string,
+  ciudadSlug: string,
+): Promise<GeocoderResponse[]> {
   const url = `/geocoder/?q=${query}&c=${ciudadSlug}`
   return client.get(url).then(res => res.data)
 }
