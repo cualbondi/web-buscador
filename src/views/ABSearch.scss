@@ -22,7 +22,8 @@
 .footerad {
   grid-area: ad;
   z-index: 20000;
-  background: gray;
+  background: white;
+  text-align: center;
 }
 
 @media (max-width: 600px) {
@@ -53,9 +54,4 @@
     grid-template-rows: 130px 1fr 50px;
     grid-template-columns: 400px 1fr;
   }
-}
-.footerad > .adswrapper > .adsbygoogle {
-  display: inline-block !important;
-  width: 320px !important;
-  height: 50px !important;
 }
