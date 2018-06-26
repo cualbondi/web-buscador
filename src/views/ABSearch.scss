@@ -20,25 +20,32 @@
   grid-area: bottom;
   min-height: 0;
 }
+.footerad {
+  grid-area: ad;
+  z-index: 20000;
+  background: white;
+  text-align: center;
+}
 
 $searchfieldsHeight: 120px;
+$footerAdsHeight: 50px;
+$space-top: 170px;
 
 @media (max-width: 600px) {
   .absearch {
     grid-template-columns: 100vw;
     &.no-results {
-      grid-template-rows: $searchfieldsHeight 1fr;
-      grid-template-areas: 'top' 'map';
+      grid-template-rows: $searchfieldsHeight 1fr $footerAdsHeight;
+      grid-template-areas: 'top' 'map' 'ad';
     }
     &.with-results {
-      grid-template-rows: $searchfieldsHeight 1fr 90px;
-      grid-template-areas: 'top' 'map' 'bottom';
+      grid-template-rows: $searchfieldsHeight 1fr 90px $footerAdsHeight;
+      grid-template-areas: 'top' 'map' 'bottom' 'ad';
     }
   }
-  $space-top: 250px;
   .bottom {
+    height: calc(100% - #{$space-top} - 90px - #{$footerAdsHeight});
     background: white;
-    height: calc(100vh - #{$space-top});
   }
   .bottom.small {
     position: absolute;
@@ -48,8 +55,8 @@ $searchfieldsHeight: 120px;
 }
 @media (min-width: 601px) {
   .absearch {
-    grid-template-areas: 'top map' 'bottom map';
-    grid-template-rows: $searchfieldsHeight calc(100vh - #{$searchfieldsHeight});
+    grid-template-areas: 'top map' 'bottom map' 'ad map';
+    grid-template-rows: $searchfieldsHeight calc(100% - #{$searchfieldsHeight} - #{$footerAdsHeight}) $footerAdsHeight;
     grid-template-columns: 400px 1fr;
   }
 }
