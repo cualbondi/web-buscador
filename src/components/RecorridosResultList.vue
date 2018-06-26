@@ -35,13 +35,16 @@
           </v-list-tile-content>
         </v-list-tile>
         <!--div v-if="($index > 0) && ($index%4 === 1)" :key="result.id + '_ad'" style="height: initial">
-          <InFeedAdsense
-            data-ad-client="ca-pub-1193419141108967"
-            data-ad-slot="2366883515"
-            data-ad-layout-key="-6t+ed+2i-1n-4w"
-            data-ad-format="fluid"
-          >
-          </InFeedAdsense>
+          <script2 async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script2>
+          <ins class="adsbygoogle"
+              style="display:block"
+              data-ad-format="fluid"
+              data-ad-layout-key="-6t+ed+2i-1n-4w"
+              data-ad-client="ca-pub-1193419141108967"
+              data-ad-slot="2366883515"></ins>
+          <script2>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+          </script2>
         </div-->
       </template>
       <v-list-tile>
