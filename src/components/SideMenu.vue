@@ -55,7 +55,7 @@
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>star</v-icon></div></div>
           Top usuarios
         </v-list-tile>
-        <v-list-tile @click="openExternalLink(`https://spreadsheets.google.com/spreadsheet/viewform?formkey=dFJERlREQjUyaE1iSkFDYnhOa2Nnbmc6MQ+`, true)">
+        <v-list-tile @click="openExternalLink(`https://goo.gl/forms/JRfMgq4ar0VgF9OA3`, true)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>comment</v-icon></div></div>
           Sugerencias
         </v-list-tile>
