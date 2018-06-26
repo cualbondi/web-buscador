@@ -1,4 +1,6 @@
 import stopIconUrl from '@/assets/marker-stop.png'
+import downIconUrl from '@/assets/marker-stop.png'
+import upIconUrl from '@/assets/marker-stop.png'
 import L from 'leaflet'
 
 export const geoLocationIcon = new L.DivIcon({
@@ -9,6 +11,26 @@ export const StopIcon = L.icon(
   Object.assign({}, L.Icon.Default.prototype.options, {
     iconUrl: stopIconUrl,
     iconRetinaUrl: stopIconUrl,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -5],
+  }),
+)
+
+export const DownIcon = L.icon(
+  Object.assign({}, L.Icon.Default.prototype.options, {
+    iconUrl: downIconUrl,
+    iconRetinaUrl: downIconUrl,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -5],
+  }),
+)
+
+export const UpIcon = L.icon(
+  Object.assign({}, L.Icon.Default.prototype.options, {
+    iconUrl: upIconUrl,
+    iconRetinaUrl: upIconUrl,
     iconSize: [40, 40],
     iconAnchor: [20, 20],
     popupAnchor: [0, -5],

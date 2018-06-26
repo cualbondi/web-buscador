@@ -15,7 +15,25 @@
         </l-marker>
       </template>
 
-      <!--l-polyline v-for="(recorrido, $index) in recorridos" :key="recorrido.id" v-if="$index != recorridoSelectedIndex" @click="recorridoSelectedIndex = $index" :latLngs="recorrido.itinerario[0].ruta_corta" :color="disabledPolyStyle.color" :weight="disabledPolyStyle.weight" :opacity="disabledPolyStyle.opacity" /-->
+      <template v-if="recorrido && recorrido.itinerario.length == 2">
+        <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
+        <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
+        <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[1].ruta_corta]" />
+        <l-marker v-if="recorrido.itinerario[1].p1" :latLng="recorrido.itinerario[1].p1.latlng" :icon="stopIcon">
+          <l-popup>{{recorrido.itinerario[1].p1.nombre}}</l-popup>
+        </l-marker>
+        <l-marker v-if="recorrido.itinerario[1].p2" :latLng="recorrido.itinerario[1].p2.latlng" :icon="stopIcon">
+          <l-popup>{{recorrido.itinerario[1].p2.nombre}}</l-popup>
+        </l-marker>
+
+        <!-- agregar icono de bajada y de subida (transbordos) -->
+        <l-marker :latLng="recorrido.itinerario[0].ruta_corta[recorrido.itinerario[0].ruta_corta.length-1]" :icon="downIcon">
+          <l-popup>Bajar del bondi {{recorrido.itinerario[0].nombre}}</l-popup>
+        </l-marker>
+        <l-marker :latLng="recorrido.itinerario[1].ruta_corta[0]" :icon="upIcon">
+          <l-popup>Subir al bondi {{recorrido.itinerario[1].nombre}}</l-popup>
+        </l-marker>
+      </template>
 
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="geoMarkerOptions"/>
 
@@ -37,7 +55,7 @@ import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch';
-import { geoLocationIcon, StopIcon, AIcon, BIcon } from '@/components/icons'
+import { geoLocationIcon, StopIcon, DownIcon, UpIcon, AIcon, BIcon } from '@/components/icons'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -105,6 +123,8 @@ export default class Map extends Vue {
   public patterns = [decoratorArrow1, decoratorArrow2, decoratorArrow3]
 
   public stopIcon = StopIcon
+  public downIcon = DownIcon
+  public upIcon = UpIcon
   public aOptions = {
     draggable: true,
     icon: AIcon,
