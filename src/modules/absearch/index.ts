@@ -39,6 +39,7 @@ interface State {
   resultsMore: boolean
   resultsMoreLoading: boolean
   searchRequested: boolean
+  transbordo: boolean
 }
 
 const module: Module<State, RootState> = {
@@ -53,6 +54,7 @@ const module: Module<State, RootState> = {
     resultsMore: true,
     resultsMoreLoading: false,
     searchRequested: false,
+    transbordo: false,
   },
 
   actions: {
@@ -68,7 +70,7 @@ const module: Module<State, RootState> = {
       const B = getters.B
       return { lngA: A.lng, latA: A.lat, lngB: B.lng, latB: B.lat }
     },
-    async query({ dispatch, commit, state, getters }, opts = {transbordo: false}) {
+    async query({ dispatch, commit, state, getters }) {
       if (!state.A || !state.B) {
         return
       }
@@ -84,7 +86,7 @@ const module: Module<State, RootState> = {
         rad: state.radius,
         page: state.resultsPage,
         ciudadSlug,
-        transbordo: opts.transbordo,
+        transbordo: state.transbordo,
       }
       try {
         const data = await api.recorridos(params)
@@ -113,6 +115,7 @@ const module: Module<State, RootState> = {
         rad: state.radius,
         page: state.resultsPage + 1,
         ciudadSlug,
+        transbordo: state.transbordo,
       }
       try {
         const data = await api.recorridos(params)
@@ -131,15 +134,18 @@ const module: Module<State, RootState> = {
         commit('setA', ll)
       } else if (state.B === null) {
         commit('setB', ll)
+        commit('setTransbordo', false)
         dispatch('query')
       }
     },
     setA({ commit, dispatch }, ll: Location) {
       commit('setA', ll)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     setB({ commit, dispatch }, ll: Location) {
       commit('setB', ll)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     setRadius({ state, commit, dispatch }, meters: number) {
@@ -147,6 +153,7 @@ const module: Module<State, RootState> = {
         return
       }
       commit('setRadius', meters)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     async setRecorridoSelectedIndex(
@@ -172,6 +179,9 @@ const module: Module<State, RootState> = {
         return dispatch('setB', ll)
       }
     },
+    setTransbordo({ commit }, value) {
+      commit('setTransbordo', value)
+    },
     // sets A or B from a geocoder result
     fromGeocoder(
       { dispatch },
@@ -191,6 +201,7 @@ const module: Module<State, RootState> = {
       const B = state.B
       commit('setA', B)
       commit('setB', A)
+      commit('setTransbordo', false)
       dispatch('query')
     },
     searchRequested({ commit, state }) {
@@ -245,6 +256,9 @@ const module: Module<State, RootState> = {
     },
     setRadius(state, meters: number) {
       state.radius = meters
+    },
+    setTransbordo(state, value: boolean) {
+      state.transbordo = value
     },
   },
   getters: {
@@ -308,6 +322,9 @@ const module: Module<State, RootState> = {
     },
     radius(state) {
       return state.radius
+    },
+    transbordo(state) {
+      return state.transbordo
     },
   },
 }

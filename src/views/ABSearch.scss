@@ -40,11 +40,14 @@ $space-top: 170px;
     }
     &.with-results {
       grid-template-rows: $searchfieldsHeight 1fr 90px $footerAdsHeight;
+      &.transbordo {
+        grid-template-rows: $searchfieldsHeight 1fr 180px $footerAdsHeight;
+      }
       grid-template-areas: 'top' 'map' 'bottom' 'ad';
     }
   }
   .bottom {
-    height: calc(100% - #{$space-top} - 90px - #{$footerAdsHeight});
+    height: calc(100% - #{$space-top} - #{$footerAdsHeight});
     background: white;
   }
   .bottom.small {

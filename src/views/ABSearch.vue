@@ -1,5 +1,5 @@
 <template>
-  <div class="absearch" :class="withResults">
+  <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo}">
     
     <CityHeader />
 
@@ -48,14 +48,14 @@ export default class Home extends Vue {
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
-  get withResults() {
-    return this.searchRequested ? 'with-results' : 'no-results'
-  }
   get searchRequested() {
     return this.$store.getters.searchRequested
   }
   get smallResults() {
     return this.$store.getters.getSmallResults
+  }
+  get transbordo() {
+    return this.$store.getters.transbordo
   }
 }
 </script>

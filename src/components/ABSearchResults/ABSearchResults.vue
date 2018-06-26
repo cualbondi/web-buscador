@@ -5,7 +5,7 @@
     :results="recorridos" 
     :selectedIndex.sync="recorridoSelectedIndex"
   />
-  
+
   <div v-if="!loadingResults && !hayResultados" class="no-results">
     <div class="description">No se encontraron resultados</div>
     <v-btn color="primary" dark @click="buscarConTransbordo">Buscar con transbordo</v-btn>
@@ -42,8 +42,9 @@ export default class ABSearchResults extends Vue {
   get loadingResults() {
     return this.$store.getters.getRecorridosLoading
   }
-  buscarConTransbordo(){
-    this.$store.dispatch('query', {transbordo: true})
+  buscarConTransbordo() {
+    this.$store.dispatch('setTransbordo', true)
+    this.$store.dispatch('query')
   }
 }
 </script>
