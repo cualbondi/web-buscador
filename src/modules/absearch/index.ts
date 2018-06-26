@@ -76,7 +76,14 @@ const module: Module<State, RootState> = {
       }
       dispatch('searchRequested')
       commit('startLoadingResults')
-      const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      try {
+        var { lngA, latA, lngB, latB } = await dispatch('getAB')
+        console.log(lngA)
+      } catch {
+        commit('finishLoadingResults')
+        return
+      }
+      console.log(lngA)
       const ciudadSlug = getters.getCiudad.slug
       const params = {
         lngA,

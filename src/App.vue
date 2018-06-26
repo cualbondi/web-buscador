@@ -5,6 +5,7 @@
       <v-snackbar
         :timeout="5000"
         v-model="messageActive"
+        :bottom="true"
       >
         {{ messageText }}
         <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
