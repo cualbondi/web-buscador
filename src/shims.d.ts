@@ -9,6 +9,8 @@ declare module 'vue2-leaflet-editablecirclemarker'
 declare module 'vue-analytics'
 declare module 'raven-js/plugins/vue'
 declare module 'vue-headful'
+declare module 'vue-script2'
+declare module 'vue-google-adsense'
 
 // from https://github.com/vuetifyjs/vuetify/issues/3943#issuecomment-388034052
 declare module 'vuetify/es5/components/*' {
