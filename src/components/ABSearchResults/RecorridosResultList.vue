@@ -39,9 +39,11 @@
           <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile>
-        <v-btn v-if="resultsMore" @click="getNextPage">Buscar mas resultados</v-btn>
-        <span v-if="resultsMoreLoading">Buscando mas ...</span>
+      <v-list-tile v-if="resultsMore" >
+        <v-btn @click="getNextPage">Buscar mas resultados</v-btn>
+      </v-list-tile>
+      <v-list-tile v-if="resultsMoreLoading">
+        <span >Buscando mas ...</span>
       </v-list-tile>
     </v-list>
   </div>

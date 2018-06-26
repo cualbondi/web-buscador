@@ -1,5 +1,14 @@
 .result-list-container {
   height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.results {
+  margin-top: 5px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  overflow: auto;
+  margin: 0;
 }
 .single-result {
   height: 90px;
@@ -138,14 +147,7 @@ $speed: 0.2s;
   }
 }
 
-.results {
-  margin-top: 5px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  height: 100%;
-  overflow: auto;
-  margin: 0;
-}
+
 
 .subheader {
   height: 25px;
