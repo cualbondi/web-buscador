@@ -82,8 +82,9 @@ const module: Module<State, RootState> = {
       commit('startLoadingResults')
       commit('setApiError', false)
       commit('setGeolocationError', false)
+      let lngA, latA, lngB, latB
       try {
-        var { lngA, latA, lngB, latB } = await dispatch('getAB')
+        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
@@ -119,7 +120,14 @@ const module: Module<State, RootState> = {
       }
       commit('startLoadingMoreResults')
       commit('setApiError', false)
-      const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      let lngA, latA, lngB, latB
+      try {
+        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch {
+        dispatch('setGeolocationError')
+        commit('finishLoadingResults')
+        return
+      }
       const ciudadSlug = getters.getCiudad.slug
       const params = {
         lngA,
