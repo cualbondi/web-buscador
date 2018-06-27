@@ -91,7 +91,6 @@ export default class Home extends Vue {
     return this.$store.getters.getCiudad
   }
   set ciudad(ciudadSlug) {
-    console.log(ciudadSlug)
     this.$store.dispatch('setCiudad', ciudadSlug)
   }
   get ciudades() {
