@@ -1,11 +1,19 @@
-import axios from 'axios'
+import axios, {
+  CancelToken,
+  Canceler,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosPromise,
+} from 'axios'
 import { API_URL } from '@/config'
-import { geobufToLatlngs } from '@/utils'
+import { geobufToLatlngs, MakeStatusPromise, StatusPromise } from '@/utils'
 import { Recorrido, ApiResponse, GeocoderResponse } from './schema'
 
 const client = axios.create({
   baseURL: API_URL,
 })
+
+const CancelToken = axios.CancelToken
 
 const convertResults = function convertResultsGeobufToLatlngs(
   data: ApiResponse<Recorrido>,
@@ -32,32 +40,65 @@ interface RecorridosParams {
   ciudadSlug: string
   transbordo?: boolean
 }
+type AxiosGetArguments<T = any> = (
+  url: string,
+  config?: AxiosRequestConfig,
+) => AxiosPromise<T>
 
-function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
-  const {
-    lngA,
-    latA,
-    lngB,
-    latB,
-    rad,
-    page = 1,
-    ciudadSlug,
-    transbordo = false,
-  } = params
-  const l = `${lngA},${latA},${rad}|${lngB},${latB},${rad}`
-  const url =`/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
-  return client.get(url).then(res => convertResults(res.data))
+function CancelableFetcher(axiosClient: AxiosInstance): AxiosGetArguments<any> {
+  let promise: StatusPromise<any>
+  let cancel: Canceler | null = null
+
+  return (url, options) => {
+    if (promise && promise.isPending() && cancel !== null) {
+      cancel()
+    }
+    promise = MakeStatusPromise(
+      axiosClient.get(url, {
+        ...options,
+        cancelToken: new CancelToken(c => {
+          cancel = c
+        }),
+      }),
+    )
+    return promise
+  }
+}
+class API {
+  private getRecorridos: AxiosGetArguments<any>
+  private getGeocoding: AxiosGetArguments<any>
+
+  constructor() {
+    this.getRecorridos = CancelableFetcher(client)
+    this.getGeocoding = CancelableFetcher(client)
+  }
+
+  public recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
+    const {
+      lngA,
+      latA,
+      lngB,
+      latB,
+      rad,
+      page = 1,
+      ciudadSlug,
+      transbordo = false,
+    } = params
+    const l = `${lngA},${latA},${rad}|${lngB},${latB},${rad}`
+    const url = `/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
+
+    return this.getRecorridos(url).then(res => convertResults(res.data))
+  }
+
+  public geocoder(
+    query: string,
+    ciudadSlug: string,
+  ): Promise<GeocoderResponse[]> {
+    const url = `/geocoder/?q=${query}&c=${ciudadSlug}`
+
+    return this.getGeocoding(url).then(res => res.data)
+  }
 }
 
-function geocoder(
-  query: string,
-  ciudadSlug: string,
-): Promise<GeocoderResponse[]> {
-  const url = `/geocoder/?q=${query}&c=${ciudadSlug}`
-  return client.get(url).then(res => res.data)
-}
-
-export default {
-  recorridos,
-  geocoder,
-}
+const api = new API()
+export default api
