@@ -7,8 +7,11 @@ import { Vue, Component } from 'vue-property-decorator'
 import MapLocationPicker from '@/components/MapLocationPicker.vue'
 import L from 'leaflet'
 import { LatLngLocation } from '@/modules/absearch'
-import { geoLocationIcon, AIconDragging, BIconDragging } from '@/components/icons'
-
+import {
+  geoLocationIcon,
+  AIconDragging,
+  BIconDragging,
+} from '@/components/icons'
 
 @Component({
   components: {
@@ -20,8 +23,7 @@ export default class extends Vue {
   mounted() {
     if (this.$route.params.point === 'origin') {
       this.icon = AIconDragging
-    }
-    else {
+    } else {
       this.icon = BIconDragging
     }
   }

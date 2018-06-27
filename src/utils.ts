@@ -81,12 +81,15 @@ class GeolocationObservable {
   }
   public start() {
     if (!this.started) {
+      this.started = true
       this.watchId = navigator.geolocation.watchPosition(
         position => this.update(position.coords),
-        err => this.reject(err),
+        err => {
+          this.started = false
+          this.reject(err)
+        },
         { enableHighAccuracy: true, maximumAge: 2000 },
       )
-      this.started = true
     }
   }
   public stop() {

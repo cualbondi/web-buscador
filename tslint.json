@@ -21,6 +21,7 @@
     "no-empty-interface": false,
     "no-unused-variable": true,
     "no-console": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "one-variable-per-declaration": false
   }
 }

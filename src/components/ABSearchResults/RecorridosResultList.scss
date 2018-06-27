@@ -90,8 +90,7 @@
         'distances distances'
         'avatar2 title2'
         'description2 description2'
-        'distances2 distances2'
-      ;
+        'distances2 distances2';
       > span.avatar2 {
         grid-area: avatar2;
         justify-self: center;
@@ -185,8 +184,6 @@ $speed: 0.2s;
     left: 0;
   }
 }
-
-
 
 .subheader {
   height: 25px;

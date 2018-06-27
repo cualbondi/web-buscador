@@ -45,7 +45,7 @@ function recorridos(params: RecorridosParams): Promise<ApiResponse<Recorrido>> {
     transbordo = false,
   } = params
   const l = `${lngA},${latA},${rad}|${lngB},${latB},${rad}`
-  const url =`/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
+  const url = `/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
   return client.get(url).then(res => convertResults(res.data))
 }
 

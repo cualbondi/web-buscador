@@ -54,8 +54,15 @@ import 'leaflet-polylinedecorator'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-import { LatLngLocation } from '@/modules/absearch';
-import { geoLocationIcon, StopIcon, DownIcon, UpIcon, AIcon, BIcon } from '@/components/icons'
+import { LatLngLocation } from '@/modules/absearch'
+import {
+  geoLocationIcon,
+  StopIcon,
+  DownIcon,
+  UpIcon,
+  AIcon,
+  BIcon,
+} from '@/components/icons'
 
 const decoratorBuilder = function(offset: string, opacity: number) {
   return {
@@ -88,7 +95,6 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
   },
 })
 export default class Map extends Vue {
-
   public options = {
     zoomControl: false,
   }
@@ -131,7 +137,7 @@ export default class Map extends Vue {
     weight: 1,
     opacity: 0.7,
     fillOpacity: 0.25,
-    color: '#FFB703'
+    color: '#FFB703',
   }
   public bOptions = {
     draggable: true,
@@ -139,9 +145,9 @@ export default class Map extends Vue {
     weight: 1,
     opacity: 0.3,
     fillOpacity: 0.15,
-    color: '#B72815'
+    color: '#B72815',
   }
-  
+
   get center() {
     return L.latLng(this.$store.getters.getCiudadLatlng)
   }
@@ -276,8 +282,8 @@ div.location-marker.red {
 
 <style lang="scss">
 .leaflet-map-pane:not(.leaflet-zoom-anim) div.leaflet-marker-icon.markerAB {
-  transition: height .4s ease;
-  transition: margin-top .4s ease;
+  transition: height 0.4s ease;
+  transition: margin-top 0.4s ease;
 }
 .leaflet-map-pane div.leaflet-marker-icon.markerAB {
   margin-left: -15px !important;
@@ -303,9 +309,9 @@ div.leaflet-marker-icon.markerB.leaflet-drag-target,
 }
 div.leaflet-marker-icon.leaflet-drag-target.markerAB,
 .leaflet-dragging div.leaflet-marker-icon.markerAB.drag {
-    margin-left: -4px !important;
-    margin-top: -46px !important;
-    width: 36px !important;
-    height: 49px !important;
+  margin-left: -4px !important;
+  margin-top: -46px !important;
+  width: 36px !important;
+  height: 49px !important;
 }
 </style>
