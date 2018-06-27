@@ -55,13 +55,13 @@ export default class ABSearchResults extends Vue {
     this.$store.dispatch('setTransbordo', true)
     this.$store.dispatch('query')
   }
-  get geolocationError(){
+  get geolocationError() {
     return this.$store.getters.geolocationError
   }
-  get apiError(){
+  get apiError() {
     return this.$store.getters.apiError
   }
-  retry(){
+  retry() {
     this.$store.dispatch('query')
   }
 }

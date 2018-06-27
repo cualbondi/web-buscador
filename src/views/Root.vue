@@ -42,7 +42,7 @@ export default class Root extends Vue {
 
 <style lang="scss" scoped>
 .container {
-  background-color: #51B2E0;
+  background-color: #51b2e0;
   max-width: initial;
   .v-list {
     background-color: transparent;

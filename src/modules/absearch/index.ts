@@ -231,11 +231,11 @@ const module: Module<State, RootState> = {
         commit('setSearchRequested')
       }
     },
-    setApiError({commit, dispatch}){
+    setApiError({ commit, dispatch }) {
       dispatch('message', 'Hubo un error al comunicarse con el servidor')
       commit('setApiError', true)
     },
-    setGeolocationError({commit, dispatch}){
+    setGeolocationError({ commit, dispatch }) {
       dispatch('message', 'No se pudo acceder a tu ubicación')
       commit('setGeolocationError', true)
     },
@@ -290,18 +290,18 @@ const module: Module<State, RootState> = {
     setTransbordo(state, value: boolean) {
       state.transbordo = value
     },
-    setApiError(state, value){
+    setApiError(state, value) {
       state.apiError = value
     },
-    setGeolocationError(state, value){
+    setGeolocationError(state, value) {
       state.geolocationError = value
     },
   },
   getters: {
-    geolocationError(state){
+    geolocationError(state) {
       return state.geolocationError
     },
-    apiError(state){
+    apiError(state) {
       return state.apiError
     },
     searchRequested(state) {
