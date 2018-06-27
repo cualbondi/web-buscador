@@ -4,7 +4,7 @@ import upIconUrl from '@/assets/marker-stop.png'
 import L from 'leaflet'
 
 export const geoLocationIcon = new L.DivIcon({
-  className: 'location-marker'
+  className: 'location-marker',
 })
 
 export const StopIcon = L.icon(
@@ -39,20 +39,20 @@ export const UpIcon = L.icon(
 
 export const AIcon = new L.DivIcon({
   className: 'markerAB markerA',
-  popupAnchor: [0, -40]
+  popupAnchor: [0, -40],
 })
 
 export const BIcon = new L.DivIcon({
   className: 'markerAB markerB',
-  popupAnchor: [0, -40]
+  popupAnchor: [0, -40],
 })
 
 export const AIconDragging = new L.DivIcon({
   className: 'markerAB markerA drag',
-  popupAnchor: [0, -40]
+  popupAnchor: [0, -40],
 })
 
 export const BIconDragging = new L.DivIcon({
   className: 'markerAB markerB drag',
-  popupAnchor: [0, -40]
+  popupAnchor: [0, -40],
 })

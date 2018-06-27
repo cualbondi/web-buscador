@@ -49,8 +49,7 @@ export default class Map extends Vue {
     lng: number
   }
 
-  @Prop()
-  icon!: any
+  @Prop() icon!: any
 
   public options = { zoomControl: false }
 

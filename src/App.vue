@@ -5,6 +5,7 @@
       <v-snackbar
         :timeout="5000"
         v-model="messageActive"
+        :bottom="true"
       >
         {{ messageText }}
         <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
@@ -79,5 +80,9 @@ html {
 
 .shadow-right {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+}
+
+.v-snack {
+  z-index: 20001 !important;
 }
 </style>

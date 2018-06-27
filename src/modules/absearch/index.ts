@@ -40,6 +40,8 @@ interface State {
   resultsMoreLoading: boolean
   searchRequested: boolean
   transbordo: boolean
+  apiError: boolean
+  geolocationError: boolean
 }
 
 const module: Module<State, RootState> = {
@@ -55,6 +57,8 @@ const module: Module<State, RootState> = {
     resultsMoreLoading: false,
     searchRequested: false,
     transbordo: false,
+    apiError: false,
+    geolocationError: false,
   },
 
   actions: {
@@ -76,7 +80,16 @@ const module: Module<State, RootState> = {
       }
       dispatch('searchRequested')
       commit('startLoadingResults')
-      const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      commit('setApiError', false)
+      commit('setGeolocationError', false)
+      let lngA, latA, lngB, latB
+      try {
+        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch {
+        dispatch('setGeolocationError')
+        commit('finishLoadingResults')
+        return
+      }
       const ciudadSlug = getters.getCiudad.slug
       const params = {
         lngA,
@@ -95,17 +108,26 @@ const module: Module<State, RootState> = {
         }
         commit('setResults', data.results)
       } catch (err) {
-        // TODO: handle api error
+        dispatch('setApiError')
       } finally {
         commit('finishLoadingResults')
       }
     },
+    // TODO: the following method could just use the one above
     async getNextPage({ commit, state, dispatch, getters }) {
       if (!state.A || !state.B) {
         return
       }
       commit('startLoadingMoreResults')
-      const { lngA, latA, lngB, latB } = await dispatch('getAB')
+      commit('setApiError', false)
+      let lngA, latA, lngB, latB
+      try {
+        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch {
+        dispatch('setGeolocationError')
+        commit('finishLoadingResults')
+        return
+      }
       const ciudadSlug = getters.getCiudad.slug
       const params = {
         lngA,
@@ -124,7 +146,7 @@ const module: Module<State, RootState> = {
         }
         commit('appendResults', data.results)
       } catch (err) {
-        // TODO: handle api error
+        dispatch('setApiError')
       } finally {
         commit('finishLoadingMoreResults')
       }
@@ -209,6 +231,14 @@ const module: Module<State, RootState> = {
         commit('setSearchRequested')
       }
     },
+    setApiError({ commit, dispatch }) {
+      dispatch('message', 'Hubo un error al comunicarse con el servidor')
+      commit('setApiError', true)
+    },
+    setGeolocationError({ commit, dispatch }) {
+      dispatch('message', 'No se pudo acceder a tu ubicación')
+      commit('setGeolocationError', true)
+    },
   },
 
   mutations: {
@@ -260,8 +290,20 @@ const module: Module<State, RootState> = {
     setTransbordo(state, value: boolean) {
       state.transbordo = value
     },
+    setApiError(state, value) {
+      state.apiError = value
+    },
+    setGeolocationError(state, value) {
+      state.geolocationError = value
+    },
   },
   getters: {
+    geolocationError(state) {
+      return state.geolocationError
+    },
+    apiError(state) {
+      return state.apiError
+    },
     searchRequested(state) {
       return state.searchRequested
     },
