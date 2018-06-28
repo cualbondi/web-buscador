@@ -73,10 +73,12 @@ export default class Map extends Vue {
   }
 
   goBack() {
+    (this as any).$ga.event('locationpicker', 'back')
     this.$router.back()
   }
 
   onOk() {
+    (this as any).$ga.event('locationpicker', 'ok', `${this.center.lat},${this.center.lng}`)
     this.$emit('locationPicked', this.center)
   }
 
@@ -91,6 +93,7 @@ export default class Map extends Vue {
   }
 
   geolocate() {
+    (this as any).$ga.event('locationpicker', 'geolocate')
     this.$store.dispatch('geolocate').then(position => {
       this.updatingGeolocation = true
       this.center = {
@@ -101,6 +104,7 @@ export default class Map extends Vue {
     })
   }
   moveend() {
+    (this as any).$ga.event('locationpicker', 'moveend')
     this.updatingGeolocation = false
   }
 

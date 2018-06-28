@@ -161,6 +161,7 @@ export default class Map extends Vue {
     return this.$store.getters.getRecorridoSelectedIndex
   }
   set recorridoSelectedIndex(val) {
+    (this as any).$ga.event('resultados', 'select', '', val)
     this.$store.dispatch('setRecorridoSelectedIndex', val)
   }
   get recorrido() {

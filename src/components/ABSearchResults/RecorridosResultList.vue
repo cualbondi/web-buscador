@@ -98,6 +98,7 @@ export default class RecorridosResultList extends Vue {
   }
 
   getNextPage() {
+    (this as any).$ga.event('resultados', 'more', '', this.results.length/5)
     this.$store.dispatch('getNextPage')
   }
 
@@ -126,10 +127,12 @@ export default class RecorridosResultList extends Vue {
   }
 
   nextResult() {
+    (this as any).$ga.event('resultados', 'next', '', this.selectedIndex)
     this.$emit('update:selectedIndex', this.selectedIndex + 1)
     this.directionRight = true
   }
   prevResult() {
+    (this as any).$ga.event('resultados', 'prev', '', this.selectedIndex)
     this.$emit('update:selectedIndex', this.selectedIndex - 1)
     this.directionRight = false
   }

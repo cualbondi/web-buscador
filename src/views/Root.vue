@@ -34,6 +34,7 @@ export default class Root extends Vue {
     return this.$store.getters.getCiudades
   }
   public gotoCiudad(ciudad: any) {
+    (this as any).$ga.event('root', 'select_ciudad', ciudad.slug)
     this.$store.dispatch('setCiudad', ciudad.slug)
     this.$router.push(`/${ciudad.slug}/`)
   }
