@@ -70,6 +70,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import logo from '@/assets/logo.png'
+import { BASE_URL } from '../config';
 
 @Component({})
 export default class Home extends Vue {
@@ -92,6 +93,7 @@ export default class Home extends Vue {
   }
   set ciudad(ciudadSlug) {
     this.$store.dispatch('setCiudad', ciudadSlug)
+    window.open(`${BASE_URL}${ciudadSlug}/`, '_self')
   }
   get ciudades() {
     return this.$store.getters.getCiudades
