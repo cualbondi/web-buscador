@@ -43,17 +43,14 @@ $space-top: 170px;
       &.transbordo {
         grid-template-rows: $searchfieldsHeight 1fr 180px $footerAdsHeight;
       }
+      &.smallResults {
+        grid-template-rows: $searchfieldsHeight 100px calc(100% - 100px - #{$searchfieldsHeight} - #{$footerAdsHeight}) $footerAdsHeight;
+      }
       grid-template-areas: 'top' 'map' 'bottom' 'ad';
     }
   }
   .bottom {
-    height: calc(100% - #{$space-top} - #{$footerAdsHeight});
     background: white;
-  }
-  .bottom.small {
-    position: absolute;
-    width: 100%;
-    top: $space-top;
   }
 }
 @media (min-width: 601px) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo}">
+  <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo, smallResults}">
     
     <CityHeader />
 
@@ -9,7 +9,7 @@
     
     <ABMap class="middle"/>
     
-    <ABSearchResults class="bottom" :class="{small: smallResults}" v-if="searchRequested"/>
+    <ABSearchResults class="bottom" v-if="searchRequested"/>
 
     <div class="footerad">
       <script2 type="text/javascript" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script2>
