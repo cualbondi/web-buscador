@@ -104,10 +104,11 @@ const module: Module<State, RootState> = {
       try {
         const data = await api.recorridos(params)
         if (data.next) {
-          commit('setResultsMore', false)
+          commit('setResultsMore', true)
         }
         commit('setResults', data.results)
       } catch (err) {
+        console.log(err)
         dispatch('setApiError')
       } finally {
         commit('finishLoadingResults')
@@ -146,6 +147,7 @@ const module: Module<State, RootState> = {
         }
         commit('appendResults', data.results)
       } catch (err) {
+        console.log(err)
         dispatch('setApiError')
       } finally {
         commit('finishLoadingMoreResults')
@@ -257,7 +259,6 @@ const module: Module<State, RootState> = {
     setResults(state, results: Recorrido[]) {
       state.results = results
       state.resultSelected = 0
-      state.resultsMore = true
     },
     setRecorridoSelectedIndex(state, index: number) {
       if (index < state.results.length && index > -1) {
@@ -326,8 +327,11 @@ const module: Module<State, RootState> = {
       return state.resultsMoreLoading
     },
     hasNextResult(state) {
+      if (state.resultSelected === state.results.length - 1) {
+        return state.resultsMore
+      }
       return (
-        state.resultsMore || state.resultSelected < state.results.length - 1
+        state.resultSelected < state.results.length - 1
       )
     },
     hasPrevResult(state) {
