@@ -5,7 +5,7 @@ const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 const CIUDADES = require('./src/ciudades')
 
 const production = process.env.NODE_ENV === 'production'
-const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '/mapa_nuevo/'
+const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '/mapa/'
 
 
 const developmentPlugins = []
