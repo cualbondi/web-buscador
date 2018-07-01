@@ -54,7 +54,6 @@ export default class Map extends Vue {
   public options = { zoomControl: false }
 
   center = { ...this.initialCenter }
-  zoom = 13
 
   markerOptions = {
     draggable: false,
@@ -66,6 +65,11 @@ export default class Map extends Vue {
   }
 
   updatingGeolocation = false
+
+  get zoom() {
+    return this.$store.getters.getCiudadZoom
+  }
+  
   move(e: LeafletMouseEvent) {
     if (!this.updatingGeolocation) {
       this.center = e.target.getCenter()
