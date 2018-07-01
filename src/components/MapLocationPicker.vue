@@ -66,9 +66,7 @@ export default class Map extends Vue {
 
   updatingGeolocation = false
 
-  get zoom() {
-    return this.$store.getters.getCiudadZoom
-  }
+  zoom = this.$store.getters.getCiudadZoom
   
   move(e: LeafletMouseEvent) {
     if (!this.updatingGeolocation) {
