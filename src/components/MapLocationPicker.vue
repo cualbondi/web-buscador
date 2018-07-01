@@ -51,7 +51,7 @@ export default class Map extends Vue {
 
   @Prop() icon!: any
 
-  public options = { zoomControl: false }
+  public options = { zoomControl: false, attributionControl: false }
 
   center = { ...this.initialCenter }
 

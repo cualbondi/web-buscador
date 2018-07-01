@@ -97,6 +97,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
 export default class Map extends Vue {
   public options = {
     zoomControl: false,
+    attributionControl: false
   }
 
   public disabledPolyStyle = {
