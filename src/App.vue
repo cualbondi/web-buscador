@@ -11,11 +11,6 @@
         <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
       </v-snackbar>
 
-      <v-dialog v-model="bienvenida" max-width="500px" class="bienvenida">
-        Renovamos Cualbondi! <br> Dejanos tu opinion en "Sugerencias", en el menu arriba a la izquierda.
-        <v-btn flat @click.native="bienvenida = false">OK</v-btn>
-      </v-dialog>
-
     </div>
   </v-app>
 </template>
@@ -25,7 +20,6 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class App extends Vue {
-  bienvenida: boolean = localStorage.getItem('bienvenidalista') === null
   get messageActive() {
     return this.$store.getters.messageActive
   }
@@ -43,7 +37,6 @@ export default class App extends Vue {
   }
   mounted() {
     this.$store.dispatch('initGeolocation')
-    localStorage.setItem('bienvenidalista', 'true')
   }
 }
 </script>
