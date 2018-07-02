@@ -59,9 +59,14 @@ module.exports = {
     workboxOptions: {
       runtimeCaching: [
         {
+          // handler: 'staleWhileRevalidate',
           handler: 'networkFirst',
-          urlPattern: new RegExp('.*'),
+          urlPattern: new RegExp('^https:\/\/cualbondi.com.ar'),
         },
+        {
+          handler: 'networkOnly',
+          urlPattern: new RegExp('.*'),
+        }
       ],
       skipWaiting: true,
     },
