@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Root from '@/views/Root.vue'
 import ABSearch from '@/views/ABSearch.vue'
+import Editor from '@/views/Editor.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
@@ -21,6 +22,11 @@ export default new Router({
       path: `/`,
       name: 'root',
       component: Root,
+    },
+    {
+      path: `/editor/`,
+      name: 'editor',
+      component: Editor,
     },
     {
       path: `/:ciudadSlug(${ciudadesRegex})/`,

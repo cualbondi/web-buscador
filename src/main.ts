@@ -30,6 +30,7 @@ import VGrid from 'vuetify/es5/components/VGrid'
 import VSelect from 'vuetify/es5/components/VSelect'
 import VProgressCircular from 'vuetify/es5/components/VProgressCircular'
 import VDialog from 'vuetify/es5/components/VDialog'
+import VForm from 'vuetify/es5/components/VForm'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
@@ -62,6 +63,7 @@ Vue.use(Vuetify, {
     VSelect,
     VProgressCircular,
     VDialog,
+    VForm,
   },
   directives: {
     Ripple,
