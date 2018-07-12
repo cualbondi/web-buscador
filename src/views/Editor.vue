@@ -428,7 +428,7 @@ export default class Home extends Vue {
 
       let relationId = xml_relation.getAttribute('id')
 
-      //console.log(new XMLSerializer().serializeToString(new_xml))
+      //return console.log(new XMLSerializer().serializeToString(new_xml))
       console.log('new_xml ready!');
 
       // create changeset
