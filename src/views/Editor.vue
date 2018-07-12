@@ -417,7 +417,7 @@ export default class Home extends Vue {
         xml_relation.removeChild(node)
       }
       // check no node is left
-      if (xml_relation.querySelectorAll('way').length != 0) {
+      if (xml_relation.querySelectorAll('[type=way]').length != 0) {
         throw new Error('errorrrr!')
       }
       // put all nodes in order
