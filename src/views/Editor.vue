@@ -39,9 +39,16 @@
 
     <div class="side3">
       ways
-      <v-btn @click="sortWays()">
-      sortWays
-      </v-btn>
+      <v-btn @click="sortWays()">sortWays</v-btn>
+      <div>
+        <span v-if="disconnected" style="background: red">
+          Desconectado
+        </span>
+        <span v-if="!disconnected" style="background: green">
+          Conectado
+        </span>
+      </div>
+      <v-btn @click.stop="OSMPushDialog = true">pushOSM</v-btn>
       <v-list>
         <v-list-tile v-for="(way, $index) in poly_ways" :key="`x-${way.id}-${$index}`" @click="selectedWay=way" :class="{'selected': selectedWay && selectedWay.id == way.id}">
           <v-list-tile-content>
@@ -67,6 +74,26 @@
       <polylinedecorator v-for="(way, $index) in poly_ways" :key="`b-${way.id}-${$index}`" :patterns="patterns" :paths="[way.nodes]" />
       <l-circle v-for="(way, $index) in poly_ways" :key="`c-${way.id}-${$index}`" :latLng="way.nodes[0]" color="#993333" :opacity="1" :fill="false" :radius="50" v-if="way.disconnected" />
     </l-map>
+
+    <v-dialog
+      v-model="OSMPushDialog"
+      max-width="500px"
+    >
+      <v-text-field
+        v-model="OSMusername"
+        :append-icon="'user'"
+        label="Username"
+      ></v-text-field>
+      <v-text-field
+        v-model="OSMpassword"
+        :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+        :type="showPassword ? 'text' : 'password'"
+        label="Password"
+        @click:append="showPassword = !showPassword"
+      ></v-text-field>
+      <v-btn @click="OSMPushDialog = false">Close</v-btn>
+      <v-btn @click="pushOSM()" :disabled="pushingOSM">PUSH!</v-btn>
+    </v-dialog>
 
   </div>
 </template>
@@ -147,8 +174,30 @@ function first_pass(ways: Array<Way>): Array<Way> {
     }
     ret.push(way)
   }
+  // check last one
+  let last = ways[ways.length-1];
+  let prev = ret[ret.length-1];
+  if (last && prev) {
+    console.log('last and prev')
+    last.disconnected = false
+    if (last.nodes[0].id == prev.nodes[prev.nodes.length-1].id) {
+      ret.push(last)
+    }
+    else {
+      if (last.nodes[last.nodes.length-1].id == prev.nodes[prev.nodes.length-1].id) {
+          last.nodes = last.nodes.slice().reverse()
+          ret.push(last)
+      }
+      else {
+        last.disconnected = true
+        ret.push(last)
+      }
+    }
+  }
   return ret
 }
+
+let xmlDocument: Document; // lo pongo aca para evitar el reactive de vuejs
 
 @Component({
   components: {
@@ -165,6 +214,12 @@ export default class Home extends Vue {
   firsts = []
   poly_ways: Array<Way> = []
   selectedWay = null
+  disconnected = false
+  OSMPushDialog = false
+  OSMusername = ''
+  OSMpassword = ''
+  pushingOSM = false
+  showPassword = false
 
   osm_id = '3713281'
   recorridos = []
@@ -198,7 +253,9 @@ export default class Home extends Vue {
   // TODO: agregar los recorridos editados moderados, y mostrar fechas de edicion y de OSM
 
   sortWays() {
-    // WIP look the todo, this method will loop infinitely
+
+    this.disconnected = false
+
     let bag = this.poly_ways.slice()
     if (bag.length == 0) {
       return []
@@ -206,6 +263,7 @@ export default class Home extends Vue {
     let current = (bag.shift() as Way)
     let sorted: Way[] = [current]
     while (bag.length != 0) {
+      let current = sorted[sorted.length-1]
       let current_first = current.nodes[0]
       let current_last = current.nodes[current.nodes.length-1]
       let found_way
@@ -238,6 +296,12 @@ export default class Home extends Vue {
         current = found_way
         continue;
       }
+
+
+      // current is last on sorted then try with current as first on sorted
+      current = sorted[0]
+      current_first = current.nodes[0]
+      current_last = current.nodes[current.nodes.length-1]
 
       // not found yet, search backwards, way forward
       found_way = bag.find(way => {
@@ -272,10 +336,11 @@ export default class Home extends Vue {
       remove_mutating(bag, found_way)
       sorted.push(found_way)
       current = found_way
-      console.error('ERRORR desconectado', found_way)
+      console.error('ERRORR disconnected', found_way)
 
     }
     this.poly_ways = first_pass(sorted);
+    this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
   }
 
   searchOSM() {
@@ -288,6 +353,7 @@ export default class Home extends Vue {
       let poly: Array<Way> = []
       let index = 0
       const xml = (response.data as Document)
+      xmlDocument = xml;
       const wayrefs = xml.getElementsByTagName('relation')[0].querySelectorAll('[type=way]')
       Array.from(wayrefs).map(wref => xml.getElementById(wref.getAttribute('ref'))).forEach(way => {
         const noderefs = way.getElementsByTagName('nd')
@@ -310,7 +376,98 @@ export default class Home extends Vue {
         })
       });
       this.poly_ways = first_pass(poly);
+      this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
     })
+  }
+
+  async pushOSM() {
+    this.pushingOSM = true
+    function xml_tag(xmldoc, k, v) {
+      let xml_tag = xmldoc.createElement('tag');
+      xml_tag.setAttribute('k', k)
+      xml_tag.setAttribute('v', v)
+      return xml_tag;
+    }
+    try {
+      // TODO: must be wrapped in <osm></osm> tag
+      var new_xml = document.implementation.createDocument(null, 'osm', null);
+      let xml_relation = xmlDocument.getElementsByTagName('relation')[0].cloneNode(true) as Element
+      new_xml.documentElement.appendChild(xml_relation);
+      xml_relation.removeAttribute('user')
+      xml_relation.removeAttribute('uid')
+      xml_relation.removeAttribute('timestamp')
+      // remove nodes in order
+      let ways_arr = [];
+      for (let i = 0; i < this.poly_ways.length; i++) {
+        const poly_way = this.poly_ways[i];
+        let node = xml_relation.querySelectorAll(`[ref='${poly_way.id}']`)[0];
+        ways_arr.push(node)
+        xml_relation.removeChild(node)
+      }
+      // check no node is left
+      if (xml_relation.querySelectorAll('way').length != 0) {
+        throw new Error('errorrrr!')
+      }
+      // put all nodes in order
+      for (let i = 0; i < ways_arr.length; i++) {
+        const node = ways_arr[i];
+        xml_relation.appendChild(node);
+      }
+
+      let relationId = xml_relation.getAttribute('id')
+
+      //console.log(new XMLSerializer().serializeToString(new_xml))
+      console.log('new_xml ready!');
+
+      // create changeset
+      let xml = document.implementation.createDocument(null, 'osm', null);
+      let xml_changeset = xml.createElement('changeset');
+      xml_changeset.appendChild(xml_tag(xml, 'created_by', 'Cualbondi Editor 0.0.1'))
+      xml_changeset.appendChild(xml_tag(xml, 'comment', 'Repair mixed transport relation by reordering ways'))
+      xml.documentElement.appendChild(xml_changeset);
+
+
+      const changesetId = (await axios({
+        method: 'put',
+        url: 'https://www.openstreetmap.org/api/0.6/changeset/create',
+        auth: {
+            username: this.OSMusername,
+            password: this.OSMpassword
+        },
+        data: new XMLSerializer().serializeToString(xml)
+      })).data;
+
+      console.log('newChangeset', changesetId)
+      xml_relation.setAttribute('changeset', changesetId);
+
+      // rearrange relation xml (global var xmlDocument) to match this.poly_ways
+      let newxml = new_xml.cloneNode(true);
+      // put/post changed relation referencing changeset
+      await axios({
+        method: 'put',
+        url: `https://www.openstreetmap.org/api/0.6/relation/${relationId}`,
+        auth: {
+            username: this.OSMusername,
+            password: this.OSMpassword
+        },
+        data: new XMLSerializer().serializeToString(new_xml)
+      });
+
+      // close changeset
+      await axios({
+        method: 'put',
+        url: `https://www.openstreetmap.org/api/0.6/changeset/${changesetId}/close`,
+        auth: {
+            username: this.OSMusername,
+            password: this.OSMpassword
+        }
+      });
+    }
+    catch (e) {
+      console.log(JSON.stringify(e))
+      window.alert(e)
+    }
+    this.pushingOSM = false
   }
 
   created() {
