@@ -39,16 +39,23 @@
 
     <div class="side3">
       ways
-      <v-btn @click="sortWays()">sortWays</v-btn>
-      <div>
+      <span>
         <span v-if="disconnected" style="background: red">
           Desconectado
         </span>
         <span v-if="!disconnected" style="background: green">
           Conectado
         </span>
+      </span>
+      <div>
+        <v-btn @click="sortWays()">sortWays</v-btn>
       </div>
-      <v-btn @click.stop="OSMPushDialog = true">pushOSM</v-btn>
+      <div>
+        <v-btn @click="reverseRelation()">reverseRelation</v-btn>
+      </div>
+      <div>
+        <v-btn @click.stop="OSMPushDialog = true">pushOSM</v-btn>
+      </div>
       <v-list>
         <v-list-tile v-for="(way, $index) in poly_ways" :key="`x-${way.id}-${$index}`" @click="selectedWay=way" :class="{'selected': selectedWay && selectedWay.id == way.id}">
           <v-list-tile-content>
@@ -341,6 +348,11 @@ export default class Home extends Vue {
     }
     this.poly_ways = first_pass(sorted);
     this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
+  }
+
+  reverseRelation() {
+    this.poly_ways.reverse()
+    this.poly_ways = first_pass(this.poly_ways);
   }
 
   searchOSM() {
