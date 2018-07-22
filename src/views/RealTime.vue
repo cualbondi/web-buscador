@@ -15,10 +15,7 @@ export default class Live extends Vue {
         }
         sock.onopen = () => {
             const message = {
-                position: {
-                    lat: 1,
-                    lng: 2,
-                },
+                position: "POINT (1 1)",
                 recorridos: [1,2,3]
             }
             sock.send(JSON.stringify(message))
