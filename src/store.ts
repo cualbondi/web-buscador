@@ -5,6 +5,7 @@ import absearch from '@/modules/absearch'
 import ui from '@/modules/ui'
 import core from '@/modules/core'
 import geocoder from '@/modules/geocoder'
+import auth from '@/modules/auth'
 import analyticsMiddleware from '@/middleware/analytics'
 import { isProd } from '@/config'
 
@@ -22,6 +23,7 @@ export default new Vuex.Store<RootState>({
     ui,
     core,
     geocoder,
+    auth,
   },
   strict: isProd,
   plugins: [analyticsMiddleware],

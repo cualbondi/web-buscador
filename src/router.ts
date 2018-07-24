@@ -6,6 +6,7 @@ import Editor from '@/views/Editor.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
+import Login from '@/views/Login.vue'
 import { BASE_URL } from '@/config'
 import CIUDADES from '@/ciudades'
 
@@ -22,6 +23,11 @@ export default new Router({
       path: `/`,
       name: 'root',
       component: Root,
+    },
+    {
+      path: `/login`,
+      name: 'login',
+      component: Login,
     },
     {
       path: `/editor/`,

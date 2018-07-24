@@ -31,6 +31,7 @@ import VSelect from 'vuetify/es5/components/VSelect'
 import VProgressCircular from 'vuetify/es5/components/VProgressCircular'
 import VDialog from 'vuetify/es5/components/VDialog'
 import VForm from 'vuetify/es5/components/VForm'
+import VCheckbox from 'vuetify/es5/components/VCheckbox'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
@@ -64,6 +65,7 @@ Vue.use(Vuetify, {
     VProgressCircular,
     VDialog,
     VForm,
+    VCheckbox,
   },
   directives: {
     Ripple,
@@ -78,14 +80,14 @@ Vue.use(VueAnalytics, {
   id: GA_KEY,
   router,
   debug: {
-    enabled: !isProd,
+    enabled: false,
     sendHitTask: isProd,
   },
 })
 
 Vue.config.productionTip = false
 
-interface VueExtended extends Vue {
+export interface VueExtended extends Vue {
   $ga?: any
 }
 const vueInstance: VueExtended = new Vue({

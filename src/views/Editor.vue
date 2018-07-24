@@ -25,6 +25,16 @@
           go!
         </v-btn>
       </v-form>
+      <div>
+        <v-layout row wrap>
+          <v-flex xs3>
+            <v-checkbox label="sync" v-model="linkear_sync"></v-checkbox>
+          </v-flex>
+          <v-flex xs3>
+            <v-btn @click="linkear">linkear</v-btn>
+          </v-flex>
+        </v-layout>
+      </div>
       <v-list>
         <v-list-tile v-for="rec in recorridos_osm" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
           <v-list-tile-content>
@@ -227,6 +237,7 @@ export default class Home extends Vue {
   OSMpassword = ''
   pushingOSM = false
   showPassword = false
+  linkear_sync = false
 
   osm_id = '3713281'
   recorridos = []
@@ -234,26 +245,43 @@ export default class Home extends Vue {
   recorrido_selected = null
   public patterns = [decoratorArrow1]
 
-  setRecorrido(recorrido) {
+  linkear() {
+    axios({
+      headers: {
+        authorization: `Bearer facebook ${this.$store.getters.getUser.FBToken}`
+      },
+      method: 'patch',
+      url: `${API_URL}/recorridos/${this.recorrido_selected}/`,
+      data: {
+        osm_id: this.osm_id,
+        osm_sync: this.linkear_sync
+      }
+    }).catch(e => {
+      alert('error guardando')
+      console.log(e)
+    })
+  }
+
+  setRecorrido(recorrido: any) {
     this.recorridos_osm = []
     this.recorrido_cb = []
     this.poly_ways = []
     this.recorrido_selected = recorrido.id
     let llarr = recorrido.ruta.split('(')[1].split(')')[0].split(', ')
-    this.recorrido_cb = llarr.map(llstr => llstr.split(' ').map(parseFloat).reverse())
+    this.recorrido_cb = llarr.map((llstr: any) => llstr.split(' ').map(parseFloat).reverse())
     axios({
       method: 'get',
       url: `${API_URL}/match-recorridos/${recorrido.id}/`
-    }).then(response => {
+    }).then((response: any) => {
       this.recorridos_osm = response.data
       let { osm_id } = response.data[0]
-      this.osm_id = Math.abs(osm_id)
+      this.osm_id = Math.abs(osm_id).toString()
       this.searchOSM()
     })
   }
 
-  setRecorrido_osm(recorrido_matched) {
-    this.osm_id = Math.abs(recorrido_matched.osm_id)
+  setRecorrido_osm(recorrido_matched: any) {
+    this.osm_id = Math.abs(recorrido_matched.osm_id).toString()
     this.searchOSM()
   }
 
@@ -367,25 +395,36 @@ export default class Home extends Vue {
       const xml = (response.data as Document)
       xmlDocument = xml;
       const wayrefs = xml.getElementsByTagName('relation')[0].querySelectorAll('[type=way]')
-      Array.from(wayrefs).map(wref => xml.getElementById(wref.getAttribute('ref'))).forEach(way => {
-        const noderefs = way.getElementsByTagName('nd')
-        let first = true
-        let poly_way: Array<Node> = []
-        Array.from(noderefs).map(nref => xml.getElementById(nref.getAttribute('ref'))).forEach(node => {
-          poly_way.push({
-            id: (node.getAttribute('id') as string),
-            lat: parseFloat(node.getAttribute('lat') as string),
-            lng: parseFloat(node.getAttribute('lon') as string)
+      Array.from(wayrefs).map(wref => xml.getElementById((wref as any).getAttribute('ref'))).forEach(way => {
+        if (way) {
+          const noderefs = way.getElementsByTagName('nd')
+          let first = true
+          let poly_way: Array<Node> = []
+          Array.from(noderefs).map(nref => xml.getElementById((nref as any).getAttribute('ref'))).forEach(node => {
+            if (node) {
+              poly_way.push({
+                id: (node.getAttribute('id') as string),
+                lat: parseFloat(node.getAttribute('lat') as string),
+                lng: parseFloat(node.getAttribute('lon') as string)
+              })
+            }
           })
-        })
-        let name = way.querySelectorAll('[k=name]')[0]
-        name = name ? name.getAttribute('v') : ''
-        poly.push({
-          id: (way.getAttribute('id') as string),
-          name,
-          nodes: poly_way,
-          disconnected: false
-        })
+          const ename = way.querySelectorAll('[k=name]')[0]
+          let name
+          if (name) {
+            const n = ename.getAttribute('v')
+            name = n ? n : ''
+          }
+          else {
+            name = ''
+          }
+          poly.push({
+            id: (way.getAttribute('id') as string),
+            name,
+            nodes: poly_way,
+            disconnected: false
+          })
+        }
       });
       this.poly_ways = first_pass(poly);
       this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
@@ -394,7 +433,7 @@ export default class Home extends Vue {
 
   async pushOSM() {
     this.pushingOSM = true
-    function xml_tag(xmldoc, k, v) {
+    function xml_tag(xmldoc: any, k: string, v: string) {
       let xml_tag = xmldoc.createElement('tag');
       xml_tag.setAttribute('k', k)
       xml_tag.setAttribute('v', v)
@@ -482,11 +521,19 @@ export default class Home extends Vue {
     this.pushingOSM = false
   }
 
-  created() {
+  mounted() {
+    // permission check!
+    const user = this.$store.getters.getUser
+    if (!user || !user.permissions.includes('staff')) {
+      this.$store.dispatch('setNextUrl', 'editor')
+      this.$router.push({ name: 'login' })
+      return
+    }
+    // end permission check
     axios({
-      metod: 'get',
+      method: 'get',
       url: `${API_URL}/recorridos-por-ciudad/1/`
-    }).then(response => {
+    }).then((response: any) => {
       this.recorridos = response.data
     })
   }

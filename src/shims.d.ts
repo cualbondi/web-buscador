@@ -28,3 +28,8 @@ interface LatLng {
   lat: number
   lng: number
 }
+
+interface Window {
+  FB: any
+  fbAsyncInit: any
+}
