@@ -44,7 +44,7 @@ const module: Module<State, RootState> = {
     },
     setNextUrl(state, nextUrl: string) {
       state.nextUrl = nextUrl
-    }
+    },
   },
   getters: {
     getUser(state) {

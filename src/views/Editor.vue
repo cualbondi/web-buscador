@@ -155,25 +155,25 @@ const decoratorBuilder = function(offset: string, opacity: number) {
 const decoratorArrow1 = decoratorBuilder('5', 1)
 
 function remove_mutating(array: Way[], way: Way) {
-    const index = array.indexOf(way);
+    const index = array.indexOf(way)
     if (index !== -1) {
-        array.splice(index, 1);
+        array.splice(index, 1)
     }
 }
 
-function first_pass(ways: Array<Way>): Array<Way> {
-  let ret: Array<Way> = []
-  let way: Way | undefined;
+function first_pass(ways: Way[]): Way[] {
+  const ret: Way[] = []
+  let way: Way | undefined
   if (ways.length == 1) {
     return ways
   }
-  for (let i = 0; i < ways.length-1; i++) {
-    const way = ways[i];
-    const curr_last = way.nodes[way.nodes.length-1];
-    const curr_first = way.nodes[0];
-    const next = ways[i+1]
-    const next_first = next.nodes[0];
-    const next_last = next.nodes[next.nodes.length-1];
+  for (let i = 0; i < ways.length - 1; i++) {
+    const way = ways[i]
+    const curr_last = way.nodes[way.nodes.length - 1]
+    const curr_first = way.nodes[0]
+    const next = ways[i + 1]
+    const next_first = next.nodes[0]
+    const next_last = next.nodes[next.nodes.length - 1]
     way.disconnected = false
     if (
       curr_last.id != next_first.id &&
@@ -184,28 +184,25 @@ function first_pass(ways: Array<Way>): Array<Way> {
         curr_first.id != next_last.id
       ) {
         way.disconnected = true
-      }
-      else {
+      } else {
         way.nodes = way.nodes.slice().reverse()
       }
     }
     ret.push(way)
   }
   // check last one
-  let last = ways[ways.length-1];
-  let prev = ret[ret.length-1];
+  const last = ways[ways.length - 1]
+  const prev = ret[ret.length - 1]
   if (last && prev) {
     console.log('last and prev')
     last.disconnected = false
-    if (last.nodes[0].id == prev.nodes[prev.nodes.length-1].id) {
+    if (last.nodes[0].id == prev.nodes[prev.nodes.length - 1].id) {
       ret.push(last)
-    }
-    else {
-      if (last.nodes[last.nodes.length-1].id == prev.nodes[prev.nodes.length-1].id) {
+    } else {
+      if (last.nodes[last.nodes.length - 1].id == prev.nodes[prev.nodes.length - 1].id) {
           last.nodes = last.nodes.slice().reverse()
           ret.push(last)
-      }
-      else {
+      } else {
         last.disconnected = true
         ret.push(last)
       }
@@ -214,7 +211,7 @@ function first_pass(ways: Array<Way>): Array<Way> {
   return ret
 }
 
-let xmlDocument: Document; // lo pongo aca para evitar el reactive de vuejs
+let xmlDocument: Document // lo pongo aca para evitar el reactive de vuejs
 
 @Component({
   components: {
@@ -222,106 +219,106 @@ let xmlDocument: Document; // lo pongo aca para evitar el reactive de vuejs
     LTileLayer,
     LPolyline,
     Polylinedecorator,
-    LCircle
+    LCircle,
   },
 })
 export default class Home extends Vue {
-  mapCenter = [-34.921111,-57.954444]
-  recorrido_cb = []
-  firsts = []
-  poly_ways: Array<Way> = []
-  selectedWay = null
-  disconnected = false
-  OSMPushDialog = false
-  OSMusername = ''
-  OSMpassword = ''
-  pushingOSM = false
-  showPassword = false
-  linkear_sync = false
+  public mapCenter = [-34.921111, -57.954444]
+  public recorrido_cb = []
+  public firsts = []
+  public poly_ways: Way[] = []
+  public selectedWay = null
+  public disconnected = false
+  public OSMPushDialog = false
+  public OSMusername = ''
+  public OSMpassword = ''
+  public pushingOSM = false
+  public showPassword = false
+  public linkear_sync = false
 
-  osm_id = '3713281'
-  recorridos = []
-  recorridos_osm = []
-  recorrido_selected = null
+  public osm_id = '3713281'
+  public recorridos = []
+  public recorridos_osm = []
+  public recorrido_selected = null
   public patterns = [decoratorArrow1]
 
-  linkear() {
+  public linkear() {
     axios({
       headers: {
-        authorization: `Bearer facebook ${this.$store.getters.getUser.FBToken}`
+        authorization: `Bearer facebook ${this.$store.getters.getUser.FBToken}`,
       },
       method: 'patch',
       url: `${API_URL}/recorridos/${this.recorrido_selected}/`,
       data: {
         osm_id: this.osm_id,
-        osm_sync: this.linkear_sync
-      }
+        osm_sync: this.linkear_sync,
+      },
     }).catch(e => {
       alert('error guardando')
       console.log(e)
     })
   }
 
-  setRecorrido(recorrido: any) {
+  public setRecorrido(recorrido: any) {
     this.recorridos_osm = []
     this.recorrido_cb = []
     this.poly_ways = []
     this.recorrido_selected = recorrido.id
-    let llarr = recorrido.ruta.split('(')[1].split(')')[0].split(', ')
+    const llarr = recorrido.ruta.split('(')[1].split(')')[0].split(', ')
     this.recorrido_cb = llarr.map((llstr: any) => llstr.split(' ').map(parseFloat).reverse())
     axios({
       method: 'get',
-      url: `${API_URL}/match-recorridos/${recorrido.id}/`
+      url: `${API_URL}/match-recorridos/${recorrido.id}/`,
     }).then((response: any) => {
       this.recorridos_osm = response.data
-      let { osm_id } = response.data[0]
+      const { osm_id } = response.data[0]
       this.osm_id = Math.abs(osm_id).toString()
       this.searchOSM()
     })
   }
 
-  setRecorrido_osm(recorrido_matched: any) {
+  public setRecorrido_osm(recorrido_matched: any) {
     this.osm_id = Math.abs(recorrido_matched.osm_id).toString()
     this.searchOSM()
   }
 
   // TODO: agregar los recorridos editados moderados, y mostrar fechas de edicion y de OSM
 
-  sortWays() {
+  public sortWays() {
 
     this.disconnected = false
 
-    let bag = this.poly_ways.slice()
+    const bag = this.poly_ways.slice()
     if (bag.length == 0) {
       return []
     }
-    let current = (bag.shift() as Way)
-    let sorted: Way[] = [current]
+    const current = (bag.shift() as Way)
+    const sorted: Way[] = [current]
     while (bag.length != 0) {
-      let current = sorted[sorted.length-1]
+      let current = sorted[sorted.length - 1]
       let current_first = current.nodes[0]
-      let current_last = current.nodes[current.nodes.length-1]
+      let current_last = current.nodes[current.nodes.length - 1]
       let found_way
 
       // let the search begin //
 
       // search forward, way is also forward
       found_way = bag.find(way => {
-        let way_first = way.nodes[0]
-        let way_last = way.nodes[way.nodes.length-1]
+        const way_first = way.nodes[0]
+        const way_last = way.nodes[way.nodes.length - 1]
         return current_last.id == way_first.id
       })
       if (found_way) {
         remove_mutating(bag, found_way)
         sorted.push(found_way)
         current = found_way
-        continue;
+        continue
       }
 
       // not found yet, search forward, way backwards
       found_way = bag.find(way => {
-        let way_first = way.nodes[0]
-        let way_last = way.nodes[way.nodes.length-1]
+        const way_first = way.nodes[0]
+        const way_last = way.nodes[way.nodes.length - 1]
         return current_last.id == way_last.id
       })
       if (found_way) {
@@ -329,32 +326,32 @@ export default class Home extends Vue {
         found_way.nodes = found_way.nodes.slice().reverse()
         sorted.push(found_way)
         current = found_way
-        continue;
+        continue
       }
 
 
       // current is last on sorted then try with current as first on sorted
       current = sorted[0]
       current_first = current.nodes[0]
-      current_last = current.nodes[current.nodes.length-1]
+      current_last = current.nodes[current.nodes.length - 1]
 
       // not found yet, search backwards, way forward
       found_way = bag.find(way => {
-        let way_first = way.nodes[0]
-        let way_last = way.nodes[way.nodes.length-1]
+        const way_first = way.nodes[0]
+        const way_last = way.nodes[way.nodes.length - 1]
         return current_first.id == way_last.id
       })
       if (found_way) {
         remove_mutating(bag, found_way)
         sorted.unshift(found_way)
         current = found_way
-        continue;
+        continue
       }
 
       // not found yet, search backwards, way backwards
       found_way = bag.find(way => {
-        let way_first = way.nodes[0]
-        let way_last = way.nodes[way.nodes.length-1]
+        const way_first = way.nodes[0]
+        const way_last = way.nodes[way.nodes.length - 1]
         return current_first.id == way_first.id
       })
       if (found_way) {
@@ -362,7 +359,7 @@ export default class Home extends Vue {
         found_way.nodes = found_way.nodes.slice().reverse()
         sorted.unshift(found_way)
         current = found_way
-        continue;
+        continue
       }
 
       // not found yet, we'll have to find the closest point in all ways to the last or to the first one in current
@@ -374,38 +371,38 @@ export default class Home extends Vue {
       console.error('ERRORR disconnected', found_way)
 
     }
-    this.poly_ways = first_pass(sorted);
+    this.poly_ways = first_pass(sorted)
     this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
   }
 
-  reverseRelation() {
+  public reverseRelation() {
     this.poly_ways.reverse()
-    this.poly_ways = first_pass(this.poly_ways);
+    this.poly_ways = first_pass(this.poly_ways)
   }
 
-  searchOSM() {
+  public searchOSM() {
     axios({
       method: 'get',
       url: `https://www.openstreetmap.org/api/0.6/relation/${this.osm_id}/full`,
-      responseType: 'document'
+      responseType: 'document',
     }).then(response => {
       this.firsts = []
-      let poly: Array<Way> = []
-      let index = 0
+      const poly: Way[] = []
+      const index = 0
       const xml = (response.data as Document)
-      xmlDocument = xml;
+      xmlDocument = xml
       const wayrefs = xml.getElementsByTagName('relation')[0].querySelectorAll('[type=way]')
       Array.from(wayrefs).map(wref => xml.getElementById((wref as any).getAttribute('ref'))).forEach(way => {
         if (way) {
           const noderefs = way.getElementsByTagName('nd')
-          let first = true
-          let poly_way: Array<Node> = []
+          const first = true
+          const poly_way: Node[] = []
           Array.from(noderefs).map(nref => xml.getElementById((nref as any).getAttribute('ref'))).forEach(node => {
             if (node) {
               poly_way.push({
                 id: (node.getAttribute('id') as string),
                 lat: parseFloat(node.getAttribute('lat') as string),
-                lng: parseFloat(node.getAttribute('lon') as string)
+                lng: parseFloat(node.getAttribute('lon') as string),
               })
             }
           })
@@ -414,44 +411,43 @@ export default class Home extends Vue {
           if (name) {
             const n = ename.getAttribute('v')
             name = n ? n : ''
-          }
-          else {
+          } else {
             name = ''
           }
           poly.push({
             id: (way.getAttribute('id') as string),
             name,
             nodes: poly_way,
-            disconnected: false
+            disconnected: false,
           })
         }
-      });
-      this.poly_ways = first_pass(poly);
+      })
+      this.poly_ways = first_pass(poly)
       this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
     })
   }
 
-  async pushOSM() {
+  public async pushOSM() {
     this.pushingOSM = true
     function xml_tag(xmldoc: any, k: string, v: string) {
-      let xml_tag = xmldoc.createElement('tag');
+      const xml_tag = xmldoc.createElement('tag')
       xml_tag.setAttribute('k', k)
       xml_tag.setAttribute('v', v)
-      return xml_tag;
+      return xml_tag
     }
     try {
       // TODO: must be wrapped in <osm></osm> tag
-      var new_xml = document.implementation.createDocument(null, 'osm', null);
-      let xml_relation = xmlDocument.getElementsByTagName('relation')[0].cloneNode(true) as Element
-      new_xml.documentElement.appendChild(xml_relation);
+      const new_xml = document.implementation.createDocument(null, 'osm', null)
+      const xml_relation = xmlDocument.getElementsByTagName('relation')[0].cloneNode(true) as Element
+      new_xml.documentElement.appendChild(xml_relation)
       xml_relation.removeAttribute('user')
       xml_relation.removeAttribute('uid')
       xml_relation.removeAttribute('timestamp')
       // remove nodes in order
-      let ways_arr = [];
+      const ways_arr = []
       for (let i = 0; i < this.poly_ways.length; i++) {
-        const poly_way = this.poly_ways[i];
-        let node = xml_relation.querySelectorAll(`[ref='${poly_way.id}']`)[0];
+        const poly_way = this.poly_ways[i]
+        const node = xml_relation.querySelectorAll(`[ref='${poly_way.id}']`)[0]
         ways_arr.push(node)
         xml_relation.removeChild(node)
       }
@@ -461,21 +457,21 @@ export default class Home extends Vue {
       }
       // put all nodes in order
       for (let i = 0; i < ways_arr.length; i++) {
-        const node = ways_arr[i];
-        xml_relation.appendChild(node);
+        const node = ways_arr[i]
+        xml_relation.appendChild(node)
       }
 
-      let relationId = xml_relation.getAttribute('id')
+      const relationId = xml_relation.getAttribute('id')
 
-      //return console.log(new XMLSerializer().serializeToString(new_xml))
-      console.log('new_xml ready!');
+      // return console.log(new XMLSerializer().serializeToString(new_xml))
+      console.log('new_xml ready!')
 
       // create changeset
-      let xml = document.implementation.createDocument(null, 'osm', null);
-      let xml_changeset = xml.createElement('changeset');
+      const xml = document.implementation.createDocument(null, 'osm', null)
+      const xml_changeset = xml.createElement('changeset')
       xml_changeset.appendChild(xml_tag(xml, 'created_by', 'Cualbondi Editor 0.0.1'))
       xml_changeset.appendChild(xml_tag(xml, 'comment', 'Repair mixed transport relation by reordering ways'))
-      xml.documentElement.appendChild(xml_changeset);
+      xml.documentElement.appendChild(xml_changeset)
 
 
       const changesetId = (await axios({
@@ -483,26 +479,26 @@ export default class Home extends Vue {
         url: 'https://www.openstreetmap.org/api/0.6/changeset/create',
         auth: {
             username: this.OSMusername,
-            password: this.OSMpassword
+            password: this.OSMpassword,
         },
-        data: new XMLSerializer().serializeToString(xml)
-      })).data;
+        data: new XMLSerializer().serializeToString(xml),
+      })).data
 
       console.log('newChangeset', changesetId)
-      xml_relation.setAttribute('changeset', changesetId);
+      xml_relation.setAttribute('changeset', changesetId)
 
       // rearrange relation xml (global var xmlDocument) to match this.poly_ways
-      let newxml = new_xml.cloneNode(true);
+      const newxml = new_xml.cloneNode(true)
       // put/post changed relation referencing changeset
       await axios({
         method: 'put',
         url: `https://www.openstreetmap.org/api/0.6/relation/${relationId}`,
         auth: {
             username: this.OSMusername,
-            password: this.OSMpassword
+            password: this.OSMpassword,
         },
-        data: new XMLSerializer().serializeToString(new_xml)
-      });
+        data: new XMLSerializer().serializeToString(new_xml),
+      })
 
       // close changeset
       await axios({
@@ -510,18 +506,17 @@ export default class Home extends Vue {
         url: `https://www.openstreetmap.org/api/0.6/changeset/${changesetId}/close`,
         auth: {
             username: this.OSMusername,
-            password: this.OSMpassword
-        }
-      });
-    }
-    catch (e) {
+            password: this.OSMpassword,
+        },
+      })
+    } catch (e) {
       console.log(JSON.stringify(e))
       window.alert(e)
     }
     this.pushingOSM = false
   }
 
-  mounted() {
+  public mounted() {
     // permission check!
     const user = this.$store.getters.getUser
     if (!user || !user.permissions.includes('staff')) {
@@ -532,7 +527,7 @@ export default class Home extends Vue {
     // end permission check
     axios({
       method: 'get',
-      url: `${API_URL}/recorridos-por-ciudad/1/`
+      url: `${API_URL}/recorridos-por-ciudad/1/`,
     }).then((response: any) => {
       this.recorridos = response.data
     })

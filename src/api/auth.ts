@@ -13,7 +13,7 @@ const api = {
     console.log(e)
   }).then((r: any) =>
     r.data,
-  )
+  ),
 }
 
 export default api
