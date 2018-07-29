@@ -4,8 +4,6 @@ import router from './router'
 import store from './store'
 import VueAnalytics from 'vue-analytics'
 import vueHeadful from 'vue-headful'
-import VueScript2 from 'vue-script2'
-import VueAds from 'vue-google-adsense'
 
 import './registerServiceWorker'
 
@@ -41,8 +39,6 @@ if (SENTRY_URL) {
 }
 
 Vue.component('vue-headful', vueHeadful)
-
-Vue.use(VueScript2)
 
 Vue.use(Vuetify, {
   components: {

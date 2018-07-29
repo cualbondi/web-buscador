@@ -1,29 +1,24 @@
 <template>
   <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo, smallResults}">
-    
+
     <CityHeader />
 
     <SideMenu />
-    
+
     <ABSearchFields class="top" />
-    
+
     <ABMap class="middle"/>
-    
+
     <ABSearchResults class="bottom" v-if="searchRequested"/>
 
     <div class="footerad">
-      <script2 type="text/javascript" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script2>
       <ins
         class="adsbygoogle"
         style="display:inline-block;width:320px;height:50px"
         data-ad-client="ca-pub-1193419141108967"
         data-ad-slot="9086127115"
         ></ins>
-      <script2>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script2>
     </div>
-
   </div>
 </template>
 
@@ -34,6 +29,7 @@ import ABMap from '@/components/ABMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
+import VueScript2 from 'vue-script2'
 
 @Component({
   components: {
@@ -56,6 +52,16 @@ export default class Home extends Vue {
   }
   get transbordo() {
     return this.$store.getters.transbordo
+  }
+  mounted() {
+    // avoid rendering ads on prerender stage
+    if (!window.navigator.userAgent.includes('Headless')) {
+      VueScript2.load('//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
+      if (!(window as any).adsbygoogle) {
+        (window as any).adsbygoogle = []
+      }
+      (window as any).adsbygoogle.push({})
+    }
   }
 }
 </script>
