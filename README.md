@@ -16,7 +16,7 @@ Si se necesita agregar un package o actualizar las dependencias, es necesario ha
 
 2. Instalar o actualizar la misma (en el container):
 
-    `docker-compose -f docker-compose.dev.yml npm <install|update>`
+    `docker-compose -f docker-compose.dev.yml run --rm web-buscador npm install`
 
 3. Commitear el package.json y el lock file
 
