@@ -1,0 +1,15 @@
+version: '3.2'
+
+services:
+
+    web-buscador:
+        image: cualbondi/web-buscador
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "${PORT:-8080}:8080"
+        volumes:
+            - .:/var/www
+            # Excludes node_modules from mounting
+            - /var/www/node_modules

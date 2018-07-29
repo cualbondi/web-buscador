@@ -11,7 +11,7 @@
     "test:e2e:headless": "vue-cli-service test:e2e --headless --mode e2e",
     "prettier": "prettier-eslint --write \"src/**/*.+(js|jsx|scss|ts|vue)\"",
     "tslint": "tslint -c tslint.json --project .",
-    "pre-commit": "yarn tslint"
+    "pre-commit": "npm run tslint"
   },
   "dependencies": {
     "axios": "^0.18.0",
