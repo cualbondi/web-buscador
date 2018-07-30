@@ -85,7 +85,7 @@ const module: Module<State, RootState> = {
       let lngA, latA, lngB, latB
       try {
         ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
-      } catch {
+      } catch(e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
         return
@@ -124,7 +124,7 @@ const module: Module<State, RootState> = {
       let lngA, latA, lngB, latB
       try {
         ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
-      } catch {
+      } catch(e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
         return
