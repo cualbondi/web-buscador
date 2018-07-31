@@ -13,6 +13,9 @@
         <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIcon">
           <l-popup>{{recorrido.itinerario[0].p2.nombre}}</l-popup>
         </l-marker>
+
+        <l-marker v-if="recorrido.A" :latLng="recorrido.A" :icon="stopIcon"></l-marker>
+
       </template>
 
       <template v-if="recorrido && recorrido.itinerario.length == 2">

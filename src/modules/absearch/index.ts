@@ -2,6 +2,7 @@ import { Module } from 'vuex'
 import { RootState } from '@/store'
 import api from '@/api/api'
 import { Recorrido } from '@/api/schema'
+import Vue from 'vue'
 
 interface LatLng {
   lat: number
@@ -44,6 +45,9 @@ interface State {
   geolocationError: boolean
 }
 
+const sock = new WebSocket("ws://localhost:8084/subscribe")
+
+
 const module: Module<State, RootState> = {
   state: {
     A: null,
@@ -62,6 +66,19 @@ const module: Module<State, RootState> = {
   },
 
   actions: {
+    setrtapiids({state, dispatch, getters, commit}, recorrido_ids) {
+      const message = {
+        position: `POINT (${state.A.lng} ${state.A.lat})`, //'POINT (-62.28849501342586 -38.7461138161239)',
+        recorridos: recorrido_ids
+      }
+      sock.send(JSON.stringify(message))
+      sock.onmessage = (event: MessageEvent) => {
+        console.log('recieved ', event.data)
+        let data = JSON.parse(event.data)
+        data.A = [parseFloat(data.A.split('(')[1].split(' ')[1].split(')')[0]), parseFloat(data.A.split('(')[1].split(' ')[0])]
+        commit('setGPS', {recorrido_ids, data})
+      }
+    },
     async getAB({ state, dispatch, getters }) {
       if (state.A === null || state.B === null) {
         return
@@ -190,6 +207,7 @@ const module: Module<State, RootState> = {
         await dispatch('getNextPage')
         commit('setRecorridoSelectedIndex', index)
       }
+      dispatch('setrtapiids', [state.results[index].itinerario[0].id])
     },
     // sets A or B from geolocation
     fromGeoLocation({ dispatch, commit }, source: 'origin' | 'destination') {
@@ -244,6 +262,10 @@ const module: Module<State, RootState> = {
   },
 
   mutations: {
+    setGPS(state, {recorrido_ids, data}) {
+      console.log(data.A)
+      Vue.set(state.results[state.resultSelected], 'A', data.A)
+    },
     setSearchRequested(state) {
       state.searchRequested = true
     },
