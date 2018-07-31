@@ -54,7 +54,17 @@ export default class ABSearchResults extends Vue {
   buscarConTransbordo() {
     (this as any).$ga.event('resultados', 'buscarTransbordo')
     this.$store.dispatch('setTransbordo', true)
-    this.$store.dispatch('query')
+    this.$store.dispatch('query').then(
+      // this not force a create on absearch, so force to keep the query params
+      () => this.$router.push({
+        name: 'absearch',
+        query: {
+          from: this.$route.query.from,
+          to: this.$route.query.to,
+          transbordo: '1'
+        }
+      })
+    )
   }
   get geolocationError() {
     return this.$store.getters.geolocationError

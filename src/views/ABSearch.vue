@@ -1,14 +1,14 @@
 <template>
   <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo, smallResults}">
-    
+
     <CityHeader />
 
     <SideMenu />
-    
+
     <ABSearchFields class="top" />
-    
+
     <ABMap class="middle"/>
-    
+
     <ABSearchResults class="bottom" v-if="searchRequested"/>
 
     <div class="footerad">
@@ -34,6 +34,7 @@ import ABMap from '@/components/ABMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
+import { Location } from '@/modules/absearch'
 
 @Component({
   components: {
@@ -42,9 +43,45 @@ import CityHeader from '@/components/CityHeader.vue'
     SideMenu,
     ABSearchResults,
     CityHeader,
-  },
+  }
 })
 export default class Home extends Vue {
+
+  created() {
+    // when component is created (i.e from route change)
+    // if we have a query param, update the store with that value
+    // if not have the query param, set it from $store value
+
+    let queryParams: any = {}
+
+    const from = this.parseLocation(this.$route.query.from);
+    const to = this.parseLocation(this.$route.query.to);
+    const transbordo = this.$route.query.transbordo
+
+
+    if (from) {
+      this.$store.dispatch('setA', from);
+    } else if (this.$store.getters.A !== null) {
+      queryParams.from = this.location2Query(this.$store.getters.A)
+    }
+
+    if (to) {
+      this.$store.dispatch('setB', to);
+    } else if (this.$store.getters.B !== null) {
+      queryParams.to = this.location2Query(this.$store.getters.B)
+    }
+
+    if (transbordo !== undefined) {
+      this.$store.dispatch('setTransbordo', !!(parseInt(transbordo)));
+    } else {
+      queryParams.transbordo = this.transbordo?'1':'0'
+    }
+
+    if (Object.keys(queryParams).length !== 0) {
+      this.$router.replace({query: Object.assign({}, this.$route.query, queryParams)})
+    }
+  }
+
   get recorridos() {
     return this.$store.getters.getRecorridos
   }
@@ -56,6 +93,56 @@ export default class Home extends Vue {
   }
   get transbordo() {
     return this.$store.getters.transbordo
+  }
+
+  private parseLocation(location: string): Location | false {
+    if (typeof(location) !== 'string') {
+      return false
+    }
+
+    if (location == 'geolocation') {
+      return {type: 'geolocation'} ;
+    }
+
+    const latLongName = location.split(",");
+    const lat = parseFloat(latLongName.shift() || '');
+    const lng = parseFloat(latLongName.shift() || '');
+    const name = latLongName.join(",");
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+      if (name && name.trim()) {
+        return {
+          lat,
+          lng,
+          name,
+          type: 'geocoder',
+        };
+      } else {
+        return {
+          lat,
+          lng,
+          type: 'latlng',
+        };
+      }
+    }
+
+    return false;
+  }
+
+  private location2Query(location: Location): string {
+    if (location == null) {
+      return ''
+    }
+
+    if (location.type === 'geolocation'){
+      return 'geolocation'
+    }
+
+    if (location.type === 'latlng') {
+      return [location.lat, location.lng].join(',')
+    }
+
+    return [location.lat, location.lng, location.name].join(',')
   }
 }
 </script>
