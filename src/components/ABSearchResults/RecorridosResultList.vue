@@ -58,18 +58,6 @@
             <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
-        <!--div v-if="($index > 0) && ($index%4 === 1)" :key="result.id + '_ad'" style="height: initial">
-          <script2 async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script2>
-          <ins class="adsbygoogle"
-              style="display:block"
-              data-ad-format="fluid"
-              data-ad-layout-key="-6t+ed+2i-1n-4w"
-              data-ad-client="ca-pub-1193419141108967"
-              data-ad-slot="2366883515"></ins>
-          <script2>
-              (adsbygoogle = window.adsbygoogle || []).push({});
-          </script2>
-        </div-->
       </template>
       <v-list-tile v-if="resultsMore" >
         <v-btn @click="getNextPage">Buscar mas resultados</v-btn>
