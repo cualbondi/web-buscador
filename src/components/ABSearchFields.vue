@@ -70,17 +70,7 @@ export default class Home extends Vue {
 
   public swap() {
     (this as any).$ga.event('search', 'swapAB')
-    this.$store.dispatch('swapAB').then(
-      // this not force a create on absearch, so force to keep the query params
-      () => this.$router.push({
-        name: 'absearch',
-        query: {
-          from: this.$route.query.to,
-          to: this.$route.query.from,
-          transbordo: this.$store.getters.transbordo?'1':'0',
-        }
-      })
-    )
+    this.$store.dispatch('swapAB')
   }
 }
 </script>

@@ -40,6 +40,19 @@ import VueScript2 from 'vue-script2'
     SideMenu,
     ABSearchResults,
     CityHeader,
+  },
+  watch: {
+    "$store.getters.A": function(oldVal, newVal) {
+      const this_ = (this as Home)
+      this_.updateQueryParam('from', this_.location2Query(newVal))
+    },
+    "$store.getters.B": function(oldVal, newVal) {
+      const this_ = (this as Home)
+      this_.updateQueryParam('to', this_.location2Query(newVal))
+    },
+    "transbordo": function(oldVal, newVal) {
+      (this as Home).updateQueryParam('transbordo', newVal?'1':'0')
+    },
   }
 })
 export default class Home extends Vue {
@@ -49,33 +62,25 @@ export default class Home extends Vue {
     // if we have a query param, update the store with that value
     // if not have the query param, set it from $store value
 
-    let queryParams: any = {}
-
     const from = this.parseLocation(this.$route.query.from);
     const to = this.parseLocation(this.$route.query.to);
     const transbordo = this.$route.query.transbordo
 
-
     if (from) {
       this.$store.dispatch('setA', from);
-    } else if (this.$store.getters.A !== null) {
-      queryParams.from = this.location2Query(this.$store.getters.A)
+    } else {
+      this.updateQueryParam('from', this.location2Query(this.$store.getters.A))
     }
-
     if (to) {
       this.$store.dispatch('setB', to);
-    } else if (this.$store.getters.B !== null) {
-      queryParams.to = this.location2Query(this.$store.getters.B)
+    } else {
+      this.updateQueryParam('to', this.location2Query(this.$store.getters.B))
     }
 
     if (transbordo !== undefined) {
       this.$store.dispatch('setTransbordo', !!(parseInt(transbordo)));
     } else {
-      queryParams.transbordo = this.transbordo?'1':'0'
-    }
-
-    if (Object.keys(queryParams).length !== 0) {
-      this.$router.replace({query: Object.assign({}, this.$route.query, queryParams)})
+      this.updateQueryParam('transbordo', this.transbordo?'1':'0')
     }
   }
 
@@ -90,6 +95,10 @@ export default class Home extends Vue {
   }
   get transbordo() {
     return this.$store.getters.transbordo
+  }
+
+  private updateQueryParam(key: string, value: string): void {
+    this.$router.push({ query: Object.assign({}, this.$route.query, { [key]: value }) })
   }
 
   private parseLocation(location: string): Location | false {
