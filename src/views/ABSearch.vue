@@ -29,7 +29,7 @@ import ABMap from '@/components/ABMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
-import { Location } from '@/modules/absearch'
+import { Location, LatLngLocation } from '@/modules/absearch'
 import VueScript2 from 'vue-script2'
 
 
@@ -135,16 +135,12 @@ export default class Home extends Vue {
     return false;
   }
 
-  private location2Query(location: Location): string {
+  private location2Query(location: LatLngLocation): string {
     if (location == null) {
       return ''
     }
 
-    if (location.type === 'geolocation'){
-      return 'geolocation'
-    }
-
-    if (location.type === 'latlng') {
+    if (location.type === 'geolocation' || location.type === 'latlng' ){
       return [location.lat, location.lng].join(',')
     }
 
