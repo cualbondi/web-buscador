@@ -45,8 +45,7 @@ interface State {
   geolocationError: boolean
 }
 
-const sock = new WebSocket("ws://localhost:8084/subscribe")
-
+const sock = new WebSocket('ws://localhost:8084/subscribe')
 
 const module: Module<State, RootState> = {
   state: {
@@ -66,17 +65,21 @@ const module: Module<State, RootState> = {
   },
 
   actions: {
-    setrtapiids({state, dispatch, getters, commit}, recorrido_ids) {
+    async setrtapiids({ state, dispatch, getters, commit }, recorrido_ids) {
+      const { lngA, latA } = await dispatch('getAB')
       const message = {
-        position: `POINT (${state.A.lng} ${state.A.lat})`, //'POINT (-62.28849501342586 -38.7461138161239)',
-        recorridos: recorrido_ids
+        position: `POINT (${lngA} ${latA})`, // 'POINT (-62.28849501342586 -38.7461138161239)',
+        recorridos: recorrido_ids,
       }
       sock.send(JSON.stringify(message))
       sock.onmessage = (event: MessageEvent) => {
         console.log('recieved ', event.data)
-        let data = JSON.parse(event.data)
-        data.A = [parseFloat(data.A.split('(')[1].split(' ')[1].split(')')[0]), parseFloat(data.A.split('(')[1].split(' ')[0])]
-        commit('setGPS', {recorrido_ids, data})
+        const data = JSON.parse(event.data)
+        data.A = [
+          parseFloat(data.Aproj.split('(')[1].split(' ')[1].split(')')[0]),
+          parseFloat(data.Aproj.split('(')[1].split(' ')[0]),
+        ]
+        commit('setGPS', { recorrido_ids, data })
       }
     },
     async getAB({ state, dispatch, getters }) {
@@ -101,8 +104,8 @@ const module: Module<State, RootState> = {
       commit('setGeolocationError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
-      } catch(e) {
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
         return
@@ -140,8 +143,8 @@ const module: Module<State, RootState> = {
       commit('setApiError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
-      } catch(e) {
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
         return
@@ -262,7 +265,7 @@ const module: Module<State, RootState> = {
   },
 
   mutations: {
-    setGPS(state, {recorrido_ids, data}) {
+    setGPS(state, { recorrido_ids, data }) {
       console.log(data.A)
       Vue.set(state.results[state.resultSelected], 'A', data.A)
     },
@@ -352,9 +355,7 @@ const module: Module<State, RootState> = {
       if (state.resultSelected === state.results.length - 1) {
         return state.resultsMore
       }
-      return (
-        state.resultSelected < state.results.length - 1
-      )
+      return state.resultSelected < state.results.length - 1
     },
     hasPrevResult(state) {
       return !(state.resultSelected === 0)
