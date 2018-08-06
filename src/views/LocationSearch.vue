@@ -129,7 +129,7 @@ export default class Home extends Vue {
     this.$store.dispatch('setFromGeocoder', {
       id: selection.id
     });
-    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, result.text)
+    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, (result as any).text)
   }
 
   public goBack() {
