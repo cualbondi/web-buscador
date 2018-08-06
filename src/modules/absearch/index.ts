@@ -3,6 +3,7 @@ import { RootState } from '@/store'
 import api from '@/api/api'
 import { Recorrido } from '@/api/schema'
 import Vue from 'vue'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 interface LatLng {
   lat: number
@@ -28,6 +29,13 @@ export interface GeocoderResult {
 
 export type Location = LatLng | Geolocation | GeocoderResult | null
 export type LatLngLocation = LatLng | LatLngGeolocation | GeocoderResult | null
+interface GPSLocation {
+  lat: number
+  lng: number
+  gpsid: string
+  recorrido_id: number
+  timestamp: string
+}
 
 interface State {
   A: Location
@@ -43,9 +51,19 @@ interface State {
   transbordo: boolean
   apiError: boolean
   geolocationError: boolean
+  GPSLocations: GPSLocation[]
 }
 
-const sock = new WebSocket('ws://localhost:8084/subscribe')
+const sock = new ReconnectingWebSocket(
+  'ws://localhost:8084/subscribe',
+  [],
+  {
+    maxReconnectionDelay: 2000,
+    minReconnectionDelay: 1000,
+    debug: true,
+  }
+)
+
 
 const module: Module<State, RootState> = {
   state: {
@@ -62,24 +80,29 @@ const module: Module<State, RootState> = {
     transbordo: false,
     apiError: false,
     geolocationError: false,
+    GPSLocations: [],
   },
 
   actions: {
-    async setrtapiids({ state, dispatch, getters, commit }, recorrido_ids) {
+    async setrtapiids({ dispatch, commit }, recorrido_ids) {
       const { lngA, latA } = await dispatch('getAB')
       const message = {
-        position: `POINT (${lngA} ${latA})`, // 'POINT (-62.28849501342586 -38.7461138161239)',
+        position: `POINT (${lngA} ${latA})`,
         recorridos: recorrido_ids,
       }
       sock.send(JSON.stringify(message))
+      commit('removeGPSLocations')
       sock.onmessage = (event: MessageEvent) => {
-        console.log('recieved ', event.data)
         const data = JSON.parse(event.data)
-        data.A = [
-          parseFloat(data.Aproj.split('(')[1].split(' ')[1].split(')')[0]),
-          parseFloat(data.Aproj.split('(')[1].split(' ')[0]),
-        ]
-        commit('setGPS', { recorrido_ids, data })
+        const latlng = data.Aproj.match(/POINT\s*\(([-\d\.]*)\s([-\d\.]*)\)/)
+        console.log(data.Aproj, latlng)
+        commit('addGPSLocation', {
+          gpsid: data.id_gps,
+          lng: latlng[1],
+          lat: latlng[2],
+          recorrido_id: null,
+          timestamp: data.timestamp,
+        })
       }
     },
     async getAB({ state, dispatch, getters }) {
@@ -104,7 +127,7 @@ const module: Module<State, RootState> = {
       commit('setGeolocationError', false)
       let lngA, latA, lngB, latB
       try {
-        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
@@ -127,6 +150,9 @@ const module: Module<State, RootState> = {
           commit('setResultsMore', true)
         }
         commit('setResults', data.results)
+        if (data.results.length > 0) {
+          dispatch('setrtapiids', [data.results[0].itinerario[0].id])
+        }
       } catch (err) {
         console.log(err)
         dispatch('setApiError')
@@ -143,7 +169,7 @@ const module: Module<State, RootState> = {
       commit('setApiError', false)
       let lngA, latA, lngB, latB
       try {
-        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
@@ -265,9 +291,16 @@ const module: Module<State, RootState> = {
   },
 
   mutations: {
-    setGPS(state, { recorrido_ids, data }) {
-      console.log(data.A)
-      Vue.set(state.results[state.resultSelected], 'A', data.A)
+    removeGPSLocations(state) {
+      state.GPSLocations = []
+    },
+    addGPSLocation(state, gpslocation: GPSLocation) {
+      const oldgpslocation = state.GPSLocations.find(g => g.gpsid === gpslocation.gpsid)
+      if (oldgpslocation) {
+        Object.assign(oldgpslocation, gpslocation)
+      } else {
+        state.GPSLocations.push(gpslocation)
+      }
     },
     setSearchRequested(state) {
       state.searchRequested = true
@@ -324,6 +357,9 @@ const module: Module<State, RootState> = {
     },
   },
   getters: {
+    getGPSLocations(state) {
+      return state.GPSLocations
+    },
     geolocationError(state) {
       return state.geolocationError
     },

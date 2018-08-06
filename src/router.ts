@@ -24,11 +24,6 @@ export default new Router({
       component: Root,
     },
     {
-      path: `/realtime`,
-      name: 'realtime',
-      component: RealTime,
-    },
-    {
       path: `/:ciudadSlug(${ciudadesRegex})/`,
       name: 'absearch',
       component: ABSearch,
