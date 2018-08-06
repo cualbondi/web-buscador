@@ -90,7 +90,7 @@ class API {
     return this.getRecorridos(url).then(res => convertResults(res.data))
   }
 
-  public geocoder(
+  public geocoder_suggest(
     query: string,
     ciudadSlug: string,
   ): Promise<GeocoderResponse[]> {
@@ -102,7 +102,7 @@ class API {
   public geocoder_result(
     q: string,
     c: string,
-    mk: string,
+    mk: string | undefined,
   ): Promise<GeocoderResponse[]> {
     const url = `/geocoder/?q=${q}&c=${c}&mk=${mk}`
 

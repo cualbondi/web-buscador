@@ -211,18 +211,32 @@ const module: Module<State, RootState> = {
     setFromGeocoder({ dispatch, getters }, {id}) {
       const ciudadSlug = getters.getCiudad.slug
       const res = getters.geocoderResults[id]
-      api.geocoder_result(res.nombre, ciudadSlug, res.magickey)
-        .then((results: any) => {
-          const result = results[0]
-          const geocoderResult: GeocoderResult = {
-            lat: result.geom.coordinates[1],
-            lng: result.geom.coordinates[0],
-            type: 'geocoder',
-            name: result.nombre,
-          };
-          dispatch('fromGeocoder', {source: 'geocoder', result: geocoderResult})
-          router.push({ name: 'absearch' })
-        })
+
+      if (res.geom) {
+        const geocoderResult: GeocoderResult = {
+          lat: res.geom.coordinates[1],
+          lng: res.geom.coordinates[0],
+          type: 'geocoder',
+          name: res.nombre,
+        }
+        dispatch('fromGeocoder', { source: 'geocoder', result: geocoderResult })
+        router.push({ name: 'absearch' })
+      } else {
+        if (res.magickey) {
+          api.geocoder_result(res.nombre, ciudadSlug, res.magickey)
+            .then((results: any) => {
+              const result = results[0]
+              const geocoderResult: GeocoderResult = {
+                lat: result.geom.coordinates[1],
+                lng: result.geom.coordinates[0],
+                type: 'geocoder',
+                name: result.nombre,
+              }
+              dispatch('fromGeocoder', { source: 'geocoder', result: geocoderResult })
+              router.push({ name: 'absearch' })
+            })
+        }
+      }
     },
     fromGeocoder(
       { dispatch },
