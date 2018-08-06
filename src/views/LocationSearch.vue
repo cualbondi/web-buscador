@@ -39,6 +39,9 @@
             :results="geocoderResults"
             @selection="onLocationSelection"
             ></result-list>
+            <div v-if="loadingResults" class="progress">
+              <v-progress-circular  indeterminate color="primary"/>
+            </div>
 
         </div>
         <ABMap class="map"/>
@@ -86,11 +89,17 @@ export default class Home extends Vue {
     this.searchGeocoder(value)
   }
 
-  @debounceMethod(500)
   searchGeocoder(query: string) {
+    this.$store.dispatch('geocoderClearResults')
+    this.debouncedSearchGeocoder(query)
+  }
+
+  @debounceMethod(500)
+  debouncedSearchGeocoder(query: string) {
     (this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
     this.$store.dispatch('geocode', query)
   }
+
 
   get originOrDestination() {
     return this.$route.params.point
@@ -140,6 +149,10 @@ export default class Home extends Vue {
       },
       text: result.nombre,
     }))
+  }
+
+  get loadingResults() {
+    return this.$store.getters.getGeocoderLoading
   }
 }
 </script>
