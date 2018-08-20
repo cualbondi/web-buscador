@@ -45,8 +45,7 @@ const splitChar = '|'
   watch: {
     watchAB: function(value, oldVal) {
       const { A, B, transbordo } = value
-
-      this.updateUrl(A, B, transbordo)
+      ;(this as Home).updateUrl(A, B, transbordo)
     },
   },
 })
@@ -95,7 +94,7 @@ export default class Home extends Vue {
     return this.$store.getters.transbordo
   }
 
-  location2url(location) {
+  location2url(location: LatLngLocation) {
     if (!location) {
       return ''
     }
@@ -105,19 +104,23 @@ export default class Home extends Vue {
     return `${location.lng},${location.lat}`
   }
 
-  private updateUrl(A: Location, B: Location, transbordo: boolean): void {
+  private updateUrl(
+    A: LatLngLocation,
+    B: LatLngLocation,
+    transbordo: boolean,
+  ): void {
     const urlA = this.location2url(A)
     const urlB = this.location2url(B)
     const urlTransbordo = transbordo ? 'transbordo' : ''
     const locationArr = [urlA, urlB, urlTransbordo]
     // this is to trim the last url params if they are falsey
     let i = locationArr.length - 1
-    while (i > 0 && !locationArr[i]){
+    while (i > 0 && !locationArr[i]) {
       i--
     }
     const location = locationArr.slice(0, i + 1).join(splitChar)
 
-    const params = {
+    const params: any = {
       ciudadSlug: this.$store.getters.getCiudad.slug,
     }
     if (location) {
@@ -130,7 +133,7 @@ export default class Home extends Vue {
     })
   }
 
-  private url2location(location: string): Location {
+  private url2location(location: string): Location | undefined {
     if (location == 'geolocation') {
       return { type: 'geolocation' }
     }
