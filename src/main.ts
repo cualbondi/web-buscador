@@ -72,7 +72,7 @@ Vue.use(VueAnalytics, {
   id: GA_KEY,
   router,
   debug: {
-    enabled: !isProd,
+    enabled: false,
     sendHitTask: isProd,
   },
 })

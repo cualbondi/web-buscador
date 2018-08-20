@@ -12,7 +12,7 @@ Vue.use(Vuex)
 
 export interface RootState {}
 
-export default new Vuex.Store<RootState>({
+const store = new Vuex.Store<RootState>({
   state: {},
   mutations: {},
   actions: {},
@@ -26,3 +26,5 @@ export default new Vuex.Store<RootState>({
   strict: isProd,
   plugins: [analyticsMiddleware],
 })
+
+export default store

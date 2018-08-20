@@ -23,11 +23,6 @@ export default new Router({
       component: Root,
     },
     {
-      path: `/:ciudadSlug(${ciudadesRegex})/`,
-      name: 'absearch',
-      component: ABSearch,
-    },
-    {
       path: `/:ciudadSlug(${ciudadesRegex})/location/:point(origin|destination)`,
       name: 'location',
       component: LocationSearch,
@@ -36,6 +31,11 @@ export default new Router({
       path: `/:ciudadSlug(${ciudadesRegex})/location/:point(origin|destination)/map`,
       name: 'map-location',
       component: MapLocationSearch,
+    },
+    {
+      path: `/:ciudadSlug(${ciudadesRegex})/:location?`,
+      name: 'absearch',
+      component: ABSearch,
     },
     {
       path: '*',
