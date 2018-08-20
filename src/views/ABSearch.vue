@@ -45,7 +45,8 @@ const splitChar = '|'
   watch: {
     watchAB: function(value, oldVal) {
       const { A, B, transbordo } = value
-      ;(this as Home).updateUrl(A, B, transbordo)
+      const self = (this as Home)
+      self.updateUrl(A, B, transbordo)
     },
   },
 })
@@ -98,7 +99,7 @@ export default class Home extends Vue {
     if (!location) {
       return ''
     }
-    if (location.type == 'geocoder') {
+    if (location.type === 'geocoder') {
       return `${location.lng},${location.lat},${location.name}`
     }
     return `${location.lng},${location.lat}`
@@ -134,7 +135,7 @@ export default class Home extends Vue {
   }
 
   private url2location(location: string): Location | undefined {
-    if (location == 'geolocation') {
+    if (location === 'geolocation') {
       return { type: 'geolocation' }
     }
 
