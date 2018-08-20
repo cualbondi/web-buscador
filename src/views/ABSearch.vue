@@ -32,6 +32,7 @@ import CityHeader from '@/components/CityHeader.vue'
 import { Location, LatLngLocation } from '@/modules/absearch'
 import VueScript2 from 'vue-script2'
 
+const splitChar = '|'
 
 @Component({
   components: {
@@ -42,45 +43,42 @@ import VueScript2 from 'vue-script2'
     CityHeader,
   },
   watch: {
-    "$store.getters.A": function(oldVal, newVal) {
-      const this_ = (this as Home)
-      this_.updateQueryParam('from', this_.location2Query(newVal))
+    watchAB: function(value, oldVal) {
+      const { A, B, transbordo } = value
+
+      this.updateUrl(A, B, transbordo)
     },
-    "$store.getters.B": function(oldVal, newVal) {
-      const this_ = (this as Home)
-      this_.updateQueryParam('to', this_.location2Query(newVal))
-    },
-    "transbordo": function(oldVal, newVal) {
-      (this as Home).updateQueryParam('transbordo', newVal?'1':'0')
-    },
-  }
+  },
 })
 export default class Home extends Vue {
+  get watchAB() {
+    return {
+      A: this.$store.getters.A,
+      B: this.$store.getters.B,
+      transbordo: this.$store.getters.transbordo,
+    }
+  }
 
   created() {
     // when component is created (i.e from route change)
     // if we have a query param, update the store with that value
     // if not have the query param, set it from $store value
 
-    const from = this.parseLocation(this.$route.query.from);
-    const to = this.parseLocation(this.$route.query.to);
-    const transbordo = this.$route.query.transbordo
+    const location = this.$route.params.location || ''
 
-    if (from) {
-      this.$store.dispatch('setA', from);
-    } else {
-      this.updateQueryParam('from', this.location2Query(this.$store.getters.A))
-    }
-    if (to) {
-      this.$store.dispatch('setB', to);
-    } else {
-      this.updateQueryParam('to', this.location2Query(this.$store.getters.B))
-    }
+    const [origin, destination, transbordo] = location.split(splitChar)
 
-    if (transbordo !== undefined) {
-      this.$store.dispatch('setTransbordo', !!(parseInt(transbordo)));
-    } else {
-      this.updateQueryParam('transbordo', this.transbordo?'1':'0')
+    if (origin) {
+      this.$store.dispatch('setA', this.url2location(origin))
+    }
+    if (destination) {
+      this.$store.dispatch('setB', this.url2location(destination))
+    }
+    if (transbordo === 'transbordo') {
+      this.$store.dispatch('setTransbordo', true)
+    }
+    if (!origin && !destination && !transbordo) {
+      this.updateUrl(this.$store.getters.A, this.$store.getters.B, !!transbordo)
     }
   }
 
@@ -97,23 +95,50 @@ export default class Home extends Vue {
     return this.$store.getters.transbordo
   }
 
-  private updateQueryParam(key: string, value: string): void {
-    this.$router.push({ query: Object.assign({}, this.$route.query, { [key]: value }) })
+  location2url(location) {
+    if (!location) {
+      return ''
+    }
+    if (location.type == 'geocoder') {
+      return `${location.lng},${location.lat},${location.name}`
+    }
+    return `${location.lng},${location.lat}`
   }
 
-  private parseLocation(location: string): Location | false {
-    if (typeof(location) !== 'string') {
-      return false
+  private updateUrl(A: Location, B: Location, transbordo: boolean): void {
+    const urlA = this.location2url(A)
+    const urlB = this.location2url(B)
+    const urlTransbordo = transbordo ? 'transbordo' : ''
+    const locationArr = [urlA, urlB, urlTransbordo]
+    // this is to trim the last url params if they are falsey
+    let i = locationArr.length - 1
+    while (i > 0 && !locationArr[i]){
+      i--
+    }
+    const location = locationArr.slice(0, i + 1).join(splitChar)
+
+    const params = {
+      ciudadSlug: this.$store.getters.getCiudad.slug,
+    }
+    if (location) {
+      params.location = location
     }
 
+    this.$router.push({
+      name: 'absearch',
+      params,
+    })
+  }
+
+  private url2location(location: string): Location {
     if (location == 'geolocation') {
-      return {type: 'geolocation'} ;
+      return { type: 'geolocation' }
     }
 
-    const latLongName = location.split(",");
-    const lat = parseFloat(latLongName.shift() || '');
-    const lng = parseFloat(latLongName.shift() || '');
-    const name = latLongName.join(",");
+    const latLongName = location.split(',')
+    const lng = parseFloat(latLongName.shift() || '')
+    const lat = parseFloat(latLongName.shift() || '')
+    const name = latLongName.join(',')
 
     if (!isNaN(lat) && !isNaN(lng)) {
       if (name && name.trim()) {
@@ -122,41 +147,28 @@ export default class Home extends Vue {
           lng,
           name,
           type: 'geocoder',
-        };
+        }
       } else {
         return {
           lat,
           lng,
           type: 'latlng',
-        };
+        }
       }
     }
-
-    return false;
-  }
-
-  private location2Query(location: LatLngLocation): string {
-    if (location == null) {
-      return ''
-    }
-
-    if (location.type === 'geolocation' || location.type === 'latlng' ){
-      return [location.lat, location.lng].join(',')
-    }
-
-    return [location.lat, location.lng, location.name].join(',')
   }
 
   mounted() {
     // avoid rendering ads on prerender stage
     if (!window.navigator.userAgent.includes('Headless')) {
-      VueScript2.load('//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
+      VueScript2.load(
+        '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+      )
       if (!(window as any).adsbygoogle) {
-        (window as any).adsbygoogle = []
+        ;(window as any).adsbygoogle = []
       }
-      (window as any).adsbygoogle.push({})
+      ;(window as any).adsbygoogle.push({})
     }
-
   }
 }
 </script>
