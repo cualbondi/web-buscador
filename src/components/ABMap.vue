@@ -13,6 +13,10 @@
         <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIcon">
           <l-popup>{{recorrido.itinerario[0].p2.nombre}}</l-popup>
         </l-marker>
+
+        <l-marker v-for="gps in gpslocations" :key="gps.gpsid" :latLng="gps" :icon="stopIcon">
+          <l-popup>gpsid: {{gps.gpsid}}<br>timestamp: {{gps.timestamp}}</l-popup>
+        </l-marker>
       </template>
 
       <template v-if="recorrido && recorrido.itinerario.length == 2">
@@ -210,6 +214,9 @@ export default class Map extends Vue {
       lng: coordinates.longitude,
       precision: coordinates.accuracy,
     }
+  }
+  get gpslocations() {
+    return this.$store.getters.getGPSLocations
   }
   mounted() {
     const A = this.A

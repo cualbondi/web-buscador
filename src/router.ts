@@ -5,6 +5,7 @@ import ABSearch from '@/views/ABSearch.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
+import RealTime from '@/views/RealTime.vue'
 import { BASE_URL } from '@/config'
 import CIUDADES from '@/ciudades'
 
