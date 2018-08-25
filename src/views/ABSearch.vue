@@ -45,7 +45,7 @@ const splitChar = '|'
   watch: {
     watchAB: function(value, oldVal) {
       const { A, B, transbordo } = value
-      const self = (this as Home)
+      const self = this as Home
       self.updateUrl(A, B, transbordo)
     },
   },
@@ -101,6 +101,12 @@ export default class Home extends Vue {
     }
     if (location.type === 'geocoder') {
       return `${location.lng},${location.lat},${location.name}`
+    }
+    if (
+      location.type === 'geolocation' &&
+      (location.lng === null || location.lat === null)
+    ) {
+      return `geolocation`
     }
     return `${location.lng},${location.lat}`
   }
