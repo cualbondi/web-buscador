@@ -39,6 +39,9 @@
             :results="geocoderResults"
             @selection="onLocationSelection"
             ></result-list>
+            <div v-if="loadingResults" class="progress">
+              <v-progress-circular  indeterminate color="primary"/>
+            </div>
 
         </div>
         <ABMap class="map"/>
@@ -86,11 +89,17 @@ export default class Home extends Vue {
     this.searchGeocoder(value)
   }
 
-  @debounceMethod(500)
   searchGeocoder(query: string) {
+    this.$store.dispatch('geocoderClearResults')
+    this.debouncedSearchGeocoder(query)
+  }
+
+  @debounceMethod(500)
+  debouncedSearchGeocoder(query: string) {
     (this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
     this.$store.dispatch('geocode', query)
   }
+
 
   get originOrDestination() {
     return this.$route.params.point
@@ -117,19 +126,10 @@ export default class Home extends Vue {
     const result: GeocoderResponse = this.$store.getters.geocoderResults[
       selection.id
     ]
-    const geocoderResult: GeocoderResult = {
-      lat: result.geom.coordinates[1],
-      lng: result.geom.coordinates[0],
-      type: 'geocoder',
-      name: result.nombre,
-    };
-    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, result.nombre)
-    this.$store
-      .dispatch('fromGeocoder', {
-        source: this.originOrDestination,
-        result: geocoderResult,
-      })
-      .then(() => this.$router.push({ name: 'absearch' }))
+    this.$store.dispatch('setFromGeocoder', {
+      id: selection.id
+    });
+    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, (result as any).text)
   }
 
   public goBack() {
@@ -149,6 +149,10 @@ export default class Home extends Vue {
       },
       text: result.nombre,
     }))
+  }
+
+  get loadingResults() {
+    return this.$store.getters.getGeocoderLoading
   }
 }
 </script>
