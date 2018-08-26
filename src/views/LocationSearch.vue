@@ -14,6 +14,7 @@
                 flat
                 solo
                 autofocus
+                hide-details
                 ></v-text-field>
             </div>
 
