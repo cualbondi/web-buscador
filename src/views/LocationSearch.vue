@@ -55,7 +55,6 @@ import ResultList, { Result } from '@/components/ResultList.vue'
 import ABMap from '@/components/ABMap.vue'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
-// import { debounceMethod } from '@/utils'
 import debounce from 'lodash/debounce'
 
 @Component({
@@ -84,22 +83,22 @@ export default class Home extends Vue {
     },
   ]
 
-  constructor(){
+  constructor() {
     super()
     this.debouncedSearchGeocoder = debounce(this.debouncedSearchGeocoder, 1000)
   }
 
-  mounted(){
+  mounted() {
     window.addEventListener('keyup', this.onEnterKey)
   }
 
-  destroyed(){
+  destroyed() {
     window.removeEventListener('keyup', this.onEnterKey)
   }
 
   public results: Result[] = []
 
-  onEnterKey(event) {
+  onEnterKey(event: KeyboardEvent) {
     if (event.keyCode === 13) {
       this.triggerSearchGeocoder()
     }
@@ -111,7 +110,7 @@ export default class Home extends Vue {
   }
 
   // immediately trigger the search
-  triggerSearchGeocoder(){
+  triggerSearchGeocoder() {
     ;(this.debouncedSearchGeocoder as any).flush()
   }
 
@@ -121,10 +120,13 @@ export default class Home extends Vue {
   }
 
   debouncedSearchGeocoder(query: string) {
-    ;(this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
+    ;(this as any).$ga.event(
+      'locationSearch_geocoder',
+      this.originOrDestination,
+      query,
+    )
     this.$store.dispatch('geocode', query)
   }
-
 
   get originOrDestination() {
     return this.$route.params.point
@@ -152,13 +154,17 @@ export default class Home extends Vue {
       selection.id
     ]
     this.$store.dispatch('setFromGeocoder', {
-      id: selection.id
-    });
-    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, (result as any).text)
+      id: selection.id,
+    })
+    ;(this as any).$ga.event(
+      'locationSearch_geocoder_selected',
+      this.originOrDestination,
+      (result as any).text,
+    )
   }
 
   public goBack() {
-    (this as any).$ga.event('locationSearch', 'back')
+    ;(this as any).$ga.event('locationSearch', 'back')
     this.$router.back()
   }
 
