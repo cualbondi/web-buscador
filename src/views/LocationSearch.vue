@@ -8,8 +8,8 @@
                 <v-text-field
                 class="input"
                 :clearable="true"
-               :value="location"
-               @input="setLocation"
+                :value="location"
+                @input="setLocation"
                 :label="inputLabel"
                 flat
                 solo
@@ -55,7 +55,8 @@ import ResultList, { Result } from '@/components/ResultList.vue'
 import ABMap from '@/components/ABMap.vue'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
-import { debounceMethod } from '@/utils'
+// import { debounceMethod } from '@/utils'
+import debounce from 'lodash/debounce'
 
 @Component({
   components: {
@@ -83,11 +84,35 @@ export default class Home extends Vue {
     },
   ]
 
+  constructor(){
+    super()
+    this.debouncedSearchGeocoder = debounce(this.debouncedSearchGeocoder, 1000)
+  }
+
+  mounted(){
+    window.addEventListener('keyup', this.onEnterKey)
+  }
+
+  destroyed(){
+    window.removeEventListener('keyup', this.onEnterKey)
+  }
+
   public results: Result[] = []
+
+  onEnterKey(event) {
+    if (event.keyCode === 13) {
+      this.triggerSearchGeocoder()
+    }
+  }
 
   setLocation(value: string) {
     this.location = value
     this.searchGeocoder(value)
+  }
+
+  // immediately trigger the search
+  triggerSearchGeocoder(){
+    ;(this.debouncedSearchGeocoder as any).flush()
   }
 
   searchGeocoder(query: string) {
@@ -95,9 +120,8 @@ export default class Home extends Vue {
     this.debouncedSearchGeocoder(query)
   }
 
-  @debounceMethod(500)
   debouncedSearchGeocoder(query: string) {
-    (this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
+    ;(this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
     this.$store.dispatch('geocode', query)
   }
 
