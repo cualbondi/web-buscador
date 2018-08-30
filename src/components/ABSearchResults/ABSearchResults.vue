@@ -51,7 +51,7 @@ export default class ABSearchResults extends Vue {
   get loadingResults() {
     return this.$store.getters.getRecorridosLoading
   }
-  buscarConTransbordo() {
+  public buscarConTransbordo() {
     (this as any).$ga.event('resultados', 'buscarTransbordo')
     this.$store.dispatch('setTransbordo', true)
     this.$store.dispatch('query')
@@ -62,7 +62,7 @@ export default class ABSearchResults extends Vue {
   get apiError() {
     return this.$store.getters.apiError
   }
-  retry() {
+  public retry() {
     (this as any).$ga.event('resultados', 'retry')
     this.$store.dispatch('query')
   }

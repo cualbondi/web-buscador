@@ -23,7 +23,7 @@ export interface Result {
   id: number
   icon: {
     name: string
-    color?: string
+    color?: string,
   }
   text: string
   subtext?: string
