@@ -79,14 +79,14 @@ export default class RecorridosResultList extends Vue {
   @Prop() public selectedIndex: number
   @Prop() public small: boolean
 
-  directionRight = true
+  public directionRight = true
 
-  toggleSmallResults() {
+  public toggleSmallResults() {
     this.$store.dispatch('toggleSmallResults')
   }
 
-  getNextPage() {
-    (this as any).$ga.event('resultados', 'more', '', this.results.length/5)
+  public getNextPage() {
+    (this as any).$ga.event('resultados', 'more', '', this.results.length / 5)
     this.$store.dispatch('getNextPage')
   }
 
@@ -114,12 +114,12 @@ export default class RecorridosResultList extends Vue {
     return this.$store.getters.transbordo
   }
 
-  nextResult() {
+  public nextResult() {
     (this as any).$ga.event('resultados', 'next', '', this.selectedIndex)
     this.$emit('update:selectedIndex', this.selectedIndex + 1)
     this.directionRight = true
   }
-  prevResult() {
+  public prevResult() {
     (this as any).$ga.event('resultados', 'prev', '', this.selectedIndex)
     this.$emit('update:selectedIndex', this.selectedIndex - 1)
     this.directionRight = false

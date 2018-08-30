@@ -14,7 +14,7 @@ const module: Module<State, RootState> = {
     loading: false,
   },
   actions: {
-    geocoderClearResults({commit}){
+    geocoderClearResults({commit}) {
       commit('geocoderClearResults')
     },
     geocode({ commit, getters }, query) {

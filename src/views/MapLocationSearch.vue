@@ -20,7 +20,7 @@ import {
 })
 export default class extends Vue {
   public icon: any = null
-  mounted() {
+  public mounted() {
     if (this.$route.params.point === 'origin') {
       this.icon = AIconDragging
     } else {
@@ -38,7 +38,7 @@ export default class extends Vue {
     }
     return location
   }
-  setLatlng(val: LatLng) {
+  public setLatlng(val: LatLng) {
     const newLocation = {
       lat: val.lat,
       lng: val.lng,
@@ -48,7 +48,7 @@ export default class extends Vue {
       ? this.$store.dispatch('setA', newLocation)
       : this.$store.dispatch('setB', newLocation)
   }
-  locationPicked(center: LatLng) {
+  public locationPicked(center: LatLng) {
     this.setLatlng(center)
     this.$router.push({ name: 'absearch' })
   }

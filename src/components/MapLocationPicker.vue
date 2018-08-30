@@ -44,18 +44,18 @@ import { geoLocationIcon } from '@/components/icons'
 })
 export default class Map extends Vue {
   @Prop()
-  initialCenter!: {
+  public initialCenter!: {
     lat: number
-    lng: number
+    lng: number,
   }
 
-  @Prop() icon!: any
+  @Prop() public icon!: any
 
   public options = { zoomControl: false, attributionControl: false }
 
-  center = { ...this.initialCenter }
+  public center = { ...this.initialCenter }
 
-  markerOptions = {
+  public markerOptions = {
     draggable: false,
     radius: 0,
     icon: geoLocationIcon,
@@ -64,29 +64,29 @@ export default class Map extends Vue {
     fillColor: 'red',
   }
 
-  updatingGeolocation = false
+  public updatingGeolocation = false
 
-  zoom = this.$store.getters.getCiudadZoom
-  
-  move(e: LeafletMouseEvent) {
+  public zoom = this.$store.getters.getCiudadZoom
+
+  public move(e: LeafletMouseEvent) {
     if (!this.updatingGeolocation) {
       this.center = e.target.getCenter()
     }
   }
 
-  goBack() {
+  public goBack() {
     (this as any).$ga.event('locationpicker', 'back')
     this.$router.back()
   }
 
-  onOk() {
+  public onOk() {
     (this as any).$ga.event('locationpicker', 'ok', `${this.center.lat},${this.center.lng}`)
     this.$emit('locationPicked', this.center)
   }
 
   get geolocation() {
     const coordinates: Coordinates = this.$store.getters.geolocation
-    if (coordinates === null) return null
+    if (coordinates === null) { return null }
     return {
       lat: coordinates.latitude,
       lng: coordinates.longitude,
@@ -94,7 +94,7 @@ export default class Map extends Vue {
     }
   }
 
-  geolocate() {
+  public geolocate() {
     (this as any).$ga.event('locationpicker', 'geolocate')
     this.$store.dispatch('geolocate').then(position => {
       this.updatingGeolocation = true
@@ -105,7 +105,7 @@ export default class Map extends Vue {
       this.zoom = 16
     })
   }
-  moveend() {
+  public moveend() {
     (this as any).$ga.event('locationpicker', 'moveend')
     this.updatingGeolocation = false
   }

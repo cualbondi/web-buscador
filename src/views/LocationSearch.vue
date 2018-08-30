@@ -85,18 +85,18 @@ export default class Home extends Vue {
 
   public results: Result[] = []
 
-  setLocation(value: string) {
+  public setLocation(value: string) {
     this.location = value
     this.searchGeocoder(value)
   }
 
-  searchGeocoder(query: string) {
+  public searchGeocoder(query: string) {
     this.$store.dispatch('geocoderClearResults')
     this.debouncedSearchGeocoder(query)
   }
 
   @debounceMethod(500)
-  debouncedSearchGeocoder(query: string) {
+  public debouncedSearchGeocoder(query: string) {
     (this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
     this.$store.dispatch('geocode', query)
   }
@@ -124,11 +124,13 @@ export default class Home extends Vue {
   }
 
   public onLocationSelection(selection: Result) {
+    console.log(selection)
     const result: GeocoderResponse = this.$store.getters.geocoderResults[
       selection.id
     ]
     this.$store.dispatch('setFromGeocoder', {
-      id: selection.id
+      id: selection.id,
+      source: this.originOrDestination,
     });
     (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, (result as any).text)
   }
