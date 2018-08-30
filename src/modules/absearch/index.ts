@@ -85,8 +85,8 @@ const module: Module<State, RootState> = {
       commit('setGeolocationError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
-      } catch(e) {
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
         return
@@ -124,8 +124,8 @@ const module: Module<State, RootState> = {
       commit('setApiError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
-      } catch(e) {
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+      } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
         return
@@ -208,7 +208,7 @@ const module: Module<State, RootState> = {
       commit('setTransbordo', value)
     },
     // sets A or B from a geocoder result
-    setFromGeocoder({ dispatch, getters }, {id}) {
+    setFromGeocoder({ dispatch, getters }, { id, source }) {
       const ciudadSlug = getters.getCiudad.slug
       const res = getters.geocoderResults[id]
 
@@ -219,11 +219,12 @@ const module: Module<State, RootState> = {
           type: 'geocoder',
           name: res.nombre,
         }
-        dispatch('fromGeocoder', { source: 'geocoder', result: geocoderResult })
+        dispatch('fromGeocoder', { source, result: geocoderResult })
         router.push({ name: 'absearch' })
       } else {
         if (res.magickey) {
-          api.geocoder_result(res.nombre, ciudadSlug, res.magickey)
+          api
+            .geocoder_result(res.nombre, ciudadSlug, res.magickey)
             .then((results: any) => {
               const result = results[0]
               const geocoderResult: GeocoderResult = {
@@ -232,7 +233,10 @@ const module: Module<State, RootState> = {
                 type: 'geocoder',
                 name: result.nombre,
               }
-              dispatch('fromGeocoder', { source: 'geocoder', result: geocoderResult })
+              dispatch('fromGeocoder', {
+                source,
+                result: geocoderResult,
+              })
               router.push({ name: 'absearch' })
             })
         }
@@ -361,9 +365,7 @@ const module: Module<State, RootState> = {
       if (state.resultSelected === state.results.length - 1) {
         return state.resultsMore
       }
-      return (
-        state.resultSelected < state.results.length - 1
-      )
+      return state.resultSelected < state.results.length - 1
     },
     hasPrevResult(state) {
       return !(state.resultSelected === 0)
