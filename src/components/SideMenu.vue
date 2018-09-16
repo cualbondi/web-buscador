@@ -70,7 +70,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import logo from '@/assets/logo.png'
-import { BASE_URL } from '../config';
+import { BASE_URL } from '../config'
 
 @Component({})
 export default class Home extends Vue {

@@ -97,7 +97,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
 export default class Map extends Vue {
   public options = {
     zoomControl: false,
-    attributionControl: false
+    attributionControl: false,
   }
 
   public disabledPolyStyle = {
@@ -204,14 +204,14 @@ export default class Map extends Vue {
   }
   get geolocation() {
     const coordinates: Coordinates = this.$store.getters.geolocation
-    if (coordinates === null) return null
+    if (coordinates === null) { return null }
     return {
       lat: coordinates.latitude,
       lng: coordinates.longitude,
       precision: coordinates.accuracy,
     }
   }
-  mounted() {
+  public mounted() {
     const A = this.A
     const B = this.B
 

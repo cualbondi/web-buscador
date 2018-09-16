@@ -26,16 +26,16 @@ export default class App extends Vue {
   set messageActive(val) {
     this.$store.dispatch('setMessageActive', val)
   }
-  closeMessage() {
+  public closeMessage() {
     this.$store.dispatch('setMessageActive', false)
   }
   get messageText() {
     return this.$store.getters.messageText
   }
-  created() {
+  public created() {
     this.$store.dispatch('setCiudad', this.$route.params.ciudadSlug)
   }
-  mounted() {
+  public mounted() {
     this.$store.dispatch('initGeolocation')
   }
 }

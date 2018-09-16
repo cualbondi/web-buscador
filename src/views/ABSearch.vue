@@ -43,7 +43,7 @@ const splitChar = '|'
     CityHeader,
   },
   watch: {
-    watchAB: function(value, oldVal) {
+    watchAB(value, oldVal) {
       const { A, B, transbordo } = value
       const self = this as Home
       self.updateUrl(A, B, transbordo)
@@ -59,7 +59,7 @@ export default class Home extends Vue {
     }
   }
 
-  created() {
+  public created() {
     // when component is created (i.e from route change)
     // if we have a query param, update the store with that value
     // if not have the query param, set it from $store value
@@ -95,7 +95,7 @@ export default class Home extends Vue {
     return this.$store.getters.transbordo
   }
 
-  location2url(location: LatLngLocation) {
+  public location2url(location: LatLngLocation) {
     if (!location) {
       return ''
     }
@@ -168,16 +168,16 @@ export default class Home extends Vue {
     }
   }
 
-  mounted() {
+  public mounted() {
     // avoid rendering ads on prerender stage
     if (!window.navigator.userAgent.includes('Headless')) {
       VueScript2.load(
         '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
       )
       if (!(window as any).adsbygoogle) {
-        ;(window as any).adsbygoogle = []
+        (window as any).adsbygoogle = []
       }
-      ;(window as any).adsbygoogle.push({})
+      (window as any).adsbygoogle.push({})
     }
   }
 }
