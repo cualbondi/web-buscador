@@ -96,11 +96,14 @@ export default class Home extends Vue {
   }
 
   @debounceMethod(500)
-  public searchGeocoder(query: string) {
-    (this as any).$ga.event('locationSearch_geocoder', this.originOrDestination, query)
+  public debouncedSearchGeocoder(query: string) {
+    ;(this as any).$ga.event(
+      'locationSearch_geocoder',
+      this.originOrDestination,
+      query,
+    )
     this.$store.dispatch('geocode', query)
   }
-
 
   get originOrDestination() {
     return this.$route.params.point
@@ -131,12 +134,16 @@ export default class Home extends Vue {
     this.$store.dispatch('setFromGeocoder', {
       id: selection.id,
       source: this.originOrDestination,
-    });
-    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, (result as any).text)
+    })
+    ;(this as any).$ga.event(
+      'locationSearch_geocoder_selected',
+      this.originOrDestination,
+      (result as any).text,
+    )
   }
 
   public goBack() {
-    (this as any).$ga.event('locationSearch', 'back')
+    ;(this as any).$ga.event('locationSearch', 'back')
     this.$router.back()
   }
 

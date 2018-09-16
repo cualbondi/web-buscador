@@ -7,7 +7,7 @@ const api = {
       authorization: `Bearer facebook ${FBToken}`,
     },
     method: 'get',
-    url: `${API_URL}/me`,
+    url: `${API_URL}/me/`,
   }).catch(e => {
     alert('error obteniendo user')
     console.log(e)
