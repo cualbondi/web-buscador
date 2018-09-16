@@ -23,7 +23,7 @@ export interface Result {
   id: number
   icon: {
     name: string
-    color?: string,
+    color?: string
   }
   text: string
   subtext?: string
@@ -31,9 +31,11 @@ export interface Result {
 
 @Component({})
 export default class Home extends Vue {
-  @Prop() public results: Result[]
+  @Prop()
+  public results: Result[]
 
-  @Prop() public title?: string
+  @Prop()
+  public title?: string
 
   get hasSubtext() {
     return (

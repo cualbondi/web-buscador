@@ -162,7 +162,7 @@ export default class Map extends Vue {
     return this.$store.getters.getRecorridoSelectedIndex
   }
   set recorridoSelectedIndex(val) {
-    (this as any).$ga.event('resultados', 'select', '', val)
+    ;(this as any).$ga.event('resultados', 'select', '', val)
     this.$store.dispatch('setRecorridoSelectedIndex', val)
   }
   get recorrido() {
@@ -204,7 +204,9 @@ export default class Map extends Vue {
   }
   get geolocation() {
     const coordinates: Coordinates = this.$store.getters.geolocation
-    if (coordinates === null) { return null }
+    if (coordinates === null) {
+      return null
+    }
     return {
       lat: coordinates.latitude,
       lng: coordinates.longitude,

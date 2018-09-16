@@ -75,9 +75,12 @@ import { Recorrido } from '@/api/schema'
 
 @Component({})
 export default class RecorridosResultList extends Vue {
-  @Prop() public results!: Recorrido[]
-  @Prop() public selectedIndex: number
-  @Prop() public small: boolean
+  @Prop()
+  public results!: Recorrido[]
+  @Prop()
+  public selectedIndex: number
+  @Prop()
+  public small: boolean
 
   public directionRight = true
 
@@ -86,7 +89,7 @@ export default class RecorridosResultList extends Vue {
   }
 
   public getNextPage() {
-    (this as any).$ga.event('resultados', 'more', '', this.results.length / 5)
+    ;(this as any).$ga.event('resultados', 'more', '', this.results.length / 5)
     this.$store.dispatch('getNextPage')
   }
 
@@ -115,12 +118,12 @@ export default class RecorridosResultList extends Vue {
   }
 
   public nextResult() {
-    (this as any).$ga.event('resultados', 'next', '', this.selectedIndex)
+    ;(this as any).$ga.event('resultados', 'next', '', this.selectedIndex)
     this.$emit('update:selectedIndex', this.selectedIndex + 1)
     this.directionRight = true
   }
   public prevResult() {
-    (this as any).$ga.event('resultados', 'prev', '', this.selectedIndex)
+    ;(this as any).$ga.event('resultados', 'prev', '', this.selectedIndex)
     this.$emit('update:selectedIndex', this.selectedIndex - 1)
     this.directionRight = false
   }

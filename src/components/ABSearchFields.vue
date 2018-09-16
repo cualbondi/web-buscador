@@ -69,7 +69,7 @@ export default class Home extends Vue {
   }
 
   public swap() {
-    (this as any).$ga.event('search', 'swapAB')
+    ;(this as any).$ga.event('search', 'swapAB')
     this.$store.dispatch('swapAB')
   }
 }

@@ -108,7 +108,6 @@ class API {
 
     return this.getGeocoding(url).then(res => res.data)
   }
-
 }
 
 const api = new API()
