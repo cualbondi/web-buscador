@@ -15,7 +15,10 @@
                 solo
                 autofocus
                 hide-details
-                ></v-text-field>
+                append-icon="search"
+                @click:append="searchGeocoder"
+                >
+                </v-text-field>
             </div>
 
             <result-list 
@@ -40,7 +43,7 @@
             :results="geocoderResults"
             @selection="onLocationSelection"
             ></result-list>
-            <div v-if="loadingResults" class="progress">
+            <div v-if="loadingResults" class="progress row justify-center">
               <v-progress-circular  indeterminate color="primary"/>
             </div>
 
@@ -83,11 +86,6 @@ export default class Home extends Vue {
     },
   ]
 
-  constructor() {
-    super()
-    this.debouncedSearchGeocoder = debounce(this.debouncedSearchGeocoder, 1000)
-  }
-
   mounted() {
     window.addEventListener('keyup', this.onEnterKey)
   }
@@ -100,26 +98,16 @@ export default class Home extends Vue {
 
   onEnterKey(event: KeyboardEvent) {
     if (event.keyCode === 13) {
-      this.triggerSearchGeocoder()
+      this.searchGeocoder()
     }
   }
 
   setLocation(value: string) {
     this.location = value
-    this.searchGeocoder(value)
   }
 
-  // immediately trigger the search
-  triggerSearchGeocoder() {
-    ;(this.debouncedSearchGeocoder as any).flush()
-  }
-
-  searchGeocoder(query: string) {
-    this.$store.dispatch('geocoderClearResults')
-    this.debouncedSearchGeocoder(query)
-  }
-
-  debouncedSearchGeocoder(query: string) {
+  searchGeocoder() {
+    const query = this.location
     ;(this as any).$ga.event(
       'locationSearch_geocoder',
       this.originOrDestination,

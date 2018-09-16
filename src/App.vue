@@ -58,12 +58,17 @@ html,
   font-family: Roboto;
   background: #f5f5f5;
   overflow: hidden !important;
+
 }
 html {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  .v-list__tile__title,
+  .v-list__tile__sub-title {
+    white-space: normal;
+  }
 }
 .row {
   display: flex;
