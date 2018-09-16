@@ -163,12 +163,11 @@ function remove_mutating(array: Way[], way: Way) {
 
 function first_pass(ways: Way[]): Way[] {
   const ret: Way[] = []
-  let way: Way | undefined
-  if (ways.length == 1) {
+  if (ways.length === 1) {
     return ways
   }
   for (let i = 0; i < ways.length - 1; i++) {
-    const way = ways[i]
+    const way: Way = ways[i]
     const curr_last = way.nodes[way.nodes.length - 1]
     const curr_first = way.nodes[0]
     const next = ways[i + 1]
@@ -176,12 +175,12 @@ function first_pass(ways: Way[]): Way[] {
     const next_last = next.nodes[next.nodes.length - 1]
     way.disconnected = false
     if (
-      curr_last.id != next_first.id &&
-      curr_last.id != next_last.id
+      curr_last.id !== next_first.id &&
+      curr_last.id !== next_last.id
     ) {
       if (
-        curr_first.id != next_first.id &&
-        curr_first.id != next_last.id
+        curr_first.id !== next_first.id &&
+        curr_first.id !== next_last.id
       ) {
         way.disconnected = true
       } else {
@@ -196,10 +195,10 @@ function first_pass(ways: Way[]): Way[] {
   if (last && prev) {
     console.log('last and prev')
     last.disconnected = false
-    if (last.nodes[0].id == prev.nodes[prev.nodes.length - 1].id) {
+    if (last.nodes[0].id === prev.nodes[prev.nodes.length - 1].id) {
       ret.push(last)
     } else {
-      if (last.nodes[last.nodes.length - 1].id == prev.nodes[prev.nodes.length - 1].id) {
+      if (last.nodes[last.nodes.length - 1].id === prev.nodes[prev.nodes.length - 1].id) {
           last.nodes = last.nodes.slice().reverse()
           ret.push(last)
       } else {
@@ -289,12 +288,11 @@ export default class Home extends Vue {
     this.disconnected = false
 
     const bag = this.poly_ways.slice()
-    if (bag.length == 0) {
+    if (bag.length === 0) {
       return []
     }
-    const current = (bag.shift() as Way)
-    const sorted: Way[] = [current]
-    while (bag.length != 0) {
+    const sorted: Way[] = [bag.shift() as Way]
+    while (bag.length !== 0) {
       let current = sorted[sorted.length - 1]
       let current_first = current.nodes[0]
       let current_last = current.nodes[current.nodes.length - 1]
@@ -306,7 +304,7 @@ export default class Home extends Vue {
       found_way = bag.find(way => {
         const way_first = way.nodes[0]
         const way_last = way.nodes[way.nodes.length - 1]
-        return current_last.id == way_first.id
+        return current_last.id === way_first.id
       })
       if (found_way) {
         remove_mutating(bag, found_way)
@@ -319,7 +317,7 @@ export default class Home extends Vue {
       found_way = bag.find(way => {
         const way_first = way.nodes[0]
         const way_last = way.nodes[way.nodes.length - 1]
-        return current_last.id == way_last.id
+        return current_last.id === way_last.id
       })
       if (found_way) {
         remove_mutating(bag, found_way)
@@ -339,7 +337,7 @@ export default class Home extends Vue {
       found_way = bag.find(way => {
         const way_first = way.nodes[0]
         const way_last = way.nodes[way.nodes.length - 1]
-        return current_first.id == way_last.id
+        return current_first.id === way_last.id
       })
       if (found_way) {
         remove_mutating(bag, found_way)
@@ -352,7 +350,7 @@ export default class Home extends Vue {
       found_way = bag.find(way => {
         const way_first = way.nodes[0]
         const way_last = way.nodes[way.nodes.length - 1]
-        return current_first.id == way_first.id
+        return current_first.id === way_first.id
       })
       if (found_way) {
         remove_mutating(bag, found_way)
@@ -430,10 +428,10 @@ export default class Home extends Vue {
   public async pushOSM() {
     this.pushingOSM = true
     function xml_tag(xmldoc: any, k: string, v: string) {
-      const xml_tag = xmldoc.createElement('tag')
-      xml_tag.setAttribute('k', k)
-      xml_tag.setAttribute('v', v)
-      return xml_tag
+      const tag = xmldoc.createElement('tag')
+      tag.setAttribute('k', k)
+      tag.setAttribute('v', v)
+      return tag
     }
     try {
       // TODO: must be wrapped in <osm></osm> tag
@@ -452,7 +450,7 @@ export default class Home extends Vue {
         xml_relation.removeChild(node)
       }
       // check no node is left
-      if (xml_relation.querySelectorAll('[type=way]').length != 0) {
+      if (xml_relation.querySelectorAll('[type=way]').length !== 0) {
         throw new Error('errorrrr!')
       }
       // put all nodes in order

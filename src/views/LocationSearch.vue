@@ -97,7 +97,7 @@ export default class Home extends Vue {
 
   @debounceMethod(500)
   public debouncedSearchGeocoder(query: string) {
-    ;(this as any).$ga.event(
+    (this as any).$ga.event(
       'locationSearch_geocoder',
       this.originOrDestination,
       query,
@@ -135,7 +135,8 @@ export default class Home extends Vue {
       id: selection.id,
       source: this.originOrDestination,
     })
-    ;(this as any).$ga.event(
+    const self = (this as any)
+    self.$ga.event(
       'locationSearch_geocoder_selected',
       this.originOrDestination,
       (result as any).text,
@@ -143,7 +144,7 @@ export default class Home extends Vue {
   }
 
   public goBack() {
-    ;(this as any).$ga.event('locationSearch', 'back')
+    (this as any).$ga.event('locationSearch', 'back')
     this.$router.back()
   }
 

@@ -28,7 +28,8 @@ export default class NotFound extends Vue {
       window.FB.AppEvents.logPageView()
     };
     (function(d, s, id) {
-      let js, fjs = d.getElementsByTagName(s)[0]
+      let js
+      const fjs = d.getElementsByTagName(s)[0]
       if (d.getElementById(id)) {return}
       js = d.createElement(s); js.id = id;
       (js as any).src = 'https://connect.facebook.net/en_US/sdk.js'
