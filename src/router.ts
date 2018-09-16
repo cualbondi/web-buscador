@@ -50,6 +50,11 @@ export default new Router({
       component: MapLocationSearch,
     },
     {
+      path: `/:ciudadSlug(${ciudadesRegex})/:location?`,
+      name: 'absearch',
+      component: ABSearch,
+    },
+    {
       path: '*',
       component: NotFound,
     },

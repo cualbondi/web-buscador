@@ -90,14 +90,25 @@ class API {
     return this.getRecorridos(url).then(res => convertResults(res.data))
   }
 
-  public geocoder(
+  public geocoder_suggest(
     query: string,
     ciudadSlug: string,
   ): Promise<GeocoderResponse[]> {
-    const url = `/geocoder/?q=${query}&c=${ciudadSlug}`
+    const url = `/geocoder/suggest/?q=${query}&c=${ciudadSlug}`
 
     return this.getGeocoding(url).then(res => res.data)
   }
+
+  public geocoder_result(
+    q: string,
+    c: string,
+    mk: string | undefined,
+  ): Promise<GeocoderResponse[]> {
+    const url = `/geocoder/?q=${q}&c=${c}&mk=${mk}`
+
+    return this.getGeocoding(url).then(res => res.data)
+  }
+
 }
 
 const api = new API()
