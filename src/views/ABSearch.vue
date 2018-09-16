@@ -175,9 +175,9 @@ export default class Home extends Vue {
         '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
       )
       if (!(window as any).adsbygoogle) {
-        (window as any).adsbygoogle = []
+        ;(window as any).adsbygoogle = []
       }
-      (window as any).adsbygoogle.push({})
+      ;(window as any).adsbygoogle.push({})
     }
   }
 }

@@ -15,7 +15,7 @@ export function MakeStatusPromise(promise: Promise<any>): StatusPromise<any> {
   let isFulfilled = false
 
   // Observe the promise, saving the fulfillment in a closure scope.
-  const result = (promise.then(
+  const result = promise.then(
     function(v) {
       isFulfilled = true
       isPending = false
@@ -26,7 +26,7 @@ export function MakeStatusPromise(promise: Promise<any>): StatusPromise<any> {
       isPending = false
       throw e
     },
-  ) as StatusPromise<any>)
+  ) as StatusPromise<any>
 
   result.isFulfilled = () => isFulfilled
   result.isPending = () => isPending
@@ -73,7 +73,7 @@ export function checkGeolocationPermission(
 ) {
   // Check for Geolocation API permissions
   if ('permissions' in navigator) {
-    (navigator as any).permissions
+    ;(navigator as any).permissions
       .query({ name: 'geolocation' })
       .then(function(permissionStatus: any) {
         onPermissionChanged(permissionStatus.state)
@@ -103,8 +103,8 @@ class GeolocationObservable {
   private takeManyObservers: { [id: number]: Observer }
   // array of observers for next value
   private takeFirstObservers: Array<{
-    resolve: any,
-    reject: any,
+    resolve: any
+    reject: any
   }>
 
   private constructor() {

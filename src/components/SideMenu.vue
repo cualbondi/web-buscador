@@ -86,14 +86,14 @@ export default class Home extends Vue {
     this.$store.dispatch('setRadius', value)
   }
   public openExternalLink(href: string, inTab: boolean) {
-    (this as any).$ga.event('menu', 'openLink', href)
+    ;(this as any).$ga.event('menu', 'openLink', href)
     window.open(href, inTab ? '_blank' : '_self')
   }
   get ciudad() {
     return this.$store.getters.getCiudad
   }
   set ciudad(ciudadSlug) {
-    (this as any).$ga.event('menu', 'setCiudad', ciudadSlug)
+    ;(this as any).$ga.event('menu', 'setCiudad', ciudadSlug)
     this.$store.dispatch('setCiudad', ciudadSlug)
     window.open(`${BASE_URL}${ciudadSlug}/`, '_self')
   }

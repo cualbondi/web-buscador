@@ -86,27 +86,27 @@ export default class Home extends Vue {
     },
   ]
 
-  mounted() {
+  public mounted() {
     window.addEventListener('keyup', this.onEnterKey)
   }
 
-  destroyed() {
+  public destroyed() {
     window.removeEventListener('keyup', this.onEnterKey)
   }
 
   public results: Result[] = []
 
-  onEnterKey(event: KeyboardEvent) {
+  public onEnterKey(event: KeyboardEvent) {
     if (event.keyCode === 13) {
       this.searchGeocoder()
     }
   }
 
-  setLocation(value: string) {
+  public setLocation(value: string) {
     this.location = value
   }
 
-  searchGeocoder() {
+  public searchGeocoder() {
     const query = this.location
     ;(this as any).$ga.event(
       'locationSearch_geocoder',
@@ -144,8 +144,12 @@ export default class Home extends Vue {
     this.$store.dispatch('setFromGeocoder', {
       id: selection.id,
       source: this.originOrDestination,
-    });
-    (this as any).$ga.event('locationSearch_geocoder_selected', this.originOrDestination, (result as any).text)
+    })
+    ;(this as any).$ga.event(
+      'locationSearch_geocoder_selected',
+      this.originOrDestination,
+      (result as any).text,
+    )
   }
 
   public goBack() {

@@ -85,7 +85,7 @@ const module: Module<State, RootState> = {
       commit('setGeolocationError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
@@ -124,7 +124,7 @@ const module: Module<State, RootState> = {
       commit('setApiError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')

@@ -33,7 +33,7 @@ export interface GeocoderResponse {
   nombre: string
   geom: {
     type: string
-    coordinates: number[],
+    coordinates: number[]
   }
   precision: number
   tipo: string

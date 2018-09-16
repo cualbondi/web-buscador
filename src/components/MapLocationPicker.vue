@@ -46,10 +46,11 @@ export default class Map extends Vue {
   @Prop()
   public initialCenter!: {
     lat: number
-    lng: number,
+    lng: number
   }
 
-  @Prop() public icon!: any
+  @Prop()
+  public icon!: any
 
   public options = { zoomControl: false, attributionControl: false }
 
@@ -75,18 +76,24 @@ export default class Map extends Vue {
   }
 
   public goBack() {
-    (this as any).$ga.event('locationpicker', 'back')
+    ;(this as any).$ga.event('locationpicker', 'back')
     this.$router.back()
   }
 
   public onOk() {
-    (this as any).$ga.event('locationpicker', 'ok', `${this.center.lat},${this.center.lng}`)
+    ;(this as any).$ga.event(
+      'locationpicker',
+      'ok',
+      `${this.center.lat},${this.center.lng}`,
+    )
     this.$emit('locationPicked', this.center)
   }
 
   get geolocation() {
     const coordinates: Coordinates = this.$store.getters.geolocation
-    if (coordinates === null) { return null }
+    if (coordinates === null) {
+      return null
+    }
     return {
       lat: coordinates.latitude,
       lng: coordinates.longitude,
@@ -95,7 +102,7 @@ export default class Map extends Vue {
   }
 
   public geolocate() {
-    (this as any).$ga.event('locationpicker', 'geolocate')
+    ;(this as any).$ga.event('locationpicker', 'geolocate')
     this.$store.dispatch('geolocate').then(position => {
       this.updatingGeolocation = true
       this.center = {
@@ -106,7 +113,7 @@ export default class Map extends Vue {
     })
   }
   public moveend() {
-    (this as any).$ga.event('locationpicker', 'moveend')
+    ;(this as any).$ga.event('locationpicker', 'moveend')
     this.updatingGeolocation = false
   }
 
