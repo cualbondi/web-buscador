@@ -26,14 +26,7 @@
         </v-btn>
       </v-form>
       <div>
-        <v-layout row wrap>
-          <v-flex xs3>
-            <v-checkbox label="sync" v-model="linkear_sync"></v-checkbox>
-          </v-flex>
-          <v-flex xs3>
-            <v-btn @click="linkear">linkear</v-btn>
-          </v-flex>
-        </v-layout>
+        <v-btn @click="linkear">linkear</v-btn>
       </div>
       <v-list>
         <v-list-tile v-for="rec in recorridos_osm" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
@@ -233,7 +226,6 @@ export default class Home extends Vue {
   public OSMpassword = ''
   public pushingOSM = false
   public showPassword = false
-  public linkear_sync = false
 
   public osm_id = '3713281'
   public recorridos = []
@@ -250,7 +242,6 @@ export default class Home extends Vue {
       url: `${API_URL}/recorridos/${this.recorrido_selected}/`,
       data: {
         osm_id: this.osm_id,
-        osm_sync: this.linkear_sync,
       },
     }).catch(e => {
       alert('error guardando')
