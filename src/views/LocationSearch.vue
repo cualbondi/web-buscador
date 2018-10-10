@@ -8,14 +8,17 @@
                 <v-text-field
                 class="input"
                 :clearable="true"
-               :value="location"
-               @input="setLocation"
+                :value="location"
+                @input="setLocation"
                 :label="inputLabel"
                 flat
                 solo
                 autofocus
                 hide-details
-                ></v-text-field>
+                append-icon="search"
+                @click:append="searchGeocoder"
+                >
+                </v-text-field>
             </div>
 
             <result-list 
@@ -40,7 +43,7 @@
             :results="geocoderResults"
             @selection="onLocationSelection"
             ></result-list>
-            <div v-if="loadingResults" class="progress">
+            <div v-if="loadingResults" class="progress row justify-center">
               <v-progress-circular  indeterminate color="primary"/>
             </div>
 
@@ -55,7 +58,6 @@ import ResultList, { Result } from '@/components/ResultList.vue'
 import ABMap from '@/components/ABMap.vue'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
-import { debounceMethod } from '@/utils'
 
 @Component({
   components: {
@@ -83,21 +85,29 @@ export default class Home extends Vue {
     },
   ]
 
+  public mounted() {
+    window.addEventListener('keyup', this.onEnterKey)
+  }
+
+  public destroyed() {
+    window.removeEventListener('keyup', this.onEnterKey)
+  }
+
   public results: Result[] = []
+
+  public onEnterKey(event: KeyboardEvent) {
+    if (event.keyCode === 13) {
+      this.searchGeocoder()
+    }
+  }
 
   public setLocation(value: string) {
     this.location = value
-    this.searchGeocoder(value)
   }
 
-  public searchGeocoder(query: string) {
-    this.$store.dispatch('geocoderClearResults')
-    this.debouncedSearchGeocoder(query)
-  }
-
-  @debounceMethod(500)
-  public debouncedSearchGeocoder(query: string) {
-    (this as any).$ga.event(
+  public searchGeocoder() {
+    const query = this.location
+    ;(this as any).$ga.event(
       'locationSearch_geocoder',
       this.originOrDestination,
       query,
@@ -127,7 +137,6 @@ export default class Home extends Vue {
   }
 
   public onLocationSelection(selection: Result) {
-    console.log(selection)
     const result: GeocoderResponse = this.$store.getters.geocoderResults[
       selection.id
     ]
@@ -135,8 +144,7 @@ export default class Home extends Vue {
       id: selection.id,
       source: this.originOrDestination,
     })
-    const self = (this as any)
-    self.$ga.event(
+    ;(this as any).$ga.event(
       'locationSearch_geocoder_selected',
       this.originOrDestination,
       (result as any).text,
@@ -144,7 +152,7 @@ export default class Home extends Vue {
   }
 
   public goBack() {
-    (this as any).$ga.event('locationSearch', 'back')
+    ;(this as any).$ga.event('locationSearch', 'back')
     this.$router.back()
   }
 

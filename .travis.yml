@@ -30,8 +30,8 @@ before_install:
   - docker-compose -f docker-compose-travis.yml ps
 
 script:
-  - docker-compose -f docker-compose-travis.yml exec web-buscador npm run lint
-  # - docker-compose -f docker-compose-travis.yml exec web-buscador npm run tslint
+  # - docker-compose -f docker-compose-travis.yml exec web-buscador npm run lint
+  - docker-compose -f docker-compose-travis.yml exec web-buscador npm run tslint
   - docker-compose -f docker-compose-travis.yml exec web-buscador npm run test:e2e:headless
 
 

@@ -44,7 +44,11 @@ $space-top: 170px;
         grid-template-rows: $searchfieldsHeight 1fr 180px $footerAdsHeight;
       }
       &.smallResults {
-        grid-template-rows: $searchfieldsHeight 100px calc(100% - 100px - #{$searchfieldsHeight} - #{$footerAdsHeight}) $footerAdsHeight;
+        grid-template-rows:
+          $searchfieldsHeight 100px calc(
+            100% - 100px - #{$searchfieldsHeight} - #{$footerAdsHeight}
+          )
+          $footerAdsHeight;
       }
       grid-template-areas: 'top' 'map' 'bottom' 'ad';
     }
@@ -56,9 +60,11 @@ $space-top: 170px;
 @media (min-width: 601px) {
   .absearch {
     grid-template-areas: 'top map' 'bottom map' 'ad map';
-    grid-template-rows: $searchfieldsHeight calc(
+    grid-template-rows:
+      $searchfieldsHeight calc(
         100% - #{$searchfieldsHeight} - #{$footerAdsHeight}
-      ) $footerAdsHeight;
+      )
+      $footerAdsHeight;
     grid-template-columns: 400px 1fr;
   }
 }
