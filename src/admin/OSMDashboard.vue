@@ -28,27 +28,33 @@
           <td class="justify-start layout px-0">
             <v-btn
               small
-              icon
-              fab
-              color="white"
               outline
-              @click="editJOSM(props.item.osm_id)"
+              @click="!props.item.loading150 && editJOSM(props.item, 150)"
             >
-              <v-icon>
+              <v-icon small>
                 edit
               </v-icon>
+              JOSM <b>+150</b>m
             </v-btn>
             <v-btn
               small
-              icon
-              fab
-              color="white"
+              outline
+              @click="!props.item.loading400 && editJOSM(props.item, 400)"
+            >
+              <v-icon small>
+                edit
+              </v-icon>
+              JOSM <b>+400</b>m
+            </v-btn>
+            <v-btn
+              small
               outline
               @click="gotoOSM(props.item.osm_id)"
             >
-              <v-icon>
+              <v-icon small>
                 search
               </v-icon>
+              osm.org
             </v-btn>
           </td>
         </tr>
@@ -80,18 +86,12 @@ export default class OSMDashboard extends Vue {
 
   public status2color(status: string): string {
     switch (status[0]) {
-      case '0':
-        return '#ADA'
-      case '1':
-        return '#DDA'
-      case '2':
-        return '#DAA'
-      case '3':
-        return '#D99'
-      case '4':
-        return '#D55'
-      default:
-        return '#FFF'
+      case '0': return '#ADA'
+      case '1': return '#EEC'
+      case '2': return '#ECC'
+      case '3': return '#EBB'
+      case '4': return '#E99'
+      default: return '#FFF'
     }
   }
 
@@ -111,18 +111,6 @@ export default class OSMDashboard extends Vue {
     }).then((response: any) => {
       this.relations = response.data
     })
-  }
-
-  public editJOSM(osm_id: any) {
-    this.josmCommandLoading = true
-    editJOSM(osm_id)
-      .then((response: any) => {
-        this.josmCommandLoading = false
-      })
-      .catch((err: any) => {
-        this.josmCommandLoading = false
-        this.josmCommandError = err.toString()
-      })
   }
 
   public gotoOSM(osm_id: any) {
