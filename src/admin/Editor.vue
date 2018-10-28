@@ -338,7 +338,7 @@ export default class Home extends Vue {
 
   public editJOSM() {
     this.loading = true
-    editJOSM(this.osm_id)
+    editJOSM(this.osm_id, 100)
       .then((response: any) => {
         this.loading = false
       })
