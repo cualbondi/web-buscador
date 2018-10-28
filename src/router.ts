@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Root from '@/views/Root.vue'
 import ABSearch from '@/views/ABSearch.vue'
 import Editor from '@/views/Editor.vue'
+import OSMDashboard from '@/views/OSMDashboard.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
@@ -35,6 +36,11 @@ export default new Router({
       component: Editor,
     },
     {
+      path: `/osm/`,
+      name: 'osm',
+      component: OSMDashboard,
+    },
+    {
       path: `/:ciudadSlug(${ciudadesRegex})/`,
       name: 'absearch',
       component: ABSearch,
@@ -51,7 +57,7 @@ export default new Router({
     },
     {
       path: `/:ciudadSlug(${ciudadesRegex})/:location?`,
-      name: 'absearch',
+      name: 'absearch-2',
       component: ABSearch,
     },
     {
