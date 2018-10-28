@@ -39,6 +39,21 @@
               hide-details
             ></v-select>
           </v-list-tile>
+          <v-list-tile>
+          <v-checkbox 
+            label="Best matches"
+            hide-details
+            v-model="bestMatches"
+            @change="findBestMatches($event)"
+          ></v-checkbox>
+          </v-list-tile>
+          <v-list-tile>
+          <v-checkbox
+            label="Show Linked"
+            hide-details
+            v-model="hideLinked"
+          ></v-checkbox>
+          </v-list-tile>
         </v-list>
       </v-navigation-drawer>
       <v-btn  small class="menubtn" flat icon @click="sideMenuOpen = true">
@@ -85,7 +100,7 @@
         hide-details
         v-model="cbSearchText"
       ></v-text-field>
-      <v-list dense>
+      <v-list class="cb-list" dense>
         <v-list-tile v-for="rec in filteredRecorridosCB" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
           {{ rec.linea.nombre }}: {{ rec.nombre }}
         </v-list-tile>
@@ -100,7 +115,7 @@
         hide-details
         v-model="osmSearchText"
       ></v-text-field>
-      <v-list dense>
+      <v-list class="osm-list" dense>
         <v-list-tile v-for="rec in filteredRecorridosOSM" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
           <v-list-tile-content>
             <v-list-tile-title v-text="rec.osm_name" />
@@ -139,7 +154,7 @@
     <l-map :max-zoom="25" :zoom="zoom" :center.sync="mapCenter" ref="mapref" class="map">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer', maxNativeZoom: 18, maxZoom: 25}" />
       <l-polyline :latLngs="recorrido_cb" color="#333399" ref="cb_layer" />
-      <l-polyline v-for="(way, $index) in poly_ways" :weight="8" :key="`a-${way.id}-${$index}`" :latLngs="way.nodes" color="#993333" :opacity="0.8" ref="osm_layer" />
+      <l-polyline v-for="(way, $index) in poly_ways" :weight="9" :key="`a-${way.id}-${$index}`" :latLngs="way.nodes" color="#993333" :opacity="0.3" ref="osm_layer" />
       <polylinedecorator v-for="(way, $index) in poly_ways" :key="`b-${way.id}-${$index}`" :patterns="patterns" :paths="[way.nodes]" />
       <l-circle v-for="(way, $index) in poly_ways" :key="`c-${way.id}-${$index}`" :latLng="way.nodes[0]" color="#993333" :opacity="1" :fill="false" :radius="50" v-if="way.disconnected" :ref="$index + '_gap_layer'" />
     </l-map>
@@ -205,7 +220,8 @@ const decoratorBuilder = function(offset: string, opacity: number) {
     }),
   }
 }
-const decoratorArrow1 = decoratorBuilder('5', 1)
+
+const decoratorArrow1 = decoratorBuilder('8', 1)
 
 function remove_mutating(array: Way[], way: Way) {
   const index = array.indexOf(way)
@@ -288,6 +304,8 @@ export default class Home extends Vue {
   public showPassword = false
   public cbSearchText = ''
   public osmSearchText = ''
+  public bestMatches = false
+  public hideLinked = false
 
   public osm_id = '3713281'
   public recorridos = []
@@ -410,10 +428,11 @@ export default class Home extends Vue {
     this.recorrido_cb = []
     this.poly_ways = []
     this.recorrido_selected = recorrido.id
+    console.log(recorrido.ruta)
     const llarr = recorrido.ruta
       .split('(')[1]
       .split(')')[0]
-      .split(', ')
+      .split(/, ?/)
     this.recorrido_cb = llarr.map((llstr: any) =>
       llstr
         .split(' ')
@@ -689,13 +708,17 @@ export default class Home extends Vue {
 
   public mounted() {
     // permission check!
-    const user = this.$store.getters.getUser
+    // const user = this.$store.getters.getUser
     // if (!user || !user.permissions.includes('staff')) {
     //   this.$store.dispatch('setNextUrl', 'editor')
     //   this.$router.push({ name: 'login' })
     //   return
     // }
     // end permission check
+    this.getRecorridosByName()
+  }
+
+  public getRecorridosByName() {
     this.loading = true
     axios({
       method: 'get',
@@ -705,8 +728,38 @@ export default class Home extends Vue {
       this.loading = false
     })
   }
+
+  public findBestMatches(value: boolean) {
+    if (value) {
+      this.loading = true
+      axios({
+        method: 'get',
+        url: `${API_URL}/recorridos-best-matches/1/`,
+      }).then((response: any) => {
+        this.recorridos = response.data
+        this.loading = false
+      })
+    } else {
+      this.getRecorridosByName()
+    }
+  }
 }
 </script>
+
+<style lang="scss">
+// no funciona esto si lo metes adentro de un tag scoped...
+.editor {
+  .v-text-field.v-text-field--solo .v-input__control {
+    min-height: 32px !important;
+  }
+  .v-list {
+    padding: 0;
+  }
+  .v-list--dense .v-list__tile {
+    height: 32px !important;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .navigation {
@@ -727,10 +780,22 @@ export default class Home extends Vue {
   z-index: 1000;
   grid-area: side;
   overflow: auto;
+  display: grid;
+  grid-template-rows: 32px 1fr;
+}
+.cb-list {
+  min-height: 0;
+  overflow-y: auto;
 }
 .side2 {
   margin-top: 5px;
   grid-area: side2;
+  display: grid;
+  grid-template-rows: 32px 1fr;
+}
+.osm-list {
+  min-height: 0;
+  overflow-y: auto;
 }
 .map {
   grid-area: map;
@@ -745,15 +810,6 @@ export default class Home extends Vue {
   flex-direction: row;
   align-items: center;
 }
-.v-list {
-  padding: 0;
-}
-.v-list--dense .v-list__tile {
-  height: 25px !important;
-}
-.v-text-field {
-  min-height: 25px;
-}
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -763,6 +819,9 @@ export default class Home extends Vue {
 }
 .header-left {
   grid-area: header-left;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .main > .v-overlay--active {
   z-index: 10000;
