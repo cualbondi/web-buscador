@@ -5,9 +5,101 @@
       description="Editor de cualbondi"
     />
 
+    <div class="header-left">
+      <v-navigation-drawer
+        class="navigation"
+        v-model="sideMenuOpen"
+        temporary
+        absolute
+        :touchless="true"
+      >
+        <v-toolbar color="primary">
+          <v-spacer></v-spacer>
+          <v-toolbar-title class="white--text">
+            <img :src="logo" />
+            </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="sideMenuOpen = false" class="white--text">
+            <v-icon dark>close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-divider></v-divider>
+        <v-list>
+          <v-list-tile>
+            <v-select
+              class="citySelect"
+              :items="ciudades"
+              v-model="ciudad"
+              item-text="nombre"
+              item-value="slug"
+              label="Ciudad"
+              single-line
+              auto
+              prepend-icon="map"
+              hide-details
+            ></v-select>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+      <v-btn  small class="menubtn" flat icon @click="sideMenuOpen = true">
+        <v-icon>menu</v-icon>  
+      </v-btn>
+      <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="loading"
+      :size="20"
+      ></v-progress-circular>
+
+    </div>
+
+
+    <div class="header">
+      <v-tooltip bottom>
+        <v-btn :disabled="numDisconnections === 0" slot="activator" flat small icon color="indigo" @click="zoomToPrevGap">
+          <v-icon>arrow_back</v-icon>
+        </v-btn> 
+        <span>Zoom to previous gap</span>
+      </v-tooltip>
+      
+      <v-tooltip bottom>
+        <v-btn :disabled="numDisconnections === 0" slot="activator" flat small icon color="indigo" @click="zoomToNextGap">
+          <v-icon>arrow_forward</v-icon>
+        </v-btn>
+        <span>Zoom to next gap</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+      <v-btn slot="activator" flat small icon color="indigo">
+        <v-icon>star</v-icon>
+      </v-btn>
+        <span>Tooltip</span>
+      </v-tooltip>
+      
+      <v-btn flat small icon color="indigo">
+        <v-icon>star</v-icon>
+      </v-btn>
+      <v-btn flat small icon color="indigo">
+        <v-icon>star</v-icon>
+      </v-btn>
+      <v-btn flat small icon color="indigo">
+        <v-icon>star</v-icon>
+      </v-btn>
+
+      <v-btn small @click="linkear">linkear</v-btn>
+      <v-btn small @click="sortWays()">sortWays</v-btn>
+      <v-btn small @click="reverseRelation()">reverseRelation</v-btn>
+      <v-btn small @click.stop="OSMPushDialog = true">pushOSM</v-btn>
+    </div>
+
     <div class="side">
-      Recorridos de cualbondi
-      <v-list>
+      <v-text-field
+        label="Solo"
+        placeholder="Recorridos de Cualbondi"
+        solo
+        hide-details
+      ></v-text-field>
+      <v-list dense>
         <v-list-tile v-for="rec in recorridos" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
           {{ rec.linea.nombre }}: {{ rec.nombre }}
         </v-list-tile>
@@ -15,20 +107,13 @@
     </div>
 
     <div class="side2">
-      Recorridos matcheados de OSM
-      <v-form @submit.prevent="searchOSM">
-        <v-text-field
-          v-model="osm_id"
-          label="osm relation id"
-        ></v-text-field>
-        <v-btn @click="searchOSM">
-          go!
-        </v-btn>
-      </v-form>
-      <div>
-        <v-btn @click="linkear">linkear</v-btn>
-      </div>
-      <v-list>
+      <v-text-field
+        label="Solo"
+        placeholder="Recorridos de OSM"
+        solo
+        hide-details
+      ></v-text-field>
+      <v-list dense>
         <v-list-tile v-for="rec in recorridos_osm" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
           <v-list-tile-content>
             <v-list-tile-title v-text="rec.osm_name" />
@@ -38,51 +123,38 @@
           </v-list-tile-action>
         </v-list-tile>
       </v-list>
+    
     </div>
 
-    <div class="side3">
-      ways
-      <span>
-        <span v-if="disconnected" style="background: red">
-          Desconectado
-        </span>
-        <span v-if="!disconnected" style="background: green">
-          Conectado
+    <div class="footer">
+      <span class="connected">
+        <span>
+          <span v-if="disconnected" style="background: red">
+            {{ numDisconnections }} desconexiones
+          </span>
+          <span v-if="!disconnected" style="background: green">
+            Conectado
+          </span>
         </span>
       </span>
-      <div>
-        <v-btn @click="sortWays()">sortWays</v-btn>
+
+      <div class="flex-row osm-id">
+        <input
+          class="osmid-input"
+          v-model="osm_id"
+        />
+        <v-btn flat small icon @click="searchOSM">
+          <v-icon>search</v-icon>
+        </v-btn>
       </div>
-      <div>
-        <v-btn @click="reverseRelation()">reverseRelation</v-btn>
-      </div>
-      <div>
-        <v-btn @click.stop="OSMPushDialog = true">pushOSM</v-btn>
-      </div>
-      <v-list>
-        <v-list-tile v-for="(way, $index) in poly_ways" :key="`x-${way.id}-${$index}`" @click="selectedWay=way" :class="{'selected': selectedWay && selectedWay.id == way.id}">
-          <v-list-tile-content>
-            {{ $index }}
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <span v-if="!way.disconnected">
-              ok
-            </span>
-            <span v-if="way.disconnected">
-              X
-            </span>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-list>
     </div>
 
-    <l-map :max-zoom="25" :zoom="13" :center.sync="mapCenter" ref="mapref" class="middle">
+    <l-map :max-zoom="25" :zoom="zoom" :center.sync="mapCenter" ref="mapref" class="map">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer', maxNativeZoom: 18, maxZoom: 25}" />
-      <l-polyline :latLngs="recorrido_cb" color="#333399" />
-      <l-polyline :latLngs="selectedWay.nodes" color="#333399" v-if="selectedWay" />
-      <l-polyline v-for="(way, $index) in poly_ways" :weight="8" :key="`a-${way.id}-${$index}`" :latLngs="way.nodes" color="#993333" :opacity="0.8" />
+      <l-polyline :latLngs="recorrido_cb" color="#333399" ref="cb_layer" />
+      <l-polyline v-for="(way, $index) in poly_ways" :weight="8" :key="`a-${way.id}-${$index}`" :latLngs="way.nodes" color="#993333" :opacity="0.8" ref="osm_layer" />
       <polylinedecorator v-for="(way, $index) in poly_ways" :key="`b-${way.id}-${$index}`" :patterns="patterns" :paths="[way.nodes]" />
-      <l-circle v-for="(way, $index) in poly_ways" :key="`c-${way.id}-${$index}`" :latLng="way.nodes[0]" color="#993333" :opacity="1" :fill="false" :radius="50" v-if="way.disconnected" />
+      <l-circle v-for="(way, $index) in poly_ways" :key="`c-${way.id}-${$index}`" :latLng="way.nodes[0]" color="#993333" :opacity="1" :fill="false" :radius="50" v-if="way.disconnected" :ref="$index + '_gap_layer'" />
     </l-map>
 
     <v-dialog
@@ -118,15 +190,15 @@ import axios from 'axios'
 import { API_URL } from '@/config'
 
 interface Node {
-  id: string,
-  lat: number,
+  id: string
+  lat: number
   lng: number
 }
 
 interface Way {
-  id: string,
-  name: string,
-  nodes: Node[],
+  id: string
+  name: string
+  nodes: Node[]
   disconnected: boolean
 }
 
@@ -148,10 +220,10 @@ const decoratorBuilder = function(offset: string, opacity: number) {
 const decoratorArrow1 = decoratorBuilder('5', 1)
 
 function remove_mutating(array: Way[], way: Way) {
-    const index = array.indexOf(way)
-    if (index !== -1) {
-        array.splice(index, 1)
-    }
+  const index = array.indexOf(way)
+  if (index !== -1) {
+    array.splice(index, 1)
+  }
 }
 
 function first_pass(ways: Way[]): Way[] {
@@ -167,14 +239,8 @@ function first_pass(ways: Way[]): Way[] {
     const next_first = next.nodes[0]
     const next_last = next.nodes[next.nodes.length - 1]
     way.disconnected = false
-    if (
-      curr_last.id !== next_first.id &&
-      curr_last.id !== next_last.id
-    ) {
-      if (
-        curr_first.id !== next_first.id &&
-        curr_first.id !== next_last.id
-      ) {
+    if (curr_last.id !== next_first.id && curr_last.id !== next_last.id) {
+      if (curr_first.id !== next_first.id && curr_first.id !== next_last.id) {
         way.disconnected = true
       } else {
         way.nodes = way.nodes.slice().reverse()
@@ -191,9 +257,12 @@ function first_pass(ways: Way[]): Way[] {
     if (last.nodes[0].id === prev.nodes[prev.nodes.length - 1].id) {
       ret.push(last)
     } else {
-      if (last.nodes[last.nodes.length - 1].id === prev.nodes[prev.nodes.length - 1].id) {
-          last.nodes = last.nodes.slice().reverse()
-          ret.push(last)
+      if (
+        last.nodes[last.nodes.length - 1].id ===
+        prev.nodes[prev.nodes.length - 1].id
+      ) {
+        last.nodes = last.nodes.slice().reverse()
+        ret.push(last)
       } else {
         last.disconnected = true
         ret.push(last)
@@ -204,6 +273,7 @@ function first_pass(ways: Way[]): Way[] {
 }
 
 let xmlDocument: Document // lo pongo aca para evitar el reactive de vuejs
+import logo from '@/assets/logo.png'
 
 @Component({
   components: {
@@ -215,11 +285,13 @@ let xmlDocument: Document // lo pongo aca para evitar el reactive de vuejs
   },
 })
 export default class Home extends Vue {
+  public loading = false
+  public sideMenuOpen = false
+  public logo = logo
   public mapCenter = [-34.921111, -57.954444]
   public recorrido_cb = []
   public firsts = []
   public poly_ways: Way[] = []
-  public selectedWay = null
   public disconnected = false
   public OSMPushDialog = false
   public OSMusername = ''
@@ -232,8 +304,64 @@ export default class Home extends Vue {
   public recorridos_osm = []
   public recorrido_selected = null
   public patterns = [decoratorArrow1]
+  public selectedGap = 0
+  public zoom = 13
+
+  get ciudad() {
+    return this.$store.getters.getCiudad
+  }
+  set ciudad(ciudadSlug) {
+    this.$store.dispatch('setCiudad', ciudadSlug)
+  }
+
+  get ciudades() {
+    return this.$store.getters.getCiudades
+  }
+
+  get numDisconnections() {
+    return this.disconnectedWays.length
+  }
+  get disconnectedWays() {
+    return this.poly_ways.filter(way => way.disconnected)
+  }
+
+  public zoomToRef(refName) {
+    setTimeout(
+      () =>
+        this.$refs.mapref.mapObject.fitBounds(
+          this.$refs[refName].mapObject.getBounds(),
+        ),
+      200,
+    )
+  }
+
+  public panToPoint(point) {
+    this.$refs.mapref.mapObject.flyTo(point, 16, { animate: false })
+  }
+
+  public zoomToPrevGap() {
+    if (this.numDisconnections === 0) {
+      return
+    }
+    this.selectedGap =
+      this.selectedGap - 1 < 0
+        ? this.numDisconnections - 1
+        : this.selectedGap - 1
+    const way = this.disconnectedWays[this.selectedGap]
+    this.panToPoint(way.nodes[0])
+  }
+
+  public zoomToNextGap() {
+    if (this.numDisconnections === 0) {
+      return
+    }
+    this.selectedGap = (this.selectedGap + 1) % this.numDisconnections
+    const way = this.disconnectedWays[this.selectedGap]
+    this.panToPoint(way.nodes[way.nodes.length - 1])
+  }
 
   public linkear() {
+    this.loading = true
     axios({
       headers: {
         authorization: `Bearer facebook ${this.$store.getters.getUser.FBToken}`,
@@ -243,8 +371,9 @@ export default class Home extends Vue {
       data: {
         osm_id: this.osm_id,
       },
-    }).catch(e => {
+    }).then(() => {this.loading = false}).catch(e => {
       alert('error guardando')
+      this.loading = false
       console.log(e)
     })
   }
@@ -254,8 +383,17 @@ export default class Home extends Vue {
     this.recorrido_cb = []
     this.poly_ways = []
     this.recorrido_selected = recorrido.id
-    const llarr = recorrido.ruta.split('(')[1].split(')')[0].split(', ')
-    this.recorrido_cb = llarr.map((llstr: any) => llstr.split(' ').map(parseFloat).reverse())
+    const llarr = recorrido.ruta
+      .split('(')[1]
+      .split(')')[0]
+      .split(', ')
+    this.recorrido_cb = llarr.map((llstr: any) =>
+      llstr
+        .split(' ')
+        .map(parseFloat)
+        .reverse(),
+    )
+    this.loading = true
     axios({
       method: 'get',
       url: `${API_URL}/match-recorridos/${recorrido.id}/`,
@@ -265,6 +403,8 @@ export default class Home extends Vue {
       this.osm_id = Math.abs(osm_id).toString()
       this.searchOSM()
     })
+
+    this.zoomToRef('cb_layer')
   }
 
   public setRecorrido_osm(recorrido_matched: any) {
@@ -275,7 +415,6 @@ export default class Home extends Vue {
   // TODO: agregar los recorridos editados moderados, y mostrar fechas de edicion y de OSM
 
   public sortWays() {
-
     this.disconnected = false
 
     const bag = this.poly_ways.slice()
@@ -318,7 +457,6 @@ export default class Home extends Vue {
         continue
       }
 
-
       // current is last on sorted then try with current as first on sorted
       current = sorted[0]
       current_first = current.nodes[0]
@@ -358,7 +496,6 @@ export default class Home extends Vue {
       sorted.push(found_way)
       current = found_way
       console.error('ERRORR disconnected', found_way)
-
     }
     this.poly_ways = first_pass(sorted)
     this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
@@ -378,41 +515,50 @@ export default class Home extends Vue {
       this.firsts = []
       const poly: Way[] = []
       const index = 0
-      const xml = (response.data as Document)
+      const xml = response.data as Document
       xmlDocument = xml
-      const wayrefs = xml.getElementsByTagName('relation')[0].querySelectorAll('[type=way]')
-      Array.from(wayrefs).map(wref => xml.getElementById((wref as any).getAttribute('ref'))).forEach(way => {
-        if (way) {
-          const noderefs = way.getElementsByTagName('nd')
-          const first = true
-          const poly_way: Node[] = []
-          Array.from(noderefs).map(nref => xml.getElementById((nref as any).getAttribute('ref'))).forEach(node => {
-            if (node) {
-              poly_way.push({
-                id: (node.getAttribute('id') as string),
-                lat: parseFloat(node.getAttribute('lat') as string),
-                lng: parseFloat(node.getAttribute('lon') as string),
+      const wayrefs = xml
+        .getElementsByTagName('relation')[0]
+        .querySelectorAll('[type=way]')
+      Array.from(wayrefs)
+        .map(wref => xml.getElementById((wref as any).getAttribute('ref')))
+        .forEach(way => {
+          if (way) {
+            const noderefs = way.getElementsByTagName('nd')
+            const first = true
+            const poly_way: Node[] = []
+            Array.from(noderefs)
+              .map(nref =>
+                xml.getElementById((nref as any).getAttribute('ref')),
+              )
+              .forEach(node => {
+                if (node) {
+                  poly_way.push({
+                    id: node.getAttribute('id') as string,
+                    lat: parseFloat(node.getAttribute('lat') as string),
+                    lng: parseFloat(node.getAttribute('lon') as string),
+                  })
+                }
               })
+            const ename = way.querySelectorAll('[k=name]')[0]
+            let name
+            if (name) {
+              const n = ename.getAttribute('v')
+              name = n ? n : ''
+            } else {
+              name = ''
             }
-          })
-          const ename = way.querySelectorAll('[k=name]')[0]
-          let name
-          if (name) {
-            const n = ename.getAttribute('v')
-            name = n ? n : ''
-          } else {
-            name = ''
+            poly.push({
+              id: way.getAttribute('id') as string,
+              name,
+              nodes: poly_way,
+              disconnected: false,
+            })
           }
-          poly.push({
-            id: (way.getAttribute('id') as string),
-            name,
-            nodes: poly_way,
-            disconnected: false,
-          })
-        }
-      })
+        })
       this.poly_ways = first_pass(poly)
       this.disconnected = this.poly_ways.filter(w => w.disconnected).length > 0
+      this.loading = false
     })
   }
 
@@ -427,7 +573,9 @@ export default class Home extends Vue {
     try {
       // TODO: must be wrapped in <osm></osm> tag
       const new_xml = document.implementation.createDocument(null, 'osm', null)
-      const xml_relation = xmlDocument.getElementsByTagName('relation')[0].cloneNode(true) as Element
+      const xml_relation = xmlDocument
+        .getElementsByTagName('relation')[0]
+        .cloneNode(true) as Element
       new_xml.documentElement.appendChild(xml_relation)
       xml_relation.removeAttribute('user')
       xml_relation.removeAttribute('uid')
@@ -458,17 +606,24 @@ export default class Home extends Vue {
       // create changeset
       const xml = document.implementation.createDocument(null, 'osm', null)
       const xml_changeset = xml.createElement('changeset')
-      xml_changeset.appendChild(xml_tag(xml, 'created_by', 'Cualbondi Editor 0.0.1'))
-      xml_changeset.appendChild(xml_tag(xml, 'comment', 'Repair mixed transport relation by reordering ways'))
+      xml_changeset.appendChild(
+        xml_tag(xml, 'created_by', 'Cualbondi Editor 0.0.1'),
+      )
+      xml_changeset.appendChild(
+        xml_tag(
+          xml,
+          'comment',
+          'Repair mixed transport relation by reordering ways',
+        ),
+      )
       xml.documentElement.appendChild(xml_changeset)
-
 
       const changesetId = (await axios({
         method: 'put',
         url: 'https://www.openstreetmap.org/api/0.6/changeset/create',
         auth: {
-            username: this.OSMusername,
-            password: this.OSMpassword,
+          username: this.OSMusername,
+          password: this.OSMpassword,
         },
         data: new XMLSerializer().serializeToString(xml),
       })).data
@@ -483,8 +638,8 @@ export default class Home extends Vue {
         method: 'put',
         url: `https://www.openstreetmap.org/api/0.6/relation/${relationId}`,
         auth: {
-            username: this.OSMusername,
-            password: this.OSMpassword,
+          username: this.OSMusername,
+          password: this.OSMpassword,
         },
         data: new XMLSerializer().serializeToString(new_xml),
       })
@@ -494,8 +649,8 @@ export default class Home extends Vue {
         method: 'put',
         url: `https://www.openstreetmap.org/api/0.6/changeset/${changesetId}/close`,
         auth: {
-            username: this.OSMusername,
-            password: this.OSMpassword,
+          username: this.OSMusername,
+          password: this.OSMpassword,
         },
       })
     } catch (e) {
@@ -508,20 +663,21 @@ export default class Home extends Vue {
   public mounted() {
     // permission check!
     const user = this.$store.getters.getUser
-    if (!user || !user.permissions.includes('staff')) {
-      this.$store.dispatch('setNextUrl', 'editor')
-      this.$router.push({ name: 'login' })
-      return
-    }
+    // if (!user || !user.permissions.includes('staff')) {
+    //   this.$store.dispatch('setNextUrl', 'editor')
+    //   this.$router.push({ name: 'login' })
+    //   return
+    // }
     // end permission check
+    this.loading = true
     axios({
       method: 'get',
       url: `${API_URL}/recorridos-por-ciudad/1/`,
     }).then((response: any) => {
       this.recorridos = response.data
+      this.loading = false
     })
   }
-
 }
 </script>
 
@@ -533,9 +689,12 @@ export default class Home extends Vue {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-areas: 'side side2 side3 map';
-  grid-template-rows: 100%;
-  grid-template-columns: 400px 300px 200px 1fr;
+  grid-template-areas: 'header-left header' 'side map' 'side2 map' 'side2 footer';
+  grid-template-rows: 40px 1fr 1fr 30px;
+  grid-template-columns: 400px 1fr;
+}
+.header {
+  grid-area: header;
 }
 .side {
   z-index: 1000;
@@ -543,20 +702,34 @@ export default class Home extends Vue {
   overflow: auto;
 }
 .side2 {
-  z-index: 1000;
+  margin-top: 5px;
   grid-area: side2;
-  overflow: auto;
-}
-.side3 {
-  z-index: 1000;
-  grid-area: side3;
-  overflow: auto;
 }
 .map {
   grid-area: map;
 }
 .selected {
   background-color: lightgray;
+}
+.footer {
+  grid-area: footer;
+  padding: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.v-list {
+  padding: 0;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.osmid-input {
+  margin-left: 10px;
+}
+.header-left {
+  grid-area: header-left;
 }
 </style>
 
