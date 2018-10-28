@@ -69,27 +69,12 @@
         <span>Zoom to next gap</span>
       </v-tooltip>
 
-      <v-tooltip bottom>
-      <v-btn slot="activator" flat small icon color="indigo">
-        <v-icon>star</v-icon>
-      </v-btn>
-        <span>Tooltip</span>
-      </v-tooltip>
-      
-      <v-btn flat small icon color="indigo">
-        <v-icon>star</v-icon>
-      </v-btn>
-      <v-btn flat small icon color="indigo">
-        <v-icon>star</v-icon>
-      </v-btn>
-      <v-btn flat small icon color="indigo">
-        <v-icon>star</v-icon>
-      </v-btn>
-
       <v-btn small @click="linkear">linkear</v-btn>
       <v-btn small @click="sortWays()">sortWays</v-btn>
       <v-btn small @click="reverseRelation()">reverseRelation</v-btn>
-      <v-btn small @click.stop="OSMPushDialog = true">pushOSM</v-btn>
+      <v-btn small @click.stop="OSMPushDialog = true">push OSM</v-btn>
+      <v-btn small @click="gotoOSM()">Goto OSM</v-btn>
+      <v-btn small @click="editJOSM()">Edit JOSM</v-btn>
     </div>
 
     <div class="side">
@@ -98,9 +83,10 @@
         placeholder="Recorridos de Cualbondi"
         solo
         hide-details
+        v-model="cbSearchText"
       ></v-text-field>
       <v-list dense>
-        <v-list-tile v-for="rec in recorridos" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
+        <v-list-tile v-for="rec in filteredRecorridosCB" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
           {{ rec.linea.nombre }}: {{ rec.nombre }}
         </v-list-tile>
       </v-list>
@@ -112,9 +98,10 @@
         placeholder="Recorridos de OSM"
         solo
         hide-details
+        v-model="osmSearchText"
       ></v-text-field>
       <v-list dense>
-        <v-list-tile v-for="rec in recorridos_osm" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
+        <v-list-tile v-for="rec in filteredRecorridosOSM" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
           <v-list-tile-content>
             <v-list-tile-title v-text="rec.osm_name" />
           </v-list-tile-content>
@@ -188,6 +175,7 @@ import 'leaflet-polylinedecorator'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import axios from 'axios'
 import { API_URL } from '@/config'
+import { gotoOSM, editJOSM } from './utils'
 
 interface Node {
   id: string
@@ -298,6 +286,8 @@ export default class Home extends Vue {
   public OSMpassword = ''
   public pushingOSM = false
   public showPassword = false
+  public cbSearchText = ''
+  public osmSearchText = ''
 
   public osm_id = '3713281'
   public recorridos = []
@@ -306,6 +296,39 @@ export default class Home extends Vue {
   public patterns = [decoratorArrow1]
   public selectedGap = 0
   public zoom = 13
+
+  get filteredRecorridosCB() {
+    return this.recorridos.filter(
+      rec =>
+        (rec.linea.nombre + rec.nombre).search(
+          new RegExp(this.cbSearchText, 'i'),
+        ) !== -1,
+    )
+  }
+
+  get filteredRecorridosOSM() {
+    return this.recorridos_osm.filter(
+      rec =>
+        rec.osm_name &&
+        rec.osm_name.search(new RegExp(this.osmSearchText, 'i')) !== -1,
+    )
+  }
+
+  public gotoOSM() {
+    gotoOSM(this.osm_id)
+  }
+
+  public editJOSM() {
+    this.loading = true
+    editJOSM(this.osm_id)
+      .then((response: any) => {
+        this.loading = false
+      })
+      .catch((err: any) => {
+        this.loading = false
+        console.error(err.toString())
+      })
+  }
 
   get ciudad() {
     return this.$store.getters.getCiudad
@@ -325,7 +348,7 @@ export default class Home extends Vue {
     return this.poly_ways.filter(way => way.disconnected)
   }
 
-  public zoomToRef(refName) {
+  public zoomToRef(refName: any) {
     setTimeout(
       () =>
         this.$refs.mapref.mapObject.fitBounds(
@@ -335,7 +358,7 @@ export default class Home extends Vue {
     )
   }
 
-  public panToPoint(point) {
+  public panToPoint(point: LatLng) {
     this.$refs.mapref.mapObject.flyTo(point, 16, { animate: false })
   }
 
@@ -371,11 +394,15 @@ export default class Home extends Vue {
       data: {
         osm_id: this.osm_id,
       },
-    }).then(() => {this.loading = false}).catch(e => {
-      alert('error guardando')
-      this.loading = false
-      console.log(e)
     })
+      .then(() => {
+        this.loading = false
+      })
+      .catch(e => {
+        alert('error guardando')
+        this.loading = false
+        console.log(e)
+      })
   }
 
   public setRecorrido(recorrido: any) {
@@ -721,6 +748,12 @@ export default class Home extends Vue {
 .v-list {
   padding: 0;
 }
+.v-list--dense .v-list__tile {
+  height: 25px !important;
+}
+.v-text-field {
+  min-height: 25px;
+}
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -731,9 +764,6 @@ export default class Home extends Vue {
 .header-left {
   grid-area: header-left;
 }
-</style>
-
-<style lang="scss" scoped>
 .main > .v-overlay--active {
   z-index: 10000;
 }

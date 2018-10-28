@@ -32,7 +32,7 @@
               fab
               color="white"
               outline
-              @click="editJOSM(props.item)"
+              @click="editJOSM(props.item.osm_id)"
             >
               <v-icon>
                 edit
@@ -44,7 +44,7 @@
               fab
               color="white"
               outline
-              @click="gotoOSM(props.item)"
+              @click="gotoOSM(props.item.osm_id)"
             >
               <v-icon>
                 search
@@ -61,11 +61,11 @@
 import { Vue, Component } from 'vue-property-decorator'
 import axios from 'axios'
 import { API_URL } from '@/config'
+import { gotoOSM, editJOSM } from './utils'
 
 @Component({})
 export default class OSMDashboard extends Vue {
-
-  public relations: Array<any> = [];
+  public relations: Array<any> = []
   public headers: Array<any> = [
     { text: 'osm_id', value: 'osm_id' },
     { text: 'status', value: 'status' },
@@ -73,19 +73,25 @@ export default class OSMDashboard extends Vue {
   ]
   public pagination = {
     sortBy: 'status',
-    descending: true
+    descending: true,
   }
-  public josmCommandLoading: Boolean;
-  public josmCommandError: Boolean;
+  public josmCommandLoading: Boolean
+  public josmCommandError: Boolean
 
   public status2color(status: string): string {
     switch (status[0]) {
-      case '0': return '#ADA'
-      case '1': return '#DDA'
-      case '2': return '#DAA'
-      case '3': return '#D99'
-      case '4': return '#D55'
-      default: return '#FFF'
+      case '0':
+        return '#ADA'
+      case '1':
+        return '#DDA'
+      case '2':
+        return '#DAA'
+      case '3':
+        return '#D99'
+      case '4':
+        return '#D55'
+      default:
+        return '#FFF'
     }
   }
 
@@ -107,30 +113,21 @@ export default class OSMDashboard extends Vue {
     })
   }
 
-  public editJOSM(relation: any) {
-    this.josmCommandLoading = true;
-    const overpass_query = `[out:json];(relation(${relation.osm_id});)->.R;(way[highway](around[.R]:300);)->.W2;(._;.R;.W2;);out ids;`
-    axios({
-      method: 'get',
-      url: `http://overpass-api.de/api/interpreter?data=${overpass_query}`
-    }).then(response => {
-      const ids = response.data.elements.map((e: any) => e.type == 'way' ? `w${e.id}` : e.type == 'relation' ? `r${e.id}` : null).filter((e:string | null) => e != null).reverse().join(',');
-      axios({
-        method: 'get',
-        url: `http://127.0.0.1:8111/load_object?objects=${ids}&relation_members=true`
-      }).then((response: any) => {
-        this.josmCommandLoading = false;
-      }).catch((err: any) => {
-        this.josmCommandLoading = false;
-        this.josmCommandError = err.toString();
-      });
-    });
+  public editJOSM(osm_id: any) {
+    this.josmCommandLoading = true
+    editJOSM(osm_id)
+      .then((response: any) => {
+        this.josmCommandLoading = false
+      })
+      .catch((err: any) => {
+        this.josmCommandLoading = false
+        this.josmCommandError = err.toString()
+      })
   }
 
-  public gotoOSM(relation: any) {
-    window.open(`https://openstreetmap.org/relation/${relation.osm_id}`, '_blank')
+  public gotoOSM(osm_id: any) {
+    gotoOSM(osm_id)
   }
-
 }
 </script>
 
