@@ -31,6 +31,7 @@ import VDialog from 'vuetify/es5/components/VDialog'
 import VForm from 'vuetify/es5/components/VForm'
 import VCheckbox from 'vuetify/es5/components/VCheckbox'
 import VTooltip from 'vuetify/es5/components/VTooltip'
+import VDataTable from 'vuetify/es5/components/VDataTable'
 
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
@@ -64,6 +65,7 @@ Vue.use(Vuetify, {
     VForm,
     VCheckbox,
     VTooltip,
+    VDataTable,
   },
   directives: {
     Ripple,
