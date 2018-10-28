@@ -1,4 +1,5 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 const path = require('path')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
@@ -6,7 +7,6 @@ const CIUDADES = require('./src/ciudades')
 
 const production = process.env.NODE_ENV === 'production'
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '/mapa/'
-
 
 const developmentPlugins = []
 const productionPlugins = [
@@ -20,20 +20,23 @@ const productionPlugins = [
     analyzerMode: 'static',
     reportFilename: 'report.html',
     openAnalyzer: true,
-  })
+  }),
 ]
 
 module.exports = {
   baseUrl: BASE_URL,
   outputDir: 'dist' + BASE_URL,
+  devServer: {
+    public: '0.0.0.0:' + process.env.HOST_PORT || '8080',
+  },
   chainWebpack: config => {
     config.plugin('prefetch').tap(options => {
       options[0].include = 'allAssets'
-      options[0].as = function (entry) {
-        if (/\.css$/.test(entry)) return 'style';
-        if (/\.woff$/.test(entry)) return 'font';
-        if (/\.png$/.test(entry)) return 'image';
-        return 'script';
+      options[0].as = function(entry) {
+        if (/\.css$/.test(entry)) return 'style'
+        if (/\.woff$/.test(entry)) return 'font'
+        if (/\.png$/.test(entry)) return 'image'
+        return 'script'
       }
       return options
     })
@@ -44,7 +47,7 @@ module.exports = {
       .loader('url-loader')
       .options({
         limit: 128,
-        name: 'img/[name].[hash:8].[ext]'
+        name: 'img/[name].[hash:8].[ext]',
       })
   },
   configureWebpack: {
@@ -52,8 +55,8 @@ module.exports = {
   },
   lintOnSave: false,
   pwa: {
-    name: "Cualbondi",
-    themeColor: "#4285F4",
+    name: 'Cualbondi',
+    themeColor: '#4285F4',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
     workboxOptions: {
@@ -61,12 +64,12 @@ module.exports = {
         {
           // handler: 'staleWhileRevalidate',
           handler: 'networkFirst',
-          urlPattern: new RegExp('^https:\/\/cualbondi.com.ar'),
+          urlPattern: new RegExp('^https://cualbondi.com.ar'),
         },
         {
           handler: 'networkOnly',
           urlPattern: new RegExp('.*'),
-        }
+        },
       ],
       skipWaiting: true,
     },

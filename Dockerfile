@@ -3,18 +3,14 @@ FROM cypress/base:10
 MAINTAINER Cualbondi
 
 ARG NODE_ENV=development
-
 ENV NODE_ENV $NODE_ENV
 
-RUN mkdir /app
+WORKDIR /app
 
-WORKDIR /app/
+COPY package.json package-lock.json /app/
 
-COPY package.json .
-COPY yarn.lock .
-
-RUN yarn
+RUN npm i
 
 COPY . .
 
-CMD yarn serve
+CMD npm run serve
