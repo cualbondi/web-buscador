@@ -184,6 +184,7 @@ export default class OSMDashboard extends Vue {
   height: calc(100vh - 60px);
   th {
     text-align: left;
+    cursor: pointer;
   }
   .v-datatable__actions {
     position: fixed;
