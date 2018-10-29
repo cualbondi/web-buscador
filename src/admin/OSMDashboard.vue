@@ -6,7 +6,7 @@
         <img :src="logo" />
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <h2>OpenStreetMap Transport Status Tool</h2>
+      <h2>OpenStreetMap Transport Health Tool 🚌🚑</h2>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
