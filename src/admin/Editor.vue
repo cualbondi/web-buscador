@@ -183,12 +183,12 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { LCircle, LMap, LTileLayer, LPolyline } from 'vue2-leaflet'
+import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
-import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-import axios from 'axios'
 import { API_URL } from '@/config'
 import { gotoOSM, editJOSM } from './utils'
 
@@ -278,6 +278,7 @@ function first_pass(ways: Way[]): Way[] {
 
 let xmlDocument: Document // lo pongo aca para evitar el reactive de vuejs
 import logo from '@/assets/logo.png'
+import { BBox } from 'geojson';
 
 @Component({
   components: {
@@ -308,8 +309,8 @@ export default class Home extends Vue {
   public hideLinked = false
 
   public osm_id = '3713281'
-  public recorridos = []
-  public recorridos_osm = []
+  public recorridos: Array<any> = []
+  public recorridos_osm: Array<any> = []
   public recorrido_selected = null
   public patterns = [decoratorArrow1]
   public selectedGap = 0
@@ -363,42 +364,56 @@ export default class Home extends Vue {
     return this.disconnectedWays.length
   }
   get disconnectedWays() {
-    return this.poly_ways.filter(way => way.disconnected)
+    const disconnections = []
+    for (let i = 0; i < this.poly_ways.length; i++) {
+      let w = this.poly_ways[i]
+      if (w.disconnected) {
+        if (i < this.poly_ways.length - 1) {
+          // console.log(i, w, this.poly_ways[i + 1])
+          disconnections.push({waya: w, wayb: this.poly_ways[i+1]})
+        } else {
+          disconnections.push({waya: this.poly_ways[i-1], wayb: w})
+          // console.log(i, this.poly_ways[i - 1], w)
+        }
+      }
+    }
+    return disconnections
   }
 
   public zoomToRef(refName: any) {
     setTimeout(
       () =>
-        this.$refs.mapref.mapObject.fitBounds(
-          this.$refs[refName].mapObject.getBounds(),
+        (this.$refs.mapref as any).mapObject.fitBounds(
+          (this.$refs[refName] as any).mapObject.getBounds(),
         ),
       200,
     )
   }
 
   public panToPoint(point: LatLng) {
-    this.$refs.mapref.mapObject.flyTo(point, 16, { animate: false })
+    (this.$refs.mapref as any).mapObject.flyTo(point, 16, { animate: false })
+  }
+
+  public panToBBox(bbox: any){
+    (this.$refs.mapref as any).mapObject.setMaxBounds(bbox)
   }
 
   public zoomToPrevGap() {
-    if (this.numDisconnections === 0) {
-      return
-    }
     this.selectedGap =
       this.selectedGap - 1 < 0
         ? this.numDisconnections - 1
         : this.selectedGap - 1
-    const way = this.disconnectedWays[this.selectedGap]
-    this.panToPoint(way.nodes[0])
+    debugger
+    const disconnection = this.disconnectedWays[this.selectedGap]
+    const bounds = L.latLngBounds(L.latLng(disconnection.waya.nodes[disconnection.waya.nodes.length - 1]), L.latLng(disconnection.wayb.nodes[0]))
+    this.panToBBox(bounds)
   }
 
   public zoomToNextGap() {
-    if (this.numDisconnections === 0) {
-      return
-    }
     this.selectedGap = (this.selectedGap + 1) % this.numDisconnections
-    const way = this.disconnectedWays[this.selectedGap]
-    this.panToPoint(way.nodes[way.nodes.length - 1])
+    const disconnection = this.disconnectedWays[this.selectedGap]
+    const bounds = L.latLngBounds(disconnection.waya.nodes[-1], disconnection.wayb.nodes[0])
+    this.panToBBox(bounds)
   }
 
   public linkear() {
@@ -428,7 +443,6 @@ export default class Home extends Vue {
     this.recorrido_cb = []
     this.poly_ways = []
     this.recorrido_selected = recorrido.id
-    console.log(recorrido.ruta)
     const llarr = recorrido.ruta
       .split('(')[1]
       .split(')')[0]
