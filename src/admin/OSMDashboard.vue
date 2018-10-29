@@ -1,11 +1,36 @@
 <template>
   <div class="table-container">
+
+    <v-toolbar color="primary">
+      <v-toolbar-title class="white--text">
+        <img :src="logo" />
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <h2>OpenStreetMap Transport Status Tool</h2>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-toolbar>
+
     <v-data-table
       :headers="headers"
       :items="relations"
       :pagination.sync="pagination"
       :rows-per-page-items="[ 10, 50, 100 ]"
+      :search="search"
     >
+
+      <template slot="no-results" :value="true" color="error" icon="warning">
+        <div>
+          No se encontro ninguna ciudad ni linea para "{{ search }}".
+        </div>
+      </template>
+
       <template slot="headers" slot-scope="props">
         <tr>
           <th
@@ -24,6 +49,8 @@
       <template slot="items" slot-scope="props">
         <tr :style="{'background-color': status2color(props.item.status)}">
           <td class="justify-start">{{ props.item.osm_id }}</td>
+          <td class="justify-start">{{ props.item.osm_name }}</td>
+          <td class="justify-start">{{ props.item.osm_administrative }}</td>
           <td class="justify-start">{{ props.item.status }}</td>
           <td class="justify-start layout px-0">
             <v-btn
@@ -68,12 +95,17 @@ import { Vue, Component } from 'vue-property-decorator'
 import axios from 'axios'
 import { API_URL } from '@/config'
 import { gotoOSM, editJOSM } from './utils'
+import logo from '@/assets/logo.png'
 
 @Component({})
 export default class OSMDashboard extends Vue {
+  public search = ''
+  public logo = logo
   public relations: Array<any> = []
   public headers: Array<any> = [
     { text: 'osm_id', value: 'osm_id' },
+    { text: 'name', value: 'osm_name' },
+    { text: 'administrative', value: 'osm_administrative' },
     { text: 'status', value: 'status' },
     { text: 'actions', value: 'actions' },
   ]
