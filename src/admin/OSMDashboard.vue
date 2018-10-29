@@ -179,6 +179,7 @@ export default class OSMDashboard extends Vue {
 
 <style lang="scss">
 .table-container {
+  user-select: text;
   overflow: auto;
   height: calc(100vh - 60px);
   th {
