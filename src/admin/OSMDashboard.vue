@@ -56,21 +56,35 @@
             <v-btn
               small
               outline
-              @click="!props.item.loading150 && editJOSM(props.item, 150)"
+              @click="editJOSM(props.item, 150)"
+              :disabled="props.item.loading150"
             >
-              <v-icon small>
+              <v-icon small v-if="!props.item.loading150">
                 edit
               </v-icon>
+              <v-progress-circular
+                :width="2"
+                :size="15"
+                indeterminate
+                v-if="props.item.loading150"
+              ></v-progress-circular>
               JOSM <b>+150</b>m
             </v-btn>
             <v-btn
               small
               outline
-              @click="!props.item.loading400 && editJOSM(props.item, 400)"
+              @click="editJOSM(props.item, 400)"
+              :disabled="props.item.loading400"
             >
-              <v-icon small>
+              <v-icon small v-if="!props.item.loading400">
                 edit
               </v-icon>
+              <v-progress-circular
+                :width="2"
+                :size="15"
+                indeterminate
+                v-if="props.item.loading400"
+              ></v-progress-circular>
               JOSM <b>+400</b>m
             </v-btn>
             <v-btn
@@ -134,6 +148,18 @@ export default class OSMDashboard extends Vue {
       this.pagination.sortBy = column
       this.pagination.descending = false
     }
+  }
+
+  public editJOSM(item: any, meters: number) {
+    Vue.set(item, `loading${meters}`, true);
+    editJOSM(item.osm_id, meters)
+      .then((response: any) => {
+        Vue.set(item, `loading${meters}`, false);
+      })
+      .catch((err: any) => {
+        Vue.set(item, `loading${meters}`, false);
+        console.error(err.toString());
+      })
   }
 
   public mounted() {
