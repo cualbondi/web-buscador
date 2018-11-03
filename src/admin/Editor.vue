@@ -722,12 +722,12 @@ export default class Home extends Vue {
 
   public mounted() {
     // permission check!
-    // const user = this.$store.getters.getUser
-    // if (!user || !user.permissions.includes('staff')) {
-    //   this.$store.dispatch('setNextUrl', 'editor')
-    //   this.$router.push({ name: 'login' })
-    //   return
-    // }
+    const user = this.$store.getters.getUser
+    if (!user || !user.permissions.includes('staff')) {
+      this.$store.dispatch('setNextUrl', 'editor')
+      this.$router.push({ name: 'login' })
+      return
+    }
     // end permission check
     this.getRecorridosByName()
   }

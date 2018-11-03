@@ -15,9 +15,12 @@ interface State {
   nextUrl: string | undefined
 }
 
+const localstorageUser = localStorage.getItem('user')
+const initialUser = localstorageUser && JSON.parse(localstorageUser)
+
 const module: Module<State, RootState> = {
   state: {
-    user: null,
+    user: initialUser,
     nextUrl: undefined,
   },
   actions: {
@@ -41,6 +44,7 @@ const module: Module<State, RootState> = {
   mutations: {
     setUser(state, user: User) {
       state.user = user
+      localStorage.setItem('user', JSON.stringify(user))
     },
     setNextUrl(state, nextUrl: string) {
       state.nextUrl = nextUrl
