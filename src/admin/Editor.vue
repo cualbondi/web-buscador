@@ -44,14 +44,15 @@
             label="Best matches"
             hide-details
             v-model="bestMatches"
-            @change="findBestMatches($event)"
+            @change="searchRecorridos()"
           ></v-checkbox>
           </v-list-tile>
           <v-list-tile>
           <v-checkbox
             label="Show Linked"
             hide-details
-            v-model="hideLinked"
+            v-model="showLinked"
+            @change="searchRecorridos()"
           ></v-checkbox>
           </v-list-tile>
         </v-list>
@@ -102,7 +103,16 @@
       ></v-text-field>
       <v-list class="cb-list" dense>
         <v-list-tile v-for="rec in filteredRecorridosCB" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
-          {{ rec.linea.nombre }}: {{ rec.nombre }}
+          
+          <v-list-tile-content>
+            <v-list-tile-title v-text="`${rec.linea.nombre}: ${rec.nombre}`" />
+          </v-list-tile-content>
+            <v-list-tile-action>
+             <v-tooltip bottom>
+            <v-icon slot="activator" color="success">{{rec.osm_id ? 'link' : ''}}</v-icon>
+            <span>{{rec.osm_id}}</span>
+          </v-tooltip>
+            </v-list-tile-action>
         </v-list-tile>
       </v-list>
     </div>
@@ -120,6 +130,12 @@
           <v-list-tile-content>
             <v-list-tile-title v-text="rec.osm_name" />
           </v-list-tile-content>
+           <v-list-tile-action>
+             <v-tooltip bottom>
+                <v-icon slot="activator" color="success">{{rec.linked_recorrido_id ? 'link' : ''}}</v-icon>
+                <span>{{rec.linked_recorrido_id}}</span>
+              </v-tooltip>
+            </v-list-tile-action>
           <v-list-tile-action>
             {{Math.floor(rec.area*1000000)/100}}
           </v-list-tile-action>
@@ -278,7 +294,7 @@ function first_pass(ways: Way[]): Way[] {
 
 let xmlDocument: Document // lo pongo aca para evitar el reactive de vuejs
 import logo from '@/assets/logo.png'
-import { BBox } from 'geojson';
+import { BBox } from 'geojson'
 
 @Component({
   components: {
@@ -306,7 +322,7 @@ export default class Home extends Vue {
   public cbSearchText = ''
   public osmSearchText = ''
   public bestMatches = false
-  public hideLinked = false
+  public showLinked = true
 
   public osm_id = '3713281'
   public recorridos: Array<any> = []
@@ -354,6 +370,7 @@ export default class Home extends Vue {
   }
   set ciudad(ciudadSlug) {
     this.$store.dispatch('setCiudad', ciudadSlug)
+    this.searchRecorridos()
   }
 
   get ciudades() {
@@ -370,9 +387,9 @@ export default class Home extends Vue {
       if (w.disconnected) {
         if (i < this.poly_ways.length - 1) {
           // console.log(i, w, this.poly_ways[i + 1])
-          disconnections.push({waya: w, wayb: this.poly_ways[i+1]})
+          disconnections.push({ waya: w, wayb: this.poly_ways[i + 1] })
         } else {
-          disconnections.push({waya: this.poly_ways[i-1], wayb: w})
+          disconnections.push({ waya: this.poly_ways[i - 1], wayb: w })
           // console.log(i, this.poly_ways[i - 1], w)
         }
       }
@@ -391,11 +408,11 @@ export default class Home extends Vue {
   }
 
   public panToPoint(point: LatLng) {
-    (this.$refs.mapref as any).mapObject.flyTo(point, 16, { animate: false })
+    ;(this.$refs.mapref as any).mapObject.flyTo(point, 16, { animate: false })
   }
 
-  public panToBBox(bbox: any){
-    (this.$refs.mapref as any).mapObject.setMaxBounds(bbox)
+  public panToBBox(bbox: any) {
+    ;(this.$refs.mapref as any).mapObject.fitBounds(bbox)
   }
 
   public zoomToPrevGap() {
@@ -405,14 +422,20 @@ export default class Home extends Vue {
         : this.selectedGap - 1
     debugger
     const disconnection = this.disconnectedWays[this.selectedGap]
-    const bounds = L.latLngBounds(L.latLng(disconnection.waya.nodes[disconnection.waya.nodes.length - 1]), L.latLng(disconnection.wayb.nodes[0]))
+    const bounds = L.latLngBounds(
+      L.latLng(disconnection.waya.nodes[disconnection.waya.nodes.length - 1]),
+      L.latLng(disconnection.wayb.nodes[0]),
+    )
     this.panToBBox(bounds)
   }
 
   public zoomToNextGap() {
     this.selectedGap = (this.selectedGap + 1) % this.numDisconnections
     const disconnection = this.disconnectedWays[this.selectedGap]
-    const bounds = L.latLngBounds(disconnection.waya.nodes[-1], disconnection.wayb.nodes[0])
+    const bounds = L.latLngBounds(
+      disconnection.waya.nodes[-1],
+      disconnection.wayb.nodes[0],
+    )
     this.panToBBox(bounds)
   }
 
@@ -454,9 +477,14 @@ export default class Home extends Vue {
         .reverse(),
     )
     this.loading = true
+    const params: any = {}
+    if (this.showLinked) {
+      params.showall = true
+    }
     axios({
       method: 'get',
       url: `${API_URL}/match-recorridos/${recorrido.id}/`,
+      params: params,
     }).then((response: any) => {
       this.recorridos_osm = response.data
       const { osm_id } = response.data[0]
@@ -722,38 +750,53 @@ export default class Home extends Vue {
 
   public mounted() {
     // permission check!
-    // const user = this.$store.getters.getUser
-    // if (!user || !user.permissions.includes('staff')) {
-    //   this.$store.dispatch('setNextUrl', 'editor')
-    //   this.$router.push({ name: 'login' })
-    //   return
-    // }
+    const user = this.$store.getters.getUser
+    if (!user || !user.permissions.includes('staff')) {
+      this.$store.dispatch('setNextUrl', 'editor')
+      this.$router.push({ name: 'login' })
+      return
+    }
     // end permission check
     this.getRecorridosByName()
   }
 
   public getRecorridosByName() {
     this.loading = true
+    const params: any = {}
+    if (this.showLinked) {
+      params.showall = true
+    }
     axios({
       method: 'get',
-      url: `${API_URL}/recorridos-por-ciudad/1/`,
+      url: `${API_URL}/recorridos-por-ciudad/${this.ciudad.id}/`,
+      params: params,
     }).then((response: any) => {
       this.recorridos = response.data
       this.loading = false
     })
   }
 
-  public findBestMatches(value: boolean) {
-    if (value) {
-      this.loading = true
-      axios({
-        method: 'get',
-        url: `${API_URL}/recorridos-best-matches/1/`,
-      }).then((response: any) => {
-        this.recorridos = response.data
-        this.loading = false
-      })
+  public findBestMatches() {
+    this.loading = true
+    axios({
+      method: 'get',
+      url: `${API_URL}/recorridos-best-matches/${this.ciudad.id}/`,
+    }).then((response: any) => {
+      this.recorridos = response.data
+      this.loading = false
+    })
+  }
+
+  public searchRecorridos() {
+    if (this.bestMatches) {
+      this.findBestMatches()
     } else {
+      this.getRecorridosByName()
+    }
+  }
+
+  public showLinkedToggle(value: boolean) {
+    if (value) {
       this.getRecorridosByName()
     }
   }
