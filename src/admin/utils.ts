@@ -5,7 +5,7 @@ export function editJOSM(osm_id: any, meters: number = 1): AxiosPromise {
         [out:json];(relation(${osm_id});)->.R;(way[highway](around[.R]:${meters});)->.W2;(._;.R;.W2;);out ids;
     `
   return axios
-    .get(`http://overpass-api.de/api/interpreter?data=${overpass_query}`)
+    .get(`https://overpass-api.de/api/interpreter?data=${overpass_query}`)
     .then(response => {
       const ids = response.data.elements
         .map(

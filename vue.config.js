@@ -28,6 +28,7 @@ module.exports = {
   outputDir: 'dist' + BASE_URL,
   devServer: {
     public: '0.0.0.0:' + process.env.HOST_PORT || '8080',
+    https: true,
   },
   chainWebpack: config => {
     config.plugin('prefetch').tap(options => {

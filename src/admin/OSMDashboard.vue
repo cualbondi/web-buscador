@@ -6,14 +6,15 @@
         <img :src="logo" />
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <h2>OpenStreetMap Transport Status Tool</h2>
+      <h2>OpenStreetMap Transport Health Tool 🚌🚑</h2>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="search"
-        label="Search"
+        label="Buscar"
         single-line
         hide-details
+        solo
       ></v-text-field>
     </v-toolbar>
 
@@ -56,21 +57,35 @@
             <v-btn
               small
               outline
-              @click="!props.item.loading150 && editJOSM(props.item, 150)"
+              @click="editJOSM(props.item, 150)"
+              :disabled="props.item.loading150"
             >
-              <v-icon small>
+              <v-icon small v-if="!props.item.loading150">
                 edit
               </v-icon>
+              <v-progress-circular
+                :width="2"
+                :size="15"
+                indeterminate
+                v-if="props.item.loading150"
+              ></v-progress-circular>
               JOSM <b>+150</b>m
             </v-btn>
             <v-btn
               small
               outline
-              @click="!props.item.loading400 && editJOSM(props.item, 400)"
+              @click="editJOSM(props.item, 400)"
+              :disabled="props.item.loading400"
             >
-              <v-icon small>
+              <v-icon small v-if="!props.item.loading400">
                 edit
               </v-icon>
+              <v-progress-circular
+                :width="2"
+                :size="15"
+                indeterminate
+                v-if="props.item.loading400"
+              ></v-progress-circular>
               JOSM <b>+400</b>m
             </v-btn>
             <v-btn
@@ -136,6 +151,18 @@ export default class OSMDashboard extends Vue {
     }
   }
 
+  public editJOSM(item: any, meters: number) {
+    Vue.set(item, `loading${meters}`, true);
+    editJOSM(item.osm_id, meters)
+      .then((response: any) => {
+        Vue.set(item, `loading${meters}`, false);
+      })
+      .catch((err: any) => {
+        Vue.set(item, `loading${meters}`, false);
+        console.error(err.toString());
+      })
+  }
+
   public mounted() {
     axios({
       method: 'get',
@@ -153,10 +180,12 @@ export default class OSMDashboard extends Vue {
 
 <style lang="scss">
 .table-container {
+  user-select: text;
   overflow: auto;
   height: calc(100vh - 60px);
   th {
     text-align: left;
+    cursor: pointer;
   }
   .v-datatable__actions {
     position: fixed;
