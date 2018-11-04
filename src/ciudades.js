@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     id: 6,
     slug: 'bahia-blanca',
