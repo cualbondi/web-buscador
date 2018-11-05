@@ -3,7 +3,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const path = require('path')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
-const CIUDADES = require('./src/ciudades')
+const CIUDADES = require('./src/ciudades.json')
 
 const production = process.env.NODE_ENV === 'production'
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '/mapa/'
