@@ -35,22 +35,24 @@ $space-top: 170px;
   .absearch {
     grid-template-columns: 100vw;
     &.no-results {
-      grid-template-rows: $searchfieldsHeight 1fr $footerAdsHeight;
-      grid-template-areas: 'top' 'map' 'ad';
+      grid-template-rows: $searchfieldsHeight $footerAdsHeight 1fr;
+      grid-template-areas: 'top' 'ad' 'map';
     }
     &.with-results {
-      grid-template-rows: $searchfieldsHeight 1fr 90px $footerAdsHeight;
+      grid-template-rows: $searchfieldsHeight $footerAdsHeight 1fr 90px;
       &.transbordo {
-        grid-template-rows: $searchfieldsHeight 1fr 180px $footerAdsHeight;
+        grid-template-rows: $searchfieldsHeight $footerAdsHeight 1fr 180px;
       }
       &.smallResults {
         grid-template-rows:
-          $searchfieldsHeight 100px calc(
+          $searchfieldsHeight
+          $footerAdsHeight
+          100px
+          calc(
             100% - 100px - #{$searchfieldsHeight} - #{$footerAdsHeight}
-          )
-          $footerAdsHeight;
+          );
       }
-      grid-template-areas: 'top' 'map' 'bottom' 'ad';
+      grid-template-areas: 'top' 'ad' 'map' 'bottom';
     }
   }
   .bottom {
@@ -59,12 +61,13 @@ $space-top: 170px;
 }
 @media (min-width: 601px) {
   .absearch {
-    grid-template-areas: 'top map' 'bottom map' 'ad map';
+    grid-template-areas: 'top map' 'ad map' 'bottom map';
     grid-template-rows:
-      $searchfieldsHeight calc(
+      $searchfieldsHeight
+      $footerAdsHeight
+      calc(
         100% - #{$searchfieldsHeight} - #{$footerAdsHeight}
-      )
-      $footerAdsHeight;
+      );
     grid-template-columns: 400px 1fr;
   }
 }
