@@ -820,7 +820,7 @@ export default class Home extends Vue {
 
 <style lang="scss" scoped>
 .navigation {
-  z-index: 10000;
+  z-index: 20001;
 }
 .editor {
   height: 100%;

@@ -116,6 +116,7 @@ export default class Home extends Vue {
   background-color: transparent !important;
 }
 .navigation {
+  z-index: 20001;
   .v-input {
     font-size: 14px;
   }
