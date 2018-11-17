@@ -132,7 +132,7 @@
           </v-list-tile-content>
            <v-list-tile-action>
              <v-tooltip bottom>
-                <v-icon slot="activator" color="success">{{rec.linked_recorrido_id ? 'link' : ''}}</v-icon>
+                <v-icon slot="activator" color="success" @click="cbSearchText='id:'+rec.linked_recorrido_id">{{rec.linked_recorrido_id ? 'link' : ''}}</v-icon>
                 <span>{{rec.linked_recorrido_id}}</span>
               </v-tooltip>
             </v-list-tile-action>
@@ -335,7 +335,7 @@ export default class Home extends Vue {
   get filteredRecorridosCB() {
     return this.recorridos.filter(
       rec =>
-        (rec.linea.nombre + rec.nombre).search(
+        ('id:' + rec.id + rec.linea.nombre + rec.nombre).search(
           new RegExp(this.cbSearchText, 'i'),
         ) !== -1,
     )
@@ -451,7 +451,8 @@ export default class Home extends Vue {
         osm_id: this.osm_id,
       },
     })
-      .then(() => {
+      .then((response) => {
+        this.recorridos.find(r => r.id === this.recorrido_selected).osm_id = response.data.osm_id
         this.loading = false
       })
       .catch(e => {
