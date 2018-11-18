@@ -170,6 +170,7 @@
     <l-map :max-zoom="25" :zoom="zoom" :center.sync="mapCenter" ref="mapref" class="map">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer', maxNativeZoom: 18, maxZoom: 25}" />
       <l-polyline :latLngs="recorrido_cb" color="#333399" ref="cb_layer" />
+      <polylinedecorator :patterns="patterns" :paths="[recorrido_cb]" />
       <l-polyline v-for="(way, $index) in poly_ways" :weight="9" :key="`a-${way.id}-${$index}`" :latLngs="way.nodes" color="#993333" :opacity="0.3" ref="osm_layer" />
       <polylinedecorator v-for="(way, $index) in poly_ways" :key="`b-${way.id}-${$index}`" :patterns="patterns" :paths="[way.nodes]" />
       <l-circle v-for="(way, $index) in poly_ways" :key="`c-${way.id}-${$index}`" :latLng="way.nodes[0]" color="#993333" :opacity="1" :fill="false" :radius="50" v-if="way.disconnected" :ref="$index + '_gap_layer'" />
