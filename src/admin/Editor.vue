@@ -170,7 +170,7 @@
     <l-map :max-zoom="25" :zoom="zoom" :center.sync="mapCenter" ref="mapref" class="map">
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer', maxNativeZoom: 18, maxZoom: 25}" />
       <l-polyline :latLngs="recorrido_cb" color="#333399" ref="cb_layer" />
-      <polylinedecorator :patterns="patterns" :paths="[recorrido_cb]" />
+      <polylinedecorator :patterns="patternscb" :paths="[recorrido_cb]" />
       <l-polyline v-for="(way, $index) in poly_ways" :weight="9" :key="`a-${way.id}-${$index}`" :latLngs="way.nodes" color="#993333" :opacity="0.3" ref="osm_layer" />
       <polylinedecorator v-for="(way, $index) in poly_ways" :key="`b-${way.id}-${$index}`" :patterns="patterns" :paths="[way.nodes]" />
       <l-circle v-for="(way, $index) in poly_ways" :key="`c-${way.id}-${$index}`" :latLng="way.nodes[0]" color="#993333" :opacity="1" :fill="false" :radius="50" v-if="way.disconnected" :ref="$index + '_gap_layer'" />
@@ -222,7 +222,7 @@ interface Way {
   disconnected: boolean
 }
 
-const decoratorBuilder = function(offset: string, opacity: number) {
+const decoratorBuilder = function(offset: string, opacity: number, color: string) {
   return {
     offset,
     repeat: 150,
@@ -230,7 +230,7 @@ const decoratorBuilder = function(offset: string, opacity: number) {
       pixelSize: 6,
       polygon: false,
       pathOptions: {
-        color: '#000',
+        color: color,
         opacity,
         weight: 2,
       },
@@ -238,7 +238,8 @@ const decoratorBuilder = function(offset: string, opacity: number) {
   }
 }
 
-const decoratorArrow1 = decoratorBuilder('8', 1)
+const decoratorArrow1 = decoratorBuilder('8', 1, '#000')
+const decoratorArrow2 = decoratorBuilder('8', 1, 'red')
 
 function remove_mutating(array: Way[], way: Way) {
   const index = array.indexOf(way)
@@ -330,6 +331,7 @@ export default class Home extends Vue {
   public recorridos_osm: Array<any> = []
   public recorrido_selected = null
   public patterns = [decoratorArrow1]
+  public patternscb = [decoratorArrow2]
   public selectedGap = 0
   public zoom = 13
 
