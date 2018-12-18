@@ -4,6 +4,7 @@ import Root from '@/views/Root.vue'
 import ABSearch from '@/views/ABSearch.vue'
 import Editor from '@/admin/Editor.vue'
 import OSMDashboard from '@/admin/OSMDashboard.vue'
+import OSMDashboardStats from '@/admin/OSMDashboardStats.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
@@ -39,6 +40,11 @@ export default new Router({
       path: `/osm/`,
       name: 'osm',
       component: OSMDashboard,
+    },
+    {
+      path: `/osm/stats/`,
+      name: 'osmstats',
+      component: OSMDashboardStats,
     },
     {
       path: `/:ciudadSlug(${ciudadesRegex})/`,
