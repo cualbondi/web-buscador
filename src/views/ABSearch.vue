@@ -1,11 +1,13 @@
 <template>
-  <div class="absearch" :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo, smallResults}">
+  <div
+    class="absearch"
+    :class="{'with-results': searchRequested, 'no-results': !searchRequested, transbordo, smallResults}"
+  >
+    <CityHeader/>
 
-    <CityHeader />
+    <SideMenu/>
 
-    <SideMenu />
-
-    <ABSearchFields class="top" />
+    <ABSearchFields class="top"/>
 
     <ABMap class="middle"/>
 
@@ -17,7 +19,7 @@
         style="display:inline-block;width:320px;height:50px"
         data-ad-client="ca-pub-1193419141108967"
         data-ad-slot="9086127115"
-        ></ins>
+      ></ins>
     </div>
   </div>
 </template>
@@ -31,7 +33,6 @@ import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
 import { Location, LatLngLocation } from '@/modules/absearch'
 import VueScript2 from 'vue-script2'
-
 const splitChar = '|'
 
 @Component({
@@ -67,7 +68,7 @@ export default class Home extends Vue {
     const location = this.$route.params.location || ''
 
     const [origin, destination, transbordo] = location.split(splitChar)
-
+    // take url as source of truth
     if (origin) {
       this.$store.dispatch('setA', this.url2location(origin))
     }
@@ -77,6 +78,7 @@ export default class Home extends Vue {
     if (transbordo === 'transbordo') {
       this.$store.dispatch('setTransbordo', true)
     }
+    // fallback to store values
     if (!origin && !destination && !transbordo) {
       this.updateUrl(this.$store.getters.A, this.$store.getters.B, !!transbordo)
     }
@@ -133,9 +135,9 @@ export default class Home extends Vue {
     if (location) {
       params.location = location
     }
-
+    
     this.$router.push({
-      name: 'absearch',
+      name: 'absearch-2',
       params,
     })
   }
