@@ -423,7 +423,6 @@ export default class Home extends Vue {
       this.selectedGap - 1 < 0
         ? this.numDisconnections - 1
         : this.selectedGap - 1
-    debugger
     const disconnection = this.disconnectedWays[this.selectedGap]
     const bounds = L.latLngBounds(
       L.latLng(disconnection.waya.nodes[disconnection.waya.nodes.length - 1]),
