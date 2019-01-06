@@ -11,7 +11,6 @@ declare module 'vue-headful'
 declare module 'vue-script2'
 declare module 'vue-google-adsense'
 declare module 'vue-apexcharts'
-declare module 'vue2-leaflet'
 
 // from https://github.com/vuetifyjs/vuetify/issues/3943#issuecomment-388034052
 declare module 'vuetify/es5/components/*' {
@@ -33,6 +32,7 @@ interface LatLng {
 interface Window {
   FB: any
   fbAsyncInit: any
+  L: any
 }
 
 interface Navigator {

@@ -36,6 +36,7 @@ import VDataTable from 'vuetify/es5/components/VDataTable'
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
 
+
 // polyfill String.startswidth
 if (!String.prototype.startsWith) {
   Object.defineProperty(String.prototype, 'startsWith', {

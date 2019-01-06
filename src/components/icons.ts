@@ -1,8 +1,7 @@
 import stopIconUrl from '@/assets/marker-stop.png'
 import downIconUrl from '@/assets/marker-stop.png'
 import upIconUrl from '@/assets/marker-stop.png'
-import * as vue2Leaflet from 'vue2-leaflet'
-const L = vue2Leaflet.L
+import { L } from 'vue2-leaflet'
 
 export const geoLocationIcon = new L.DivIcon({
   className: 'location-marker',
