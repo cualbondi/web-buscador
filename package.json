@@ -14,6 +14,7 @@
     "tslint": "tslint -c tslint.json --project ."
   },
   "dependencies": {
+    "apexcharts": "^2.4.2",
     "axios": "^0.18.0",
     "babel-plugin-transform-imports": "^1.5.0",
     "geobuf": "^3.0.0",
@@ -24,6 +25,7 @@
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.16",
     "vue-analytics": "^5.12.2",
+    "vue-apexcharts": "^1.2.7",
     "vue-class-component": "^6.0.0",
     "vue-headful": "^2.0.1",
     "vue-property-decorator": "^6.0.0",

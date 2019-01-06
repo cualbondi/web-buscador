@@ -24,7 +24,7 @@
   grid-area: ad;
   z-index: 20000;
   background: white;
-  text-align: center;
+  text-align: right;
 }
 
 $searchfieldsHeight: 120px;
@@ -35,24 +35,24 @@ $space-top: 170px;
   .absearch {
     grid-template-columns: 100vw;
     &.no-results {
-      grid-template-rows: $searchfieldsHeight $footerAdsHeight 1fr;
-      grid-template-areas: 'top' 'ad' 'map';
+      grid-template-rows: $searchfieldsHeight 1fr $footerAdsHeight;
+      grid-template-areas: 'top' 'map' 'ad';
     }
     &.with-results {
-      grid-template-rows: $searchfieldsHeight $footerAdsHeight 1fr 90px;
+      grid-template-rows: $searchfieldsHeight 1fr $footerAdsHeight 90px;
       &.transbordo {
-        grid-template-rows: $searchfieldsHeight $footerAdsHeight 1fr 180px;
+        grid-template-rows: $searchfieldsHeight 1fr $footerAdsHeight 180px;
       }
       &.smallResults {
         grid-template-rows:
           $searchfieldsHeight
-          $footerAdsHeight
           100px
+          $footerAdsHeight
           calc(
             100% - 100px - #{$searchfieldsHeight} - #{$footerAdsHeight}
           );
       }
-      grid-template-areas: 'top' 'ad' 'map' 'bottom';
+      grid-template-areas: 'top' 'map' 'ad' 'bottom';
     }
   }
   .bottom {

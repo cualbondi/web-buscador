@@ -752,6 +752,23 @@ export default class Home extends Vue {
   }
 
   public mounted() {
+
+    function textToClipboard (text: any) {
+      var dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+    }
+
+    window.addEventListener('keyup', (event: any) => {
+      if (event.key == 'c') {
+        const sel = this.recorrido_selected as any;
+        textToClipboard(sel ? sel : '');
+      }
+    })
+
     // permission check!
     const user = this.$store.getters.getUser
     if (!user || !user.permissions.includes('staff')) {
