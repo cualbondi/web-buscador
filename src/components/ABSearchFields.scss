@@ -4,9 +4,10 @@
   padding-bottom: 20px;
   grid-template-columns: 56px 1fr 56px;
   grid-template-rows: 50px 50px;
-  grid-template-areas: 'menu origin swap' 'blank destination swap';
+  grid-template-areas: 'menu origin share''blank destination swap';
   align-items: center;
 }
+
 .swap {
   grid-area: swap;
   display: flex;
@@ -14,13 +15,23 @@
   align-items: center;
 }
 
+.share {
+  grid-area: share;
+
+  i {
+    font-size: 20px;
+  }
+}
+
 .menubtn {
   grid-area: menu;
 }
+
 .input-group {
   padding-top: 0;
   margin-left: 20px;
 }
+
 .input-location {
   background-color: #3331;
   color: #eee;
@@ -32,9 +43,11 @@
   white-space: nowrap;
   overflow: hidden;
   cursor: text;
+
   &.origin {
     grid-area: origin;
     position: relative;
+
     .cue {
       position: absolute;
       display: block;
@@ -45,9 +58,11 @@
       background-color: #ffb703;
     }
   }
+
   &.destination {
     grid-area: destination;
     position: relative;
+
     .cue {
       position: absolute;
       display: block;

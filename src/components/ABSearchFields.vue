@@ -1,10 +1,9 @@
 <template>
   <div class="search-container primary shadow-right">
-    
     <v-btn class="menubtn" flat icon dark @click="openMenu">
-      <v-icon dark>menu</v-icon>  
+      <v-icon dark>menu</v-icon>
     </v-btn>
-    
+
     <div class="input-location origin" @click="searchOrigin">
       <div class="cue"></div>
       {{ locationOrigin }}
@@ -18,7 +17,10 @@
     <v-btn class="swap" flat icon dark @click="swap">
       <v-icon dark>swap_vert</v-icon>
     </v-btn>
-  
+
+    <v-btn class="share" flat icon dark @click="share">
+      <v-icon dark>share</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -71,6 +73,20 @@ export default class Home extends Vue {
   public swap() {
     ;(this as any).$ga.event('search', 'swapAB')
     this.$store.dispatch('swapAB')
+  }
+
+  public share() {
+    if (false) {
+      navigator
+        .share({
+          title: 'Cualbondi',
+          url: window.location.href,
+        })
+        .then(() => console.log('Successful share'))
+        .catch(error => console.log('Error sharing', error))
+    } else {
+      this.$store.dispatch('setShareModal', true)
+    }
   }
 }
 </script>

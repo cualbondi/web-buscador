@@ -13,6 +13,8 @@
 
     <ABSearchResults class="bottom" v-if="searchRequested"/>
 
+    <ShareModal v-if="shareModalOpen"/>
+
     <div class="footerad">
       <ins
         class="adsbygoogle"
@@ -31,6 +33,7 @@ import ABMap from '@/components/ABMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
+import ShareModal from '@/components/ShareModal.vue'
 import { Location, LatLngLocation } from '@/modules/absearch'
 import VueScript2 from 'vue-script2'
 const splitChar = '|'
@@ -42,6 +45,7 @@ const splitChar = '|'
     SideMenu,
     ABSearchResults,
     CityHeader,
+    ShareModal,
   },
   watch: {
     watchAB(value, oldVal) {
@@ -96,6 +100,9 @@ export default class Home extends Vue {
   get transbordo() {
     return this.$store.getters.transbordo
   }
+  get shareModalOpen() {
+    return this.$store.getters.shareModalOpen
+  }
 
   public location2url(location: LatLngLocation) {
     if (!location) {
@@ -135,7 +142,7 @@ export default class Home extends Vue {
     if (location) {
       params.location = location
     }
-    
+
     this.$router.push({
       name: 'absearch-2',
       params,

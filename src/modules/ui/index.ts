@@ -6,6 +6,7 @@ interface State {
   smallResults: boolean
   messageText: string
   messageActive: boolean
+  shareModalOpen: boolean
 }
 
 const module: Module<State, RootState> = {
@@ -14,6 +15,7 @@ const module: Module<State, RootState> = {
     smallResults: false,
     messageText: '',
     messageActive: false,
+    shareModalOpen: false,
   },
   actions: {
     toggleSmallResults({ commit }) {
@@ -32,6 +34,9 @@ const module: Module<State, RootState> = {
     setMessageActive({ commit }, active: boolean) {
       commit('setMessageActive', active)
     },
+    setShareModal({ commit }, active = true) {
+      commit('setShareModal', active)
+    },
   },
   mutations: {
     toggleSmallResults(state) {
@@ -46,6 +51,9 @@ const module: Module<State, RootState> = {
     setMessageActive(state, active: boolean) {
       state.messageActive = active
     },
+    setShareModal(state, active: boolean) {
+      state.shareModalOpen = active
+    },
   },
   getters: {
     getSmallResults(state) {
@@ -59,6 +67,9 @@ const module: Module<State, RootState> = {
     },
     messageText(state) {
       return state.messageText
+    },
+    shareModalOpen(state) {
+      return state.shareModalOpen
     },
   },
 }
