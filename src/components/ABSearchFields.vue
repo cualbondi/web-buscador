@@ -76,7 +76,7 @@ export default class Home extends Vue {
   }
 
   public share() {
-    if (false) {
+    if (navigator.share) {
       navigator
         .share({
           title: 'Cualbondi',
