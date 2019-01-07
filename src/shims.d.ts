@@ -2,7 +2,6 @@
 declare module '*.png'
 
 // modules without type definitions
-declare module 'vue2-leaflet'
 declare module 'geobuf'
 declare module 'vue2-leaflet-polylinedecorator'
 declare module 'vue2-leaflet-editablecirclemarker'
@@ -33,6 +32,7 @@ interface LatLng {
 interface Window {
   FB: any
   fbAsyncInit: any
+  L: any
 }
 
 interface Navigator {

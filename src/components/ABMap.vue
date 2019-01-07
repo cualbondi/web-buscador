@@ -47,11 +47,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker, LPolyline, LPopup } from 'vue2-leaflet'
-import { LeafletMouseEvent } from 'leaflet'
-import L from 'leaflet'
+import { LMap, LTileLayer, LMarker, LPolyline, LPopup, L } from 'vue2-leaflet'
 import 'leaflet-polylinedecorator'
-import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch'
@@ -68,7 +65,7 @@ const decoratorBuilder = function(offset: string, opacity: number) {
   return {
     offset,
     repeat: 150,
-    symbol: L.Symbol.arrowHead({
+    symbol: (L as any).Symbol.arrowHead({
       pixelSize: 6,
       polygon: false,
       pathOptions: {
@@ -199,7 +196,7 @@ export default class Map extends Vue {
   get radius() {
     return this.$store.getters.radius
   }
-  public onClick(e: LeafletMouseEvent) {
+  public onClick(e: L.LeafletMouseEvent) {
     this.$store.dispatch('clickMap', e.latlng)
   }
   get geolocation() {

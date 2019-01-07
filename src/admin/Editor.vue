@@ -202,9 +202,8 @@
 <script lang="ts">
 import axios from 'axios'
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { LCircle, LMap, LTileLayer, LPolyline } from 'vue2-leaflet'
+import { LCircle, LMap, LTileLayer, LPolyline, L  } from 'vue2-leaflet'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
-import L from 'leaflet'
 import 'leaflet-polylinedecorator'
 import { API_URL } from '@/config'
 import { gotoOSM, editJOSM } from './utils'
@@ -226,7 +225,7 @@ const decoratorBuilder = function(offset: string, opacity: number, color: string
   return {
     offset,
     repeat: 150,
-    symbol: L.Symbol.arrowHead({
+    symbol: (L as any).Symbol.arrowHead({
       pixelSize: 6,
       polygon: false,
       pathOptions: {

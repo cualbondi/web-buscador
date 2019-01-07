@@ -27,10 +27,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
-import { LeafletMouseEvent } from 'leaflet'
-import L from 'leaflet'
-import 'leaflet-editablecirclemarker'
+import { LMap, LTileLayer, LMarker, L } from 'vue2-leaflet'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import { geoLocationIcon } from '@/components/icons'
 
@@ -69,7 +66,7 @@ export default class Map extends Vue {
 
   public zoom = this.$store.getters.getCiudadZoom
 
-  public move(e: LeafletMouseEvent) {
+  public move(e: L.LeafletMouseEvent) {
     if (!this.updatingGeolocation) {
       this.center = e.target.getCenter()
     }

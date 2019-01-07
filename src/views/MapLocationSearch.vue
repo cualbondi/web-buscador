@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MapLocationPicker from '@/components/MapLocationPicker.vue'
-import L from 'leaflet'
+import { L } from 'vue2-leaflet'
 import { LatLngLocation } from '@/modules/absearch'
 import {
   geoLocationIcon,
