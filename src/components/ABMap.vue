@@ -49,7 +49,6 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker, LPolyline, LPopup, L } from 'vue2-leaflet'
 import 'leaflet-polylinedecorator'
-import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch'
