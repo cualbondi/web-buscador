@@ -25,8 +25,26 @@ const module: Module<State, RootState> = {
     ciudad: null,
   },
   actions: {
-    setCiudad({ commit }, slug) {
-      const ciudad = CS.find(c => c.slug === slug)
+    setCiudad({ commit }, slug: string) {
+      // slug can be a slug of a city or a slug plus "|" plus coordinates.
+      // ex. slug: "la-plata"
+      // ex. with geo: "villa-dominico|-57.23,-48.3423"
+      let ciudad = CS.find(c => c.slug === slug)
+      if (!ciudad && slug.includes('|')) {
+        const parts = slug.split('|')
+        try {
+          ciudad = {
+            slug: parts[0],
+            nombre: parts[0],
+            latlng: parts[1].split(',').map(n => parseFloat(n)) as [number],
+            zoom: 12,
+          }
+        } catch (e) {
+          console.log('ERROR, NO SE PUDO PARSEAR CIUDAD!')
+          console.log(e)
+          ciudad = CS[0]
+        }
+      }
       commit('setCiudad', ciudad)
     },
     // geolocate promise that can be resolved from cache

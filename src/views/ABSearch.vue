@@ -136,8 +136,15 @@ export default class Home extends Vue {
     }
     const location = locationArr.slice(0, i + 1).join(splitChar)
 
+    const ciudad = this.$store.getters.getCiudad
+
+    let ciudadSlug = ciudad.slug
+    if (!ciudad.id) {
+      ciudadSlug = `${ciudad.slug}|${ciudad.latlng[0]},${ciudad.latlng[1]}`
+    }
+
     const params: any = {
-      ciudadSlug: this.$store.getters.getCiudad.slug,
+      ciudadSlug,
     }
     if (location) {
       params.location = location

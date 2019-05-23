@@ -14,8 +14,9 @@ import CIUDADES from '@/ciudades'
 
 Vue.use(Router)
 
-const CS: any[] = CIUDADES
-const ciudadesRegex = CS.map(c => c.slug).join('|')
+// const CS: any[] = CIUDADES
+// const ciudadesRegex = CS.map(c => c.slug).join('|')
+// const ciudadesRegex = '.*'
 
 export default new Router({
   mode: 'history',
@@ -47,22 +48,22 @@ export default new Router({
       component: OSMDashboardStats,
     },
     {
-      path: `/:ciudadSlug(${ciudadesRegex})/`,
+      path: `/:ciudadSlug/`,
       name: 'absearch',
       component: ABSearch,
     },
     {
-      path: `/:ciudadSlug(${ciudadesRegex})/location/:point(origin|destination)`,
+      path: `/:ciudadSlug/location/:point(origin|destination)`,
       name: 'location',
       component: LocationSearch,
     },
     {
-      path: `/:ciudadSlug(${ciudadesRegex})/location/:point(origin|destination)/map`,
+      path: `/:ciudadSlug/location/:point(origin|destination)/map`,
       name: 'map-location',
       component: MapLocationSearch,
     },
     {
-      path: `/:ciudadSlug(${ciudadesRegex})/:location?`,
+      path: `/:ciudadSlug/:location?`,
       name: 'absearch-2',
       component: ABSearch,
     },
