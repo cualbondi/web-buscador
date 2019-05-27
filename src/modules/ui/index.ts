@@ -19,7 +19,7 @@ const module: Module<State, RootState> = {
     messageText: '',
     messageActive: false,
     shareModalOpen: false,
-    tab: 'recorridos',
+    tab: 'directions',
   },
   actions: {
     toggleSmallResults({ commit }) {

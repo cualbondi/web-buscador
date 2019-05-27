@@ -4,10 +4,10 @@
       <v-icon dark>menu</v-icon>
     </v-btn>
     <div class="tabs">
-      <v-btn class="directions" flat dark @click="gotoDirections">
+      <v-btn class="directions" :class="{active: getTab === 'directions'}" flat dark @click="gotoDirections">
         <v-icon dark>directions</v-icon>
       </v-btn>
-      <v-btn class="recorridos" flat dark @click="gotoRecorridos">
+      <v-btn class="recorridos" :class="{active: getTab === 'recorridos'}" flat dark @click="gotoRecorridos">
         <v-icon dark>directions_bus</v-icon>
       </v-btn>
     </div>
@@ -22,6 +22,10 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class TopBar extends Vue {
+
+  get getTab() {
+    return this.$store.getters.getTab
+  }
 
   public openMenu() {
     this.$store.dispatch('openSideMenu')
@@ -65,7 +69,7 @@ export default class TopBar extends Vue {
     align-items: center;
     > button {
       width: 120px;
-      &.directions {
+      &.active {
         background-color: #4FA9D4;
         border-radius: 4px 4px 0px 0px;
         padding: 0;

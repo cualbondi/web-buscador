@@ -44,8 +44,8 @@ export default new Router({
       component: OSMDashboardStats,
     },
     {
-      path: `/:ciudadSlug/:location?`,
-      name: 'absearch-2',
+      path: `/:ciudadSlug/recorridos`,
+      name: 'recorridos',
       component: Recorridos,
     },
     {

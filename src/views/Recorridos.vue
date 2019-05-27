@@ -7,9 +7,9 @@
 
     <SideMenu/>
 
-    <ABSearchFields class="top"/>
+    <RecorridosSearchFields class="top"/>
 
-    <ABMap class="middle"/>
+    <RecorridosMap class="middle"/>
 
     <ABSearchResults class="bottom" v-if="searchRequested"/>
 
@@ -28,8 +28,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import ABSearchFields from '@/components/ABSearchFields.vue'
-import ABMap from '@/components/ABMap.vue'
+import RecorridosSearchFields from '@/components/RecorridosSearchFields.vue'
+import RecorridosMap from '@/components/RecorridosMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
 import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
@@ -40,8 +40,8 @@ const splitChar = '|'
 
 @Component({
   components: {
-    ABSearchFields,
-    ABMap,
+    RecorridosSearchFields,
+    RecorridosMap,
     SideMenu,
     ABSearchResults,
     CityHeader,
@@ -125,63 +125,63 @@ export default class Home extends Vue {
     B: LatLngLocation,
     transbordo: boolean,
   ): void {
-    const urlA = this.location2url(A)
-    const urlB = this.location2url(B)
-    const urlTransbordo = transbordo ? 'transbordo' : ''
-    const locationArr = [urlA, urlB, urlTransbordo]
-    // this is to trim the last url params if they are falsey
-    let i = locationArr.length - 1
-    while (i > 0 && !locationArr[i]) {
-      i--
-    }
-    const location = locationArr.slice(0, i + 1).join(splitChar)
+    // const urlA = this.location2url(A)
+    // const urlB = this.location2url(B)
+    // const urlTransbordo = transbordo ? 'transbordo' : ''
+    // const locationArr = [urlA, urlB, urlTransbordo]
+    // // this is to trim the last url params if they are falsey
+    // let i = locationArr.length - 1
+    // while (i > 0 && !locationArr[i]) {
+    //   i--
+    // }
+    // const location = locationArr.slice(0, i + 1).join(splitChar)
 
-    const ciudad = this.$store.getters.getCiudad
+    // const ciudad = this.$store.getters.getCiudad
 
-    let ciudadSlug = ciudad.slug
-    if (!ciudad.id) {
-      ciudadSlug = `${ciudad.slug}|${ciudad.latlng[0]},${ciudad.latlng[1]}`
-    }
+    // let ciudadSlug = ciudad.slug
+    // if (!ciudad.id) {
+    //   ciudadSlug = `${ciudad.slug}|${ciudad.latlng[0]},${ciudad.latlng[1]}`
+    // }
 
-    const params: any = {
-      ciudadSlug,
-    }
-    if (location) {
-      params.location = location
-    }
+    // const params: any = {
+    //   ciudadSlug,
+    // }
+    // if (location) {
+    //   params.location = location
+    // }
 
-    this.$router.push({
-      name: 'absearch-2',
-      params,
-    })
+    // this.$router.push({
+    //   name: 'absearch-2',
+    //   params,
+    // })
   }
 
   private url2location(location: string): Location | undefined {
-    if (location === 'geolocation') {
-      return { type: 'geolocation' }
-    }
+    // if (location === 'geolocation') {
+    //   return { type: 'geolocation' }
+    // }
 
-    const latLongName = location.split(',')
-    const lng = parseFloat(latLongName.shift() || '')
-    const lat = parseFloat(latLongName.shift() || '')
-    const name = latLongName.join(',')
+    // const latLongName = location.split(',')
+    // const lng = parseFloat(latLongName.shift() || '')
+    // const lat = parseFloat(latLongName.shift() || '')
+    // const name = latLongName.join(',')
 
-    if (!isNaN(lat) && !isNaN(lng)) {
-      if (name && name.trim()) {
-        return {
-          lat,
-          lng,
-          name,
-          type: 'geocoder',
-        }
-      } else {
-        return {
-          lat,
-          lng,
-          type: 'latlng',
-        }
-      }
-    }
+    // if (!isNaN(lat) && !isNaN(lng)) {
+    //   if (name && name.trim()) {
+    //     return {
+    //       lat,
+    //       lng,
+    //       name,
+    //       type: 'geocoder',
+    //     }
+    //   } else {
+    //     return {
+    //       lat,
+    //       lng,
+    //       type: 'latlng',
+    //     }
+    //   }
+    // }
   }
 
   public mounted() {
