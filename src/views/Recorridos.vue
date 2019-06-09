@@ -9,9 +9,9 @@
 
     <RecorridosSearchFields class="top"/>
 
-    <RecorridosMap class="middle"/>
+    <RecorridosSearchMap class="middle"/>
 
-    <ABSearchResults class="bottom" v-if="searchRequested"/>
+    <RecorridosSearchResults class="bottom" v-if="searchRequested"/>
 
     <ShareModal v-if="shareModalOpen"/>
 
@@ -29,9 +29,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import RecorridosSearchFields from '@/components/RecorridosSearchFields.vue'
-import RecorridosMap from '@/components/RecorridosMap.vue'
+import RecorridosSearchMap from '@/components/RecorridosSearchMap.vue'
 import SideMenu from '@/components/SideMenu.vue'
-import ABSearchResults from '@/components/ABSearchResults/ABSearchResults.vue'
+import RecorridosSearchResults from '@/components/RecorridosSearchResults/RecorridosSearchResults.vue'
 import CityHeader from '@/components/CityHeader.vue'
 import ShareModal from '@/components/ShareModal.vue'
 import { Location, LatLngLocation } from '@/modules/absearch'
@@ -41,9 +41,9 @@ const splitChar = '|'
 @Component({
   components: {
     RecorridosSearchFields,
-    RecorridosMap,
+    RecorridosSearchMap,
     SideMenu,
-    ABSearchResults,
+    RecorridosSearchResults,
     CityHeader,
     ShareModal,
   },
@@ -89,19 +89,19 @@ export default class Home extends Vue {
   }
 
   get recorridos() {
-    return this.$store.getters.getRecorridos
+    return this.$store.getters.getRecorridosSearchBus
   }
   get searchRequested() {
-    return this.$store.getters.searchRequested
+    return this.$store.getters.searchRequestedSearchBus
   }
   get smallResults() {
-    return this.$store.getters.getSmallResults
+    return this.$store.getters.getSmallResultsSearchBus
   }
   get transbordo() {
-    return this.$store.getters.transbordo
+    return this.$store.getters.transbordoSearchBus
   }
   get shareModalOpen() {
-    return this.$store.getters.shareModalOpen
+    return this.$store.getters.shareModalOpenSearchBus
   }
 
   public location2url(location: LatLngLocation) {
@@ -157,6 +157,7 @@ export default class Home extends Vue {
   }
 
   private url2location(location: string): Location | undefined {
+    return null
     // if (location === 'geolocation') {
     //   return { type: 'geolocation' }
     // }

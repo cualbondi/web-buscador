@@ -103,8 +103,8 @@ class GeolocationObservable {
   private takeManyObservers: { [id: number]: Observer }
   // array of observers for next value
   private takeFirstObservers: Array<{
-    resolve: any
-    reject: any
+    resolve: any,
+    reject: any,
   }>
 
   private constructor() {

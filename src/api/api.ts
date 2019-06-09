@@ -7,13 +7,25 @@ import axios, {
 } from 'axios'
 import { API_URL } from '@/config'
 import { geobufToLatlngs, MakeStatusPromise, StatusPromise } from '@/utils'
-import { Recorrido, ApiResponse, GeocoderResponse } from './schema'
+import { Recorrido, Itinerario, ApiResponse, GeocoderResponse } from './schema'
 
 const client = axios.create({
   baseURL: API_URL,
 })
 
 const CancelToken = axios.CancelToken
+
+const convertSimpleResults = function convertSimpleResultsGeobufToLatlngs(
+  data: ApiResponse<Itinerario>,
+) {
+  return {
+    ...data,
+    results: data.results.map((recorrido: Itinerario) => ({
+      ...recorrido,
+      ruta_corta: geobufToLatlngs(recorrido.ruta_corta),
+    })),
+  }
+}
 
 const convertResults = function convertResultsGeobufToLatlngs(
   data: ApiResponse<Recorrido>,
@@ -39,6 +51,11 @@ interface RecorridosParams {
   page: number
   ciudadSlug: string
   transbordo?: boolean
+}
+interface RecorridosSearchParams {
+  query: string
+  page: number
+  ciudadSlug: string
 }
 type AxiosGetArguments<T = any> = (
   url: string,
@@ -88,6 +105,17 @@ class API {
     const url = `/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
 
     return this.getRecorridos(url).then(res => convertResults(res.data))
+  }
+
+  public recorridosSearch(params: RecorridosSearchParams): Promise<ApiResponse<Itinerario>> {
+    const {
+      query,
+      page = 1,
+      ciudadSlug,
+    } = params
+    const url = `/recorridos/?q=${query}&c=${ciudadSlug}&page=${page}`
+
+    return this.getRecorridos(url).then(res => convertSimpleResults(res.data))
   }
 
   public geocoder_suggest(

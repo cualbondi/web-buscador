@@ -3,10 +3,20 @@
 
     <TopBar />
 
-    <div class="input-location origin" @click="searchOrigin">
-      <div class="cue"></div>
-      {{ locationOrigin }}
-    </div>
+    <v-text-field
+      label="Buscar bus"
+      append-icon="search"
+      single-line
+      full-width
+      hide-details
+      class="searchInput"
+      color="white"
+      dark
+      @click:append="search"
+      @keyup.enter="search"
+      v-model="searchString"
+      type="search"
+    ></v-text-field>
 
   </div>
 </template>
@@ -21,28 +31,24 @@ import TopBar from '@/components/TopBar.vue'
     TopBar,
   },
 })
-export default class Home extends Vue {
+export default class RecorridoSearchFields extends Vue {
 
-  get locationOrigin() {
-    const location: Location | null = this.$store.getters.A
-    if (location === null) {
-      return 'Selecciona un origen'
-    }
-    if (location.type === 'geolocation') {
-      return 'Tu ubicacion'
-    }
-    if (location.type === 'geocoder') {
-      return location.name
-    }
-    return `${location.lat}, ${location.lng}`
-  }
+  public searchString: string = ''
+  public search2: string = ''
 
-  public searchOrigin() {
-    this.$router.push({ name: 'location', params: { point: 'origin' } })
+  search() {
+    this.$store.dispatch('setSearchStringSearchBus', this.searchString)
+    this.$store.dispatch('searchBus', this.searchString)
   }
 
 }
 </script>
 
-<style lang="scss" src="./ABSearchFields.scss" scoped>
+<style lang="scss" scoped>
+.searchInput {
+  background-color: #4FA9D4;
+}
+.v-text-field.v-text-field--full-width.v-input {
+  margin: -2px 14px;
+}
 </style>
