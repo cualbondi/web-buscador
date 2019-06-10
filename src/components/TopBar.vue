@@ -34,13 +34,23 @@ export default class TopBar extends Vue {
   public gotoDirections() {
     ;(this as any).$ga.event('tabs', 'directions')
     this.$store.dispatch('setTab', 'directions')
-    this.$router.push(`/${this.$store.getters.getCiudad.slug}/`)
+    const ciudad = this.$store.getters.getCiudad
+    let ciudadSlug = ciudad.slug
+    if (!ciudad.id) {
+      ciudadSlug = `${ciudad.slug}|${ciudad.latlng[1]},${ciudad.latlng[0]}`
+    }
+    this.$router.push(`/${ciudadSlug}/`)
   }
 
   public gotoRecorridos() {
     ;(this as any).$ga.event('tabs', 'recorridos')
     this.$store.dispatch('setTab', 'recorridos')
-    this.$router.push(`/${this.$store.getters.getCiudad.slug}/recorridos`)
+    const ciudad = this.$store.getters.getCiudad
+    let ciudadSlug = ciudad.slug
+    if (!ciudad.id) {
+      ciudadSlug = `${ciudad.slug}|${ciudad.latlng[1]},${ciudad.latlng[0]}`
+    }
+    this.$router.push(`/${ciudadSlug}/recorridos`)
   }
 
   public share() {

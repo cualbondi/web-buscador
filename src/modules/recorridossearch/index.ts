@@ -40,12 +40,12 @@ const module: Module<State, RootState> = {
       dispatch('searchRequestedSearchBus')
       commit('startLoadingResultsSearchBus')
       commit('setApiErrorSearchBus', false)
-      const ciudadSlug = getters.getCiudad.slug
+      const ciudad = getters.getCiudad
       const searchString = getters.getSearchStringSearchBus
       const params = {
         query: searchString,
         page: state.resultsPage,
-        ciudadSlug,
+        point: ciudad.latlng,
       }
       api.recorridosSearch(params)
         .then((data: any) => {
@@ -69,12 +69,12 @@ const module: Module<State, RootState> = {
       }
       commit('startLoadingMoreResultsSearchBus')
       commit('setApiErrorSearchBus', false)
-      const ciudadSlug = getters.getCiudad.slug
+      const ciudad = getters.getCiudad
       const searchString = getters.getSearchStringSearchBus
       const params = {
         query: searchString,
         page: state.resultsPage + 1,
-        ciudadSlug,
+        point: ciudad.latlng,
       }
       api.recorridosSearch(params)
         .then((data: any) => {

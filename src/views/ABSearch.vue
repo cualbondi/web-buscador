@@ -140,7 +140,7 @@ export default class Home extends Vue {
 
     let ciudadSlug = ciudad.slug
     if (!ciudad.id) {
-      ciudadSlug = `${ciudad.slug}|${ciudad.latlng[0]},${ciudad.latlng[1]}`
+      ciudadSlug = `${ciudad.slug}|${ciudad.latlng[1]},${ciudad.latlng[0]}`
     }
 
     const params: any = {

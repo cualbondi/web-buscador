@@ -37,7 +37,7 @@
           <v-list-tile-content>
             <v-list-tile-title v-html="result.nombre"></v-list-tile-title>
             <v-list-tile-sub-title>de {{result.inicio}} a {{result.fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.long_bondi/100)/10}}km</v-list-tile-sub-title>
+            <v-list-tile-sub-title><v-icon>straighten</v-icon>{{Math.floor(result.long_bondi/100)/10}}km</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
       </template>

@@ -49,13 +49,13 @@ interface RecorridosParams {
   latB: number
   rad: number
   page: number
-  ciudadSlug: string
   transbordo?: boolean
 }
 interface RecorridosSearchParams {
   query: string
   page: number
-  ciudadSlug: string
+  point: string
+  meters?: number
 }
 type AxiosGetArguments<T = any> = (
   url: string,
@@ -98,11 +98,10 @@ class API {
       latB,
       rad,
       page = 1,
-      ciudadSlug,
       transbordo = false,
     } = params
     const l = `${lngA},${latA},${rad}|${lngB},${latB},${rad}`
-    const url = `/recorridos/?l=${l}&c=${ciudadSlug}&page=${page}&t=${transbordo}`
+    const url = `/recorridos/?l=${l}&page=${page}&t=${transbordo}`
 
     return this.getRecorridos(url).then(res => convertResults(res.data))
   }
@@ -111,9 +110,10 @@ class API {
     const {
       query,
       page = 1,
-      ciudadSlug,
+      meters = 10000,
+      point,
     } = params
-    const url = `/recorridos/?q=${query}&c=${ciudadSlug}&page=${page}`
+    const url = `/recorridos/?q=${query}&l=${point[1]},${point[0]},${meters}&page=${page}`
 
     return this.getRecorridos(url).then(res => convertSimpleResults(res.data))
   }
