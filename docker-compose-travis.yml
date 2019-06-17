@@ -6,6 +6,7 @@ services:
         image: cypress/base:8
         depends_on:
           - apiv3
+        env_file: .env.local.travis
         ports:
             - 8083:8080
         command: tail -f /dev/null

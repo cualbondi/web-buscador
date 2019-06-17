@@ -73,7 +73,7 @@ export function checkGeolocationPermission(
 ) {
   // Check for Geolocation API permissions
   if ('permissions' in navigator) {
-    ;(navigator as any).permissions
+    (navigator as any).permissions
       .query({ name: 'geolocation' })
       .then(function(permissionStatus: any) {
         onPermissionChanged(permissionStatus.state)
@@ -103,8 +103,8 @@ class GeolocationObservable {
   private takeManyObservers: { [id: number]: Observer }
   // array of observers for next value
   private takeFirstObservers: Array<{
-    resolve: any
-    reject: any
+    resolve: any,
+    reject: any,
   }>
 
   private constructor() {

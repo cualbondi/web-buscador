@@ -36,7 +36,7 @@ const module: Module<State, RootState> = {
           ciudad = {
             slug: parts[0],
             nombre: parts[0],
-            latlng: parts[1].split(',').map(n => parseFloat(n)) as [number],
+            latlng: parts[1].split(',').reverse().map(n => parseFloat(n)) as [number],
             zoom: 12,
           }
         } catch (e) {

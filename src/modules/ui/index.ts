@@ -1,12 +1,15 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
 
+type ITab = 'recorridos' | 'directions'
+
 interface State {
   sideMenuOpen: boolean
   smallResults: boolean
   messageText: string
   messageActive: boolean
   shareModalOpen: boolean
+  tab: ITab
 }
 
 const module: Module<State, RootState> = {
@@ -16,6 +19,7 @@ const module: Module<State, RootState> = {
     messageText: '',
     messageActive: false,
     shareModalOpen: false,
+    tab: 'directions',
   },
   actions: {
     toggleSmallResults({ commit }) {
@@ -37,6 +41,9 @@ const module: Module<State, RootState> = {
     setShareModal({ commit }, active = true) {
       commit('setShareModal', active)
     },
+    setTab({ commit }, tab: ITab) {
+      commit('setTab', tab)
+    },
   },
   mutations: {
     toggleSmallResults(state) {
@@ -54,6 +61,9 @@ const module: Module<State, RootState> = {
     setShareModal(state, active: boolean) {
       state.shareModalOpen = active
     },
+    setTab(state, tab: ITab) {
+      state.tab = tab
+    },
   },
   getters: {
     getSmallResults(state) {
@@ -70,6 +80,9 @@ const module: Module<State, RootState> = {
     },
     shareModalOpen(state) {
       return state.shareModalOpen
+    },
+    getTab(state) {
+      return state.tab
     },
   },
 }

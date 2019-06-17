@@ -10,16 +10,24 @@
         {{ messageText }}
         <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
       </v-snackbar>
-
+      <ShareModal v-if="shareModalOpen"/>
     </div>
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import ShareModal from '@/components/ShareModal.vue'
 
-@Component({})
+@Component({
+  components: {
+    ShareModal,
+  }
+})
 export default class App extends Vue {
+  get shareModalOpen() {
+    return this.$store.getters.shareModalOpen
+  }
   get messageActive() {
     return this.$store.getters.messageActive
   }

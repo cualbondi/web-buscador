@@ -3,7 +3,7 @@ interface Parada {
   latlng: string
   nombre: string
 }
-interface Itinerario {
+export interface Itinerario {
   id: number
   ruta_corta: string
   long_bondi: number
@@ -33,7 +33,7 @@ export interface GeocoderResponse {
   nombre: string
   geom: {
     type: string
-    coordinates: number[]
+    coordinates: number[],
   }
   precision: number
   tipo: string

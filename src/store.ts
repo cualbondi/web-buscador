@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import absearch from '@/modules/absearch'
+import recorridossearch from '@/modules/recorridossearch'
 import ui from '@/modules/ui'
 import core from '@/modules/core'
 import geocoder from '@/modules/geocoder'
@@ -20,6 +21,7 @@ const store = new Vuex.Store<RootState>({
   getters: {},
   modules: {
     absearch,
+    recorridossearch,
     ui,
     core,
     geocoder,

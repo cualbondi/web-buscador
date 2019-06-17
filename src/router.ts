@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Root from '@/views/Root.vue'
 import ABSearch from '@/views/ABSearch.vue'
+import Recorridos from '@/views/Recorridos.vue'
 import Editor from '@/admin/Editor.vue'
 import OSMDashboard from '@/admin/OSMDashboard.vue'
 import OSMDashboardStats from '@/admin/OSMDashboardStats.vue'
@@ -10,13 +11,8 @@ import MapLocationSearch from '@/views/MapLocationSearch.vue'
 import NotFound from '@/views/NotFound.vue'
 import Login from '@/views/Login.vue'
 import { BASE_URL } from '@/config'
-import CIUDADES from '@/ciudades'
 
 Vue.use(Router)
-
-// const CS: any[] = CIUDADES
-// const ciudadesRegex = CS.map(c => c.slug).join('|')
-// const ciudadesRegex = '.*'
 
 export default new Router({
   mode: 'history',
@@ -46,6 +42,11 @@ export default new Router({
       path: `/osm/stats/`,
       name: 'osmstats',
       component: OSMDashboardStats,
+    },
+    {
+      path: `/:ciudadSlug/recorridos/:searchString?`,
+      name: 'recorridos',
+      component: Recorridos,
     },
     {
       path: `/:ciudadSlug/`,
