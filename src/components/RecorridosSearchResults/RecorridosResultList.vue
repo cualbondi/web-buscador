@@ -17,7 +17,7 @@
             <span class="avatar"><v-icon>directions_bus</v-icon></span>
             <span class="title" v-html="results[selectedIndex].nombre"></span>
             <span class="description">de {{results[selectedIndex].inicio}} a {{results[selectedIndex].fin}}</span>
-            <span class="distances"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(results[selectedIndex].long_bondi/100)/10}}km</span>
+            <span class="distances"><v-icon>straighten</v-icon>{{Math.floor(results[selectedIndex].long_bondi/100)/10}}km</span>
           </span>
         </transition>
 
