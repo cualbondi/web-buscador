@@ -24,7 +24,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class TopBar extends Vue {
 
   get getTab() {
-    return this.$store.getters.getTab
+    return this.$route.name == 'recorridos' ? 'recorridos' : 'directions'
   }
 
   public openMenu() {
@@ -50,7 +50,7 @@ export default class TopBar extends Vue {
     if (!ciudad.id) {
       ciudadSlug = `${ciudad.slug}|${ciudad.latlng[1]},${ciudad.latlng[0]}`
     }
-    this.$router.push(`/${ciudadSlug}/recorridos`)
+    this.$router.push(`/${ciudadSlug}/recorridos/`)
   }
 
   public share() {

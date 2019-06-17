@@ -33,6 +33,9 @@ const module: Module<State, RootState> = {
     setSearchStringSearchBus({ commit }, searchString: string) {
       commit('setSearchStringSearchBus', searchString)
     },
+    clearResultsSearchBus({ commit }) {
+      commit('clearResultsSearchBus')
+    },
     searchBus({ dispatch, commit, state, getters }) {
       if (!state.searchString) {
         return
@@ -116,6 +119,17 @@ const module: Module<State, RootState> = {
   mutations: {
     setSearchRequestedSearchBus(state) {
       state.searchRequested = true
+    },
+    clearResultsSearchBus(state) {
+      state.searchString = ''
+      state.results = []
+      state.resultSelected = 0
+      state.resultsLoading = false
+      state.resultsPage = 1
+      state.resultsMore = true
+      state.resultsMoreLoading = false
+      state.searchRequested = false
+      state.apiError = false
     },
     startLoadingResultsSearchBus(state) {
       state.resultsLoading = true

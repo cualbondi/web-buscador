@@ -6,7 +6,7 @@
   </div>
 
   <template v-else>
-    <div v-if="geolocationError || apiError" class="column retry">
+    <div v-if="apiError" class="column retry">
       <div class="description">Volver a intentar</div>
       <v-btn fab dark small color="primary" @click="retry">
         <v-icon dark>cached</v-icon>

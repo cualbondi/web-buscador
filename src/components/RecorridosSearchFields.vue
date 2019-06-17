@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { Location } from '@/modules/absearch'
 import TopBar from '@/components/TopBar.vue'
 
@@ -33,12 +33,29 @@ import TopBar from '@/components/TopBar.vue'
 })
 export default class RecorridoSearchFields extends Vue {
 
+  @Prop()
+  public onSearch: (arg0: string) => void
+
   public searchString: string = ''
   public search2: string = ''
+
+  public created() {
+    // when component is created (i.e from route change)
+    // if we have a query param, update the store with that value
+    // if not have the query param, set it from $store value
+
+    const location = this.$route.params.searchString || ''
+    this.$store.dispatch('clearResultsSearchBus')
+    if (location) {
+      this.searchString = location
+      this.search()
+    }
+  }
 
   search() {
     this.$store.dispatch('setSearchStringSearchBus', this.searchString)
     this.$store.dispatch('searchBus', this.searchString)
+    this.onSearch(this.searchString)
   }
 
 }
