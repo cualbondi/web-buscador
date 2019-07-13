@@ -23,7 +23,7 @@
               <span class="avatar avatar2"><v-icon>directions_bus</v-icon></span>
               <span class="title title2" v-html="results[selectedIndex].itinerario[1].nombre"></span>
               <span class="descripcion description2">de {{results[selectedIndex].itinerario[1].inicio}} a {{results[selectedIndex].itinerario[1].fin}}</span>
-              <span class="distances distances2"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_pata+results[selectedIndex].itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((results[selectedIndex].itinerario[0].long_bondi+results[selectedIndex].itinerario[1].long_bondi)/100)/10}}km</span>
+              <span class="distances distances2"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].long_pata_transbordo+results[selectedIndex].itinerario[0].long_pata+results[selectedIndex].itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((results[selectedIndex].itinerario[0].long_bondi+results[selectedIndex].itinerario[1].long_bondi)/100)/10}}km</span>
             </template>
           </span>
         </transition>
