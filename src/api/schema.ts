@@ -15,6 +15,7 @@ export interface Itinerario {
   foto: string
   p1: null | Parada
   p2: null | Parada
+  stops: Parada[]
 }
 export interface Recorrido {
   id: number
