@@ -7,6 +7,22 @@ export const geoLocationIcon = new L.DivIcon({
   className: 'location-marker',
 })
 
+export const miniStopIcon = new L.DivIcon({
+  className: 'ministop-marker',
+})
+
+export const StopIconA = new L.DivIcon({
+  className: 'stop-marker-a',
+})
+
+export const StopIconB = new L.DivIcon({
+  className: 'stop-marker-b',
+})
+
+export const StopIconT = new L.DivIcon({
+  className: 'stop-marker-t',
+})
+
 export const StopIcon = L.icon(
   Object.assign({}, L.Icon.Default.prototype.options, {
     iconUrl: stopIconUrl,

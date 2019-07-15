@@ -7,11 +7,14 @@
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[0].ruta_corta]" />
-        <l-marker v-if="recorrido.itinerario[0].p1" :latLng="recorrido.itinerario[0].p1.latlng" :icon="stopIcon">
+        <l-marker v-if="recorrido.itinerario[0].p1" :latLng="recorrido.itinerario[0].p1.latlng" :icon="stopIconA">
           <l-popup>{{recorrido.itinerario[0].p1.nombre}}</l-popup>
         </l-marker>
-        <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIcon">
+        <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIconB">
           <l-popup>{{recorrido.itinerario[0].p2.nombre}}</l-popup>
+        </l-marker>
+        <l-marker :key="p.latlng[0]" v-for="p in recorrido.itinerario[0].paradas" v-if="p.latlng[0] != recorrido.itinerario[0].p1.latlng[0] && p.latlng[0] != recorrido.itinerario[0].p2.latlng[0]" :latLng="p.latlng" :icon="miniStopIcon">
+          <l-popup>{{p.nombre}}</l-popup>
         </l-marker>
       </template>
 
@@ -19,19 +22,24 @@
         <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[1].ruta_corta]" />
-        <l-marker v-if="recorrido.itinerario[1].p1" :latLng="recorrido.itinerario[1].p1.latlng" :icon="stopIcon">
+        <l-marker v-if="recorrido.itinerario[1].p1" :latLng="recorrido.itinerario[1].p1.latlng" :icon="stopIconA">
           <l-popup>{{recorrido.itinerario[1].p1.nombre}}</l-popup>
         </l-marker>
-        <l-marker v-if="recorrido.itinerario[1].p2" :latLng="recorrido.itinerario[1].p2.latlng" :icon="stopIcon">
+        <l-marker v-if="recorrido.itinerario[1].p2" :latLng="recorrido.itinerario[1].p2.latlng" :icon="stopIconB">
           <l-popup>{{recorrido.itinerario[1].p2.nombre}}</l-popup>
         </l-marker>
 
         <!-- agregar icono de bajada y de subida (transbordos) -->
-        <l-marker :latLng="recorrido.itinerario[0].ruta_corta[recorrido.itinerario[0].ruta_corta.length-1]" :icon="downIcon">
-          <l-popup>Bajar del bondi {{recorrido.itinerario[0].nombre}}</l-popup>
+        <l-polyline :latLngs="[recorrido.itinerario[0].ruta_corta[recorrido.itinerario[0].ruta_corta.length-1], recorrido.itinerario[1].ruta_corta[0]]" :color="'#555'" :weight="2" :opacity="0.9" />
+        <l-marker :latLng="recorrido.itinerario[0].ruta_corta[recorrido.itinerario[0].ruta_corta.length-1]" :icon="stopIconT">
+          <l-popup>Bajar de {{recorrido.itinerario[0].nombre}}</l-popup>
         </l-marker>
-        <l-marker :latLng="recorrido.itinerario[1].ruta_corta[0]" :icon="upIcon">
-          <l-popup>Subir al bondi {{recorrido.itinerario[1].nombre}}</l-popup>
+        <l-marker :latLng="recorrido.itinerario[1].ruta_corta[0]" :icon="stopIconT">
+          <l-popup>Subir a {{recorrido.itinerario[1].nombre}}</l-popup>
+        </l-marker>
+
+        <l-marker :key="p.latlng[0]" v-for="p in recorrido.itinerario[1].paradas" v-if="p.latlng[0] != recorrido.itinerario[1].p1.latlng[0] && p.latlng[0] != recorrido.itinerario[1].p2.latlng[0]" :latLng="p.latlng" :icon="miniStopIcon">
+          <l-popup>{{p.nombre}}</l-popup>
         </l-marker>
       </template>
 
@@ -57,6 +65,10 @@ import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch'
 import {
   geoLocationIcon,
+  miniStopIcon,
+  StopIconA,
+  StopIconB,
+  StopIconT,
   StopIcon,
   DownIcon,
   UpIcon,
@@ -129,7 +141,11 @@ export default class Map extends Vue {
 
   public patterns = [decoratorArrow1, decoratorArrow2, decoratorArrow3]
 
+  public miniStopIcon = miniStopIcon
   public stopIcon = StopIcon
+  public stopIconA = StopIconA
+  public stopIconB = StopIconB
+  public stopIconT = StopIconT
   public downIcon = DownIcon
   public upIcon = UpIcon
   public aOptions = {
@@ -281,6 +297,40 @@ div.location-marker.red {
   to {
     transform: scale(0.8, 0.8);
   }
+}
+
+div.ministop-marker {
+  background-color: rgba(255, 255, 255, 0.9);
+  height: 10px !important;
+  width: 10px !important;
+  border-radius: 50%;
+  margin: -5px 0 0 -5px !important;
+  border: 1px solid rgba(85, 85, 85, 0.75);
+}
+
+div.stop-marker-a {
+  background-color: #FFB703;
+  height: 16px !important;
+  width: 16px !important;
+  border-radius: 50%;
+  margin: -8px 0 0 -8px !important;
+  border: 2px solid rgb(85, 85, 85);
+}
+div.stop-marker-b {
+  background-color: #D62815;
+  height: 16px !important;
+  width: 16px !important;
+  border-radius: 50%;
+  margin: -8px 0 0 -8px !important;
+  border: 2px solid rgba(85, 85, 85, 1);
+}
+div.stop-marker-t {
+  background-color: #FFF;
+  height: 16px !important;
+  width: 16px !important;
+  border-radius: 50%;
+  margin: -8px 0 0 -8px !important;
+  border: 2px solid rgba(85, 85, 85, 1);
 }
 </style>
 

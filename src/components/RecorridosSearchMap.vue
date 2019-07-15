@@ -7,7 +7,7 @@
         <l-polyline :latLngs="recorrido.ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.ruta_corta]" />
-        <l-marker :key="p.id" v-for="p in recorrido.paradas" :latLng="p.latlng" :icon="stopIcon">
+        <l-marker :key="p.latlng[0]" v-for="p in recorrido.paradas" :latLng="p.latlng" :icon="miniStopIcon">
           <l-popup>{{p.nombre}}</l-popup>
         </l-marker>
       </template>
@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker, LPolyline } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LPolyline, LPopup } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
@@ -29,6 +29,7 @@ import {
   geoLocationIcon,
   StopIcon,
   DownIcon,
+  miniStopIcon,
   UpIcon,
   AIcon,
   BIcon,
@@ -60,6 +61,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
     LTileLayer,
     LPolyline,
     Polylinedecorator,
+    LPopup,
   },
 })
 export default class Map extends Vue {
@@ -99,6 +101,7 @@ export default class Map extends Vue {
 
   public stopIcon = StopIcon
   public downIcon = DownIcon
+  public miniStopIcon = miniStopIcon
   public upIcon = UpIcon
   public aOptions = {
     draggable: true,
@@ -180,7 +183,7 @@ export default class Map extends Vue {
 <style lang="scss">
 .osmTileLayer {
   opacity: 0.9 !important;
-  filter: saturate(90%);
+  filter: saturate(80%);
 }
 div.location-marker {
   background-color: white;
@@ -215,6 +218,15 @@ div.location-marker.red {
   to {
     transform: scale(0.8, 0.8);
   }
+}
+
+div.ministop-marker {
+  background-color: rgba(255, 255, 255, 0.9);
+  height: 10px !important;
+  width: 10px !important;
+  border-radius: 50%;
+  margin: -5px 0 0 -5px !important;
+  border: 1px solid rgba(85, 85, 85, 0.75);
 }
 </style>
 

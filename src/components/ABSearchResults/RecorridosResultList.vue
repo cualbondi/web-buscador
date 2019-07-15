@@ -55,7 +55,7 @@
           <v-list-tile-content>
             <v-list-tile-title v-html="result.itinerario[1].nombre"></v-list-tile-title>
             <v-list-tile-sub-title v-if="result.itinerario[1].inicio || result.itinerario[1].fin">de {{result.itinerario[1].inicio}} a {{result.itinerario[1].fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title class="distances2"><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-tile-sub-title>
+            <v-list-tile-sub-title class="distances2"><v-icon>directions_walk</v-icon>{{Math.floor(result.long_pata_transbordo + result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
       </template>
