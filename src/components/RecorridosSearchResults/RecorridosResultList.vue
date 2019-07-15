@@ -16,7 +16,7 @@
           <span class="animated" :class="{directionRight: directionRight, directionLeft: !directionRight}" v-for="(result, $index) in results" :key="result.id" v-if="selectedIndex == $index">
             <span class="avatar"><v-icon>directions_bus</v-icon></span>
             <span class="title" v-html="results[selectedIndex].nombre"></span>
-            <span class="description">de {{results[selectedIndex].inicio}} a {{results[selectedIndex].fin}}</span>
+            <span class="description" v-if="results[selectedIndex].inicio || results[selectedIndex].fin">de {{results[selectedIndex].inicio}} a {{results[selectedIndex].fin}}</span>
             <span class="distances"><v-icon>straighten</v-icon>{{Math.floor(results[selectedIndex].long_bondi/100)/10}}km</span>
           </span>
         </transition>
@@ -36,7 +36,7 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="result.nombre"></v-list-tile-title>
-            <v-list-tile-sub-title>de {{result.inicio}} a {{result.fin}}</v-list-tile-sub-title>
+            <v-list-tile-sub-title v-if="result.inicio || result.fin">de {{result.inicio}} a {{result.fin}}</v-list-tile-sub-title>
             <v-list-tile-sub-title><v-icon>straighten</v-icon>{{Math.floor(result.long_bondi/100)/10}}km</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>

@@ -16,13 +16,13 @@
           <span class="animated" :class="{directionRight: directionRight, directionLeft: !directionRight}" v-for="(result, $index) in results" :key="result.id" v-if="selectedIndex == $index">
             <span class="avatar"><v-icon>directions_bus</v-icon></span>
             <span class="title" v-html="results[selectedIndex].itinerario[0].nombre"></span>
-            <span class="description">de {{results[selectedIndex].itinerario[0].inicio}} a {{results[selectedIndex].itinerario[0].fin}}</span>
+            <span class="description" v-if="result.itinerario[0].inicio || result.itinerario[0].fin">de {{results[selectedIndex].itinerario[0].inicio}} a {{results[selectedIndex].itinerario[0].fin}}</span>
             <span class="distances" v-if="result.itinerario.length === 1"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_bondi/100)/10}}km</span>
             <span class="distances" v-if="result.itinerario.length === 2">Combinar con</span>
             <template v-if="transbordo">
               <span class="avatar avatar2"><v-icon>directions_bus</v-icon></span>
               <span class="title title2" v-html="results[selectedIndex].itinerario[1].nombre"></span>
-              <span class="descripcion description2">de {{results[selectedIndex].itinerario[1].inicio}} a {{results[selectedIndex].itinerario[1].fin}}</span>
+              <span class="descripcion description2" v-if="result.itinerario[1].inicio || result.itinerario[1].fin">de {{results[selectedIndex].itinerario[1].inicio}} a {{results[selectedIndex].itinerario[1].fin}}</span>
               <span class="distances distances2"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].long_pata_transbordo+results[selectedIndex].itinerario[0].long_pata+results[selectedIndex].itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((results[selectedIndex].itinerario[0].long_bondi+results[selectedIndex].itinerario[1].long_bondi)/100)/10}}km</span>
             </template>
           </span>
@@ -43,8 +43,8 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="result.itinerario[0].nombre"></v-list-tile-title>
-            <v-list-tile-sub-title>de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title v-if="result.itinerario.length === 1"><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
+            <v-list-tile-sub-title v-if="result.itinerario[0].inicio || result.itinerario[0].fin">de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-tile-sub-title>
+            <v-list-tile-sub-title class="distances" v-if="result.itinerario.length === 1"><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
             <v-list-tile-sub-title v-if="result.itinerario.length === 2">Combinar con</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -54,8 +54,8 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="result.itinerario[1].nombre"></v-list-tile-title>
-            <v-list-tile-sub-title>de {{result.itinerario[1].inicio}} a {{result.itinerario[1].fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-tile-sub-title>
+            <v-list-tile-sub-title v-if="result.itinerario[1].inicio || result.itinerario[1].fin">de {{result.itinerario[1].inicio}} a {{result.itinerario[1].fin}}</v-list-tile-sub-title>
+            <v-list-tile-sub-title class="distances2"><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
       </template>
