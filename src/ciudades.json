@@ -1,4 +1,5 @@
 [
+
   {
     "id": 6,
     "slug": "bahia-blanca",
@@ -61,5 +62,50 @@
     "nombre": "Santa Fé",
     "latlng": [-31.64189163095992, -60.70441961288452],
     "zoom": 13
+  },
+
+
+  {
+    "id": 11,
+    "slug": "madrid",
+    "nombre": "Madrid",
+    "latlng": [40.4168, -3.7038],
+    "zoom": 13
+  },
+  {
+    "id": 12,
+    "slug": "barcelona",
+    "nombre": "Barcelona",
+    "latlng": [41.3851, 2.1734],
+    "zoom": 13
+  },
+  {
+    "id": 13,
+    "slug": "valencia",
+    "nombre": "Valencia",
+    "latlng": [39.4699, -0.3763],
+    "zoom": 14
+  },
+  {
+    "id": 14,
+    "slug": "sevilla",
+    "nombre": "Sevilla",
+    "latlng": [37.3891, -5.9845],
+    "zoom": 14
+  },
+  {
+    "id": 15,
+    "slug": "bilbao",
+    "nombre": "Bilbao",
+    "latlng": [43.2630, -2.9350],
+    "zoom": 14
+  },
+  {
+    "id": 16,
+    "slug": "malaga",
+    "nombre": "Malaga",
+    "latlng": [36.7167, -4.4260],
+    "zoom": 14
   }
+
 ]
