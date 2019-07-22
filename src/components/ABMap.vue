@@ -4,6 +4,7 @@
       <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
 
       <template v-if="recorrido">
+        <l-polyline :latLngs="recorrido.itinerario[0].ruta" :color="polyStyle.color" :weight="4" :opacity="polyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[0].ruta_corta]" />
@@ -13,12 +14,13 @@
         <l-marker v-if="recorrido.itinerario[0].p2" :latLng="recorrido.itinerario[0].p2.latlng" :icon="stopIconB">
           <l-popup>{{recorrido.itinerario[0].p2.nombre}}</l-popup>
         </l-marker>
-        <l-marker :key="p.latlng[0]" v-for="p in recorrido.itinerario[0].paradas" v-if="p.latlng[0] != recorrido.itinerario[0].p1.latlng[0] && p.latlng[0] != recorrido.itinerario[0].p2.latlng[0]" :latLng="p.latlng" :icon="miniStopIcon">
+        <l-marker :key="p.latlng[0]" v-for="p in recorrido.itinerario[0].paradas" v-if="!(recorrido.itinerario[0].p1 && p.latlng[0] == recorrido.itinerario[0].p1.latlng[0]) && !(recorrido.itinerario[0].p2 && p.latlng[0] == recorrido.itinerario[0].p2.latlng[0])" :latLng="p.latlng" :icon="miniStopIcon">
           <l-popup>{{p.nombre}}</l-popup>
         </l-marker>
       </template>
 
       <template v-if="recorrido && recorrido.itinerario.length == 2">
+        <l-polyline :latLngs="recorrido.itinerario[1].ruta" :color="polyStyle.color" :weight="4" :opacity="polyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
         <l-polyline :latLngs="recorrido.itinerario[1].ruta_corta" :color="polyStyle.color" :weight="polyStyle.weight" :opacity="polyStyle.opacity" />
         <polylinedecorator :patterns="patterns" :paths="[recorrido.itinerario[1].ruta_corta]" />

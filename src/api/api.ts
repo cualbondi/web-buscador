@@ -23,6 +23,7 @@ const convertSimpleResults = function convertSimpleResultsGeobufToLatlngs(
     results: data.results.map((recorrido: Itinerario) => ({
       ...recorrido,
       ruta_corta: geobufToLatlngs(recorrido.ruta_corta),
+      ruta: geobufToLatlngs(recorrido.ruta),
     })),
   }
 }
@@ -34,9 +35,10 @@ const convertResults = function convertResultsGeobufToLatlngs(
     ...data,
     results: data.results.map((result: Recorrido) => ({
       ...result,
-      itinerario: result.itinerario.map((parte: any) => ({
+      itinerario: result.itinerario.map((parte: Itinerario) => ({
         ...parte,
         ruta_corta: geobufToLatlngs(parte.ruta_corta),
+        ruta: geobufToLatlngs(parte.ruta),
       })),
     })),
   }

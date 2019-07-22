@@ -114,6 +114,19 @@
           vertical-align: text-top;
         }
       }
+      > span.avatar2 {
+        position: relative;
+        &::before {
+          content: '';
+          display: block;
+          height: 47px;
+          width: 0;
+          position: absolute;
+          top: -53px;
+          border-right: 4px dotted rgba(0, 0, 0, 0.5);
+          left: 10px;
+        }
+      }
     }
   }
 }
@@ -212,5 +225,14 @@ $speed: 0.2s;
   }
   .second {
     border-bottom: 1px solid lightgray;
+    .v-avatar::before {
+      content: '';
+      display: block;
+      height: 36px;
+      width: 0;
+      position: absolute;
+      top: -35px;
+      border-right: 4px dotted rgba(0,0,0,0.5);
+    }
   }
 }

@@ -46,6 +46,11 @@ export function debounceMethod(time: number) {
 }
 
 export const geobufToLatlngs = function(base64str: string) {
+
+  if (!base64str) {
+    return undefined
+  }
+
   // convert base64str to Uint8Array
   const raw = atob(base64str)
   const rawLength = raw.length

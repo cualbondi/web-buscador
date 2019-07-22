@@ -6,6 +6,7 @@ interface Parada {
 export interface Itinerario {
   id: number
   ruta_corta: string
+  ruta: string
   long_bondi: number
   long_pata: number
   color_polilinea: string

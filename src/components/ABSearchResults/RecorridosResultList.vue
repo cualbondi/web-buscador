@@ -14,11 +14,12 @@
         }">
         <transition name="fade">
           <span class="animated" :class="{directionRight: directionRight, directionLeft: !directionRight}" v-for="(result, $index) in results" :key="result.id" v-if="selectedIndex == $index">
-            <span class="avatar"><v-icon>directions_bus</v-icon></span>
+            <span class="avatar">
+              <v-icon>{{iconFromType(result.itinerario[0].type)}}</v-icon>
+            </span>
             <span class="title" v-html="results[selectedIndex].itinerario[0].nombre"></span>
             <span class="description" v-if="result.itinerario[0].inicio || result.itinerario[0].fin">de {{results[selectedIndex].itinerario[0].inicio}} a {{results[selectedIndex].itinerario[0].fin}}</span>
             <span class="distances" v-if="result.itinerario.length === 1"><v-icon>directions_walk</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(results[selectedIndex].itinerario[0].long_bondi/100)/10}}km</span>
-            <span class="distances" v-if="result.itinerario.length === 2">Combinar con</span>
             <template v-if="transbordo">
               <span class="avatar avatar2"><v-icon>directions_bus</v-icon></span>
               <span class="title title2" v-html="results[selectedIndex].itinerario[1].nombre"></span>
@@ -39,7 +40,7 @@
       <template v-for="(result, $index) in results">
         <v-list-tile class="first" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
           <v-list-tile-avatar>
-            <img :src="`/static/img/micros/30x35/${result.itinerario[0].foto}.png`" />
+            <v-icon>{{iconFromType(result.itinerario[0].type)}}</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="result.itinerario[0].nombre"></v-list-tile-title>
@@ -50,7 +51,7 @@
         </v-list-tile>
         <v-list-tile class="second" v-if="result.itinerario.length === 2" :key="result.id + '_second'" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
           <v-list-tile-avatar>
-            <img :src="`/static/img/micros/30x35/${result.itinerario[1].foto}.png`" />
+            <v-icon>{{iconFromType(result.itinerario[1].type)}}</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="result.itinerario[1].nombre"></v-list-tile-title>
@@ -83,6 +84,17 @@ export default class RecorridosResultList extends Vue {
   public small: boolean
 
   public directionRight = true
+
+  public iconFromType = (type: string) =>
+    ({
+      'train': 'train',
+      'subway': 'subway',
+      'monorail': 'tram',
+      'tram': 'tram',
+      'light_rail': 'tram',
+      'bus': 'directions_bus',
+      'trolleybus': 'directions_bus',
+    } as any)[type]
 
   public toggleSmallResults() {
     this.$store.dispatch('toggleSmallResults')
