@@ -1,55 +1,53 @@
 <template>
-    <div class="location-search-container">
-        <div class="location-search">
-            <div class="input-container">
-                <v-btn class="menubtn" flat icon @click="goBack">
-                    <v-icon>arrow_back</v-icon>  
-                </v-btn>
-                <v-text-field
-                class="input"
-                :clearable="true"
-                :value="location"
-                @input="setLocation"
-                :label="inputLabel"
-                flat
-                solo
-                autofocus
-                hide-details
-                append-icon="search"
-                @click:append="searchGeocoder"
-                >
-                </v-text-field>
-            </div>
+  <div class="location-search-container">
+    <div class="location-search">
+      <div class="input-container">
+        <v-btn class="menubtn" flat icon @click="goBack">
+          <v-icon>arrow_back</v-icon>
+        </v-btn>
+        <v-text-field
+          class="input"
+          :clearable="true"
+          :value="location"
+          @input="setLocation"
+          :label="inputLabel"
+          flat
+          solo
+          autofocus
+          hide-details
+          append-icon="search"
+          @click:append="searchGeocoder"
+        ></v-text-field>
+      </div>
 
-            <result-list 
-            v-if="!location"
-            class="geolocation"
-            :results="fixedResults"
-            @selection="onGeoSelection"
-            ></result-list>
+      <result-list
+        v-if="!location"
+        class="geolocation"
+        :results="fixedResults"
+        @selection="onGeoSelection"
+      ></result-list>
 
-            <!--result-list
-            v-if="!location"
-            class="previous-searches" 
-            title="Ayer" 
-            :results="results"
-            @selection="onLocationSelection"
-            ></result-list-->
+      <result-list
+        v-if="!location"
+        class="previous-searches"
+        title="Busquedas previas"
+        :results="prevGeocoderResults"
+        @selection="onPrevLocationSelection"
+      ></result-list>
 
-             <result-list
-            v-if="location && geocoderResults.length !== 0"
-            class="results"
-            title="Resultados" 
-            :results="geocoderResults"
-            @selection="onLocationSelection"
-            ></result-list>
-            <div v-if="loadingResults" class="progress row justify-center">
-              <v-progress-circular  indeterminate color="primary"/>
-            </div>
-
-        </div>
-        <ABMap class="map"/>
+      <result-list
+        v-if="location && geocoderResults.length !== 0"
+        class="results"
+        title="Resultados"
+        :results="geocoderResults"
+        @selection="onLocationSelection"
+      ></result-list>
+      <div v-if="loadingResults" class="progress row justify-center">
+        <v-progress-circular indeterminate color="primary" />
+      </div>
     </div>
+    <ABMap class="map" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -58,6 +56,7 @@ import ResultList, { Result } from '@/components/ResultList.vue'
 import ABMap from '@/components/ABMap.vue'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
+import { RecentGeocoderResults } from '@/modules/geocoder/storage'
 
 @Component({
   components: {
@@ -92,8 +91,6 @@ export default class Home extends Vue {
   public destroyed() {
     window.removeEventListener('keyup', this.onEnterKey)
   }
-
-  public results: Result[] = []
 
   public onEnterKey(event: KeyboardEvent) {
     if (event.keyCode === 13) {
@@ -141,7 +138,7 @@ export default class Home extends Vue {
       selection.id
     ]
     this.$store.dispatch('setFromGeocoder', {
-      id: selection.id,
+      result: result,
       source: this.originOrDestination,
     })
     ;(this as any).$ga.event(
@@ -149,6 +146,14 @@ export default class Home extends Vue {
       this.originOrDestination,
       (result as any).text,
     )
+  }
+
+  public onPrevLocationSelection(selection: Result) {
+    const prevSearch = this.$store.getters.prevGeocoderResults[
+      selection.id
+    ]
+    this.setLocation(prevSearch.query)
+    this.$store.dispatch('fromCache', prevSearch)
   }
 
   public goBack() {
@@ -167,6 +172,20 @@ export default class Home extends Vue {
         name: 'access_time',
       },
       text: result.nombre,
+    }))
+  }
+
+  get prevGeocoderResults(): Result[] {
+    const prevResults: RecentGeocoderResults[] = this.$store.getters.prevGeocoderResults
+    if (prevResults.length === 0) {
+      return []
+    }
+    return prevResults.map(({ query, result, timestamp }, index) => ({
+      id: index,
+      icon: {
+        name: 'access_time',
+      },
+      text: query,
     }))
   }
 

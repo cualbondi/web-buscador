@@ -208,10 +208,8 @@ const module: Module<State, RootState> = {
       commit('setTransbordo', value)
     },
     // sets A or B from a geocoder result
-    setFromGeocoder({ dispatch, getters }, { id, source }) {
+    setFromGeocoder({ dispatch, getters }, { result: res, source }) {
       const ciudadSlug = getters.getCiudad.slug
-      const res = getters.geocoderResults[id]
-
       if (res.geom) {
         const geocoderResult: GeocoderResult = {
           lat: res.geom.coordinates[1],
