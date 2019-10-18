@@ -32,6 +32,14 @@
         class="previous-searches"
         title="Busquedas previas"
         :results="prevGeocoderResults"
+        @selection="onPrevGeocoderSearch"
+      ></result-list>
+
+      <result-list
+        v-if="!location"
+        class="previous-searches"
+        title="Selecciones previas"
+        :results="prevLocationResults"
         @selection="onPrevLocationSelection"
       ></result-list>
 
@@ -56,7 +64,7 @@ import ResultList, { Result } from '@/components/ResultList.vue'
 import ABMap from '@/components/ABMap.vue'
 import { GeocoderResponse } from '@/api/schema'
 import { GeocoderResult } from '@/modules/absearch'
-import { RecentGeocoderResults } from '@/modules/geocoder/storage'
+import { RecentGeocoderResults, RecentLocationResult } from '@/storage'
 
 @Component({
   components: {
@@ -148,12 +156,18 @@ export default class Home extends Vue {
     )
   }
 
-  public onPrevLocationSelection(selection: Result) {
-    const prevSearch = this.$store.getters.prevGeocoderResults[
-      selection.id
-    ]
+  public onPrevGeocoderSearch(selection: Result) {
+    const prevSearch: RecentGeocoderResults = this.$store.getters.prevGeocoderResults[selection.id]
     this.setLocation(prevSearch.query)
     this.$store.dispatch('fromCache', prevSearch)
+  }
+
+  public onPrevLocationSelection(selection: Result) {
+    const prevLocation: RecentLocationResult = this.$store.getters.prevLocationResults[selection.id]
+    this.$store.dispatch('setFromGeocoder', {
+      result: prevLocation.location,
+      source: this.originOrDestination,
+    })
   }
 
   public goBack() {
@@ -176,16 +190,29 @@ export default class Home extends Vue {
   }
 
   get prevGeocoderResults(): Result[] {
-    const prevResults: RecentGeocoderResults[] = this.$store.getters.prevGeocoderResults
+    const prevResults: RecentGeocoderResults[] = this.$store.getters
+      .prevGeocoderResults
     if (prevResults.length === 0) {
       return []
     }
-    return prevResults.map(({ query, result, timestamp }, index) => ({
+    return prevResults.map(({ query, results, timestamp }, index) => ({
       id: index,
       icon: {
         name: 'access_time',
       },
       text: query,
+    }))
+  }
+
+  get prevLocationResults() {
+    const prevSelections: RecentLocationResult[] = this.$store.getters
+      .prevLocationResults
+    return prevSelections.map(({ location, timestamp }, index) => ({
+      id: index,
+      icon: {
+        name: 'access_time',
+      },
+      text: location.nombre,
     }))
   }
 
