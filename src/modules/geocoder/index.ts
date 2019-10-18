@@ -2,16 +2,19 @@ import { Module } from 'vuex'
 import { RootState } from '@/store'
 import api from '@/api/api'
 import { GeocoderResponse } from '@/api/schema'
-import { recentResultsStore } from './storage'
+import { recentResultsStore, RecentGeocoderResults } from './storage'
+
 interface State {
   results: GeocoderResponse[]
   loading: boolean
+  topPrevGeocoderResults: RecentGeocoderResults[]
 }
 
 const module: Module<State, RootState> = {
   state: {
     results: [],
     loading: false,
+    topPrevGeocoderResults: recentResultsStore.top(),
   },
   actions: {
     geocoderClearResults({ commit }) {
@@ -26,11 +29,12 @@ const module: Module<State, RootState> = {
       })
     },
     logGeocoderResult({ commit }, { query, results }) {
-      recentResultsStore.store({query, results, timestamp: Date.now()})
+      recentResultsStore.store({ query, results, timestamp: Date.now() })
+      commit('setTopPrevGeocoderResults')
     },
-    fromCache({commit}, prevSearch) {
+    fromCache({ commit }, prevSearch) {
       commit('setGeocoderResults', prevSearch.results)
-    }
+    },
   },
   mutations: {
     setLoading(state, value: boolean) {
@@ -43,6 +47,9 @@ const module: Module<State, RootState> = {
       state.results = results
       state.loading = false
     },
+    setTopPrevGeocoderResults(state) {
+      state.topPrevGeocoderResults = recentResultsStore.top()
+    },
   },
   getters: {
     getGeocoderLoading(state) {
@@ -51,9 +58,9 @@ const module: Module<State, RootState> = {
     geocoderResults(state) {
       return state.results
     },
-    prevGeocoderResults(state){
-      return recentResultsStore.top()
-    }
+    prevGeocoderResults(state) {
+      return state.topPrevGeocoderResults
+    },
   },
 }
 export default module
