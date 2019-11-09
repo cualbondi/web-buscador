@@ -30,7 +30,7 @@ const module: Module<State, RootState> = {
       // ex. slug: "la-plata"
       // ex. with geo: "villa-dominico|-57.23,-48.3423"
       let ciudad = CS.find(c => c.slug === slug)
-      if (!ciudad && slug.includes('|')) {
+      if (!ciudad && slug && slug.includes('|')) {
         const parts = slug.split('|')
         try {
           ciudad = {
