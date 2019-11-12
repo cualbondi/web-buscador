@@ -94,6 +94,7 @@ export default class RecorridosResultList extends Vue {
       'light_rail': 'tram',
       'bus': 'directions_bus',
       'trolleybus': 'directions_bus',
+      null: 'directions_bus'
     } as any)[type]
 
   public toggleSmallResults() {
