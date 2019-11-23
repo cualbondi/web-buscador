@@ -1,5 +1,5 @@
 import { Module } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 import { geolocationObservable, checkGeolocationPermission } from '@/utils'
 import CIUDADES from '@/ciudades'
 

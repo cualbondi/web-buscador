@@ -1,17 +1,17 @@
 <template>
   <div class="topbar">
-    <v-btn class="menubtn" flat icon dark @click="openMenu">
+    <v-btn class="menubtn" text icon dark @click="openMenu">
       <v-icon dark>menu</v-icon>
     </v-btn>
     <div class="tabs">
-      <v-btn class="directions" :class="{active: getTab === 'directions'}" flat dark @click="gotoDirections">
+      <v-btn class="directions" :class="{active: getTab === 'directions'}" text dark @click="gotoDirections">
         <v-icon dark>directions</v-icon>
       </v-btn>
-      <v-btn class="recorridos" :class="{active: getTab === 'recorridos'}" flat dark @click="gotoRecorridos">
+      <v-btn class="recorridos" :class="{active: getTab === 'recorridos'}" text dark @click="gotoRecorridos">
         <v-icon dark>directions_bus</v-icon>
       </v-btn>
     </div>
-    <v-btn class="share" flat icon dark @click="share">
+    <v-btn class="share" text icon dark @click="share">
       <v-icon dark>share</v-icon>
     </v-btn>
   </div>

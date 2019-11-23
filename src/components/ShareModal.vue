@@ -21,7 +21,7 @@
     </div>
     <div class="divider"></div>
     <div class="cancel-container">
-      <v-btn color="primary" flat @click="shareModalOpen = false">Cancelar</v-btn>
+      <v-btn color="primary" text @click="shareModalOpen = false">Cancelar</v-btn>
     </div>
   </v-dialog>
 </template>

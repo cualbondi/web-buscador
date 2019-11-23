@@ -112,7 +112,13 @@ import { API_URL } from '@/config'
 import { gotoOSM, editJOSM } from './utils'
 import logo from '@/assets/logo.png'
 
-@Component({})
+import { VDataTable } from 'vuetify/lib'
+
+@Component({
+  components: {
+    VDataTable,
+  }
+})
 export default class OSMDashboard extends Vue {
   public search = ''
   public logo = logo

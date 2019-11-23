@@ -30,23 +30,23 @@
     </div>
     <v-list :two-line="true" class="results">
       <template v-for="(result, $index) in results">
-        <v-list-tile class="first" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
-          <v-list-tile-avatar>
+        <v-list-item class="first" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
+          <v-list-item-avatar>
             <img :src="`/static/img/micros/30x35/${result.foto}.png`" />
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title v-html="result.nombre"></v-list-tile-title>
-            <v-list-tile-sub-title v-if="result.inicio || result.fin">de {{result.inicio}} a {{result.fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title><v-icon>straighten</v-icon>{{Math.floor(result.long_bondi/100)/10}}km</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="result.nombre"></v-list-item-title>
+            <v-list-item-subtitle v-if="result.inicio || result.fin">de {{result.inicio}} a {{result.fin}}</v-list-item-subtitle>
+            <v-list-item-subtitle><v-icon>straighten</v-icon>{{Math.floor(result.long_bondi/100)/10}}km</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
       </template>
-      <v-list-tile v-if="resultsMore" >
+      <v-list-item v-if="resultsMore" >
         <v-btn @click="getNextPage">Buscar mas resultados</v-btn>
-      </v-list-tile>
-      <v-list-tile v-if="resultsMoreLoading">
+      </v-list-item>
+      <v-list-item v-if="resultsMoreLoading">
         <span>Buscando mas ...</span>
-      </v-list-tile>
+      </v-list-item>
     </v-list>
   </div>
 </template>

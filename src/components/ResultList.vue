@@ -3,15 +3,15 @@
     <v-subheader v-if="title">{{ title }}</v-subheader>
     <template v-for="(result, index) in results">
       <v-divider v-if="shouldDivide(index)" inset :key="result.id + ' divider'"></v-divider>
-      <v-list-tile :key="result.id" @click="$emit('selection', result)">
-        <v-list-tile-avatar>
+      <v-list-item :key="result.id" @click="$emit('selection', result)">
+        <v-list-item-avatar>
           <v-icon :color="result.icon.color">{{result.icon.name}}</v-icon>
-        </v-list-tile-avatar>
-        <v-list-tile-content>
-          <v-list-tile-title v-html="result.text"></v-list-tile-title>
-          <v-list-tile-sub-title v-html="result.subtext"></v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title v-html="result.text"></v-list-item-title>
+          <v-list-item-subtitle v-html="result.subtext"></v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
     </template>
   </v-list>
 </template>

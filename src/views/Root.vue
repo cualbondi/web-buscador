@@ -9,14 +9,14 @@
       <v-flex sm6 xs12>
         <div class="list-container">
           <v-list>
-            <v-list-tile ripple v-for="ciudad in ciudades" :key="ciudad.slug" @click="gotoCiudad(ciudad)">
-              <v-list-tile-content>
-                <v-list-tile-title v-text="ciudad.nombre"></v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-avatar>
+            <v-list-item ripple v-for="ciudad in ciudades" :key="ciudad.slug" @click="gotoCiudad(ciudad)">
+              <v-list-item-content>
+                <v-list-item-title v-text="ciudad.nombre"></v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-avatar>
                 <v-icon>chevron_right</v-icon>
-              </v-list-tile-avatar>
-            </v-list-tile>
+              </v-list-item-avatar>
+            </v-list-item>
           </v-list>
         </div>
       </v-flex>
@@ -52,7 +52,7 @@ export default class Root extends Vue {
 .list-container {
   height: 105vh;
   overflow: auto;
-  .v-list__tile__content {
+  .v-list-item__content {
     color: #003b5c;
   }
 }
