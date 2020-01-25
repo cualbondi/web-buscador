@@ -1,8 +1,9 @@
 import { Module } from 'vuex'
 import { RootState } from '@/plugins/store'
 import api from '@/api/api'
-import { Recorrido } from '@/api/schema'
+import { Recorrido, GeocoderResponse } from '@/api/schema'
 import router from '@/plugins/router'
+import { persistentStorage, RecentLocationResult } from '@/storage'
 
 interface LatLng {
   lat: number
@@ -43,6 +44,7 @@ interface State {
   transbordo: boolean
   apiError: boolean
   geolocationError: boolean
+  topPrevLocationResults: RecentLocationResult[]
 }
 
 const module: Module<State, RootState> = {
@@ -60,6 +62,7 @@ const module: Module<State, RootState> = {
     transbordo: false,
     apiError: false,
     geolocationError: false,
+    topPrevLocationResults: persistentStorage.topLocations(),
   },
 
   actions: {
@@ -85,7 +88,7 @@ const module: Module<State, RootState> = {
       commit('setGeolocationError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
@@ -124,7 +127,7 @@ const module: Module<State, RootState> = {
       commit('setApiError', false)
       let lngA, latA, lngB, latB
       try {
-        ({ lngA, latA, lngB, latB } = await dispatch('getAB'))
+        ;({ lngA, latA, lngB, latB } = await dispatch('getAB'))
       } catch (e) {
         dispatch('setGeolocationError')
         commit('finishLoadingResults')
@@ -208,10 +211,12 @@ const module: Module<State, RootState> = {
       commit('setTransbordo', value)
     },
     // sets A or B from a geocoder result
-    setFromGeocoder({ dispatch, getters }, { id, source }) {
+    setFromGeocoder(
+      { dispatch, getters },
+      { result: res, source }: { result: GeocoderResponse; source: string },
+    ) {
+      dispatch('logLocationSelection', res)
       const ciudadSlug = getters.getCiudad.slug
-      const res = getters.geocoderResults[id]
-
       if (res.geom) {
         const geocoderResult: GeocoderResult = {
           lat: res.geom.coordinates[1],
@@ -276,6 +281,10 @@ const module: Module<State, RootState> = {
       dispatch('message', 'No se pudo acceder a tu ubicación')
       commit('setGeolocationError', true)
     },
+    logLocationSelection({ commit }, location: GeocoderResponse) {
+      persistentStorage.logLocation({ location, timestamp: Date.now() })
+      commit('setTopPrevLocationResults')
+    },
   },
 
   mutations: {
@@ -331,6 +340,9 @@ const module: Module<State, RootState> = {
     },
     setGeolocationError(state, value) {
       state.geolocationError = value
+    },
+    setTopPrevLocationResults(state, value) {
+      state.topPrevLocationResults = persistentStorage.topLocations()
     },
   },
   getters: {
@@ -405,6 +417,9 @@ const module: Module<State, RootState> = {
     transbordo(state) {
       return state.transbordo
     },
+    prevLocationResults(state) {
+      return state.topPrevLocationResults
+    }
   },
 }
 

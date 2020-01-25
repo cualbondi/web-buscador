@@ -18,15 +18,15 @@ before_install:
   # Load cached docker images
   #- if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
-  # clone apiv3 for e2e testing
-  - git clone https://github.com/cualbondi/apiv3.git --depth 1
+  # clone web for e2e testing
+  - git clone https://github.com/cualbondi/web.git --depth 1
 
   - docker --version
   - docker-compose --version
   - docker-compose -f docker-compose-travis.yml up -d
   - docker-compose -f docker-compose-travis.yml exec web-buscador npm install
-  - docker-compose -f docker-compose-travis.yml exec apiv3 python manage.py migrate
-  - docker-compose -f docker-compose-travis.yml exec apiv3 python manage.py loaddata lineas.json recorridos.json provincias.json ciudades.json calles.json zonas.json pois.json
+  - docker-compose -f docker-compose-travis.yml exec web python3 manage.py migrate
+  - docker-compose -f docker-compose-travis.yml exec web python3 manage.py loaddata lineas.json recorridos.json provincias.json ciudades.json calles.json zonas.json pois.json
   - docker-compose -f docker-compose-travis.yml ps
 
 script:
