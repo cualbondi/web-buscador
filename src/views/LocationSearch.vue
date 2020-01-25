@@ -28,28 +28,29 @@
       ></result-list>
 
       <result-list
-        v-if="!location"
-        class="previous-searches"
-        title="Busquedas previas"
-        :results="prevGeocoderResults"
-        @selection="onPrevGeocoderSearch"
-      ></result-list>
-
-      <result-list
-        v-if="!location"
-        class="previous-searches"
-        title="Selecciones previas"
-        :results="prevLocationResults"
-        @selection="onPrevLocationSelection"
-      ></result-list>
-
-      <result-list
         v-if="location && geocoderResults.length !== 0"
         class="results"
         title="Resultados"
         :results="geocoderResults"
         @selection="onLocationSelection"
       ></result-list>
+
+      <result-list
+        v-if="prevLocationResults.length !== 0"
+        class="previous-searches"
+        title="Resultados recientes"
+        :results="prevLocationResults"
+        @selection="onPrevLocationSelection"
+      ></result-list>
+
+      <result-list
+        v-if="prevGeocoderResults.length !== 0"
+        class="previous-searches"
+        title="Busquedas recientes"
+        :results="prevGeocoderResults"
+        @selection="onPrevGeocoderSearch"
+      ></result-list>
+
       <div v-if="loadingResults" class="progress row justify-center">
         <v-progress-circular indeterminate color="primary" />
       </div>
@@ -157,13 +158,15 @@ export default class Home extends Vue {
   }
 
   public onPrevGeocoderSearch(selection: Result) {
-    const prevSearch: RecentGeocoderResults = this.$store.getters.prevGeocoderResults[selection.id]
+    const prevSearch: RecentGeocoderResults = this.$store.getters
+      .prevGeocoderResults[selection.id]
     this.setLocation(prevSearch.query)
     this.$store.dispatch('fromCache', prevSearch)
   }
 
   public onPrevLocationSelection(selection: Result) {
-    const prevLocation: RecentLocationResult = this.$store.getters.prevLocationResults[selection.id]
+    const prevLocation: RecentLocationResult = this.$store.getters
+      .prevLocationResults[selection.id]
     this.$store.dispatch('setFromGeocoder', {
       result: prevLocation.location,
       source: this.originOrDestination,
@@ -183,7 +186,7 @@ export default class Home extends Vue {
     return results.map((result, index) => ({
       id: index,
       icon: {
-        name: 'access_time',
+        name: 'location_on',
       },
       text: result.nombre,
     }))
@@ -198,7 +201,7 @@ export default class Home extends Vue {
     return prevResults.map(({ query, results, timestamp }, index) => ({
       id: index,
       icon: {
-        name: 'access_time',
+        name: 'search',
       },
       text: query,
     }))
@@ -222,5 +225,4 @@ export default class Home extends Vue {
 }
 </script>
 
-<style lang="scss" src="./LocationSearch.scss" scoped>
-</style>
+<style lang="scss" src="./LocationSearch.scss" scoped></style>
