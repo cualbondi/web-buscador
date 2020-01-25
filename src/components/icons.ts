@@ -1,30 +1,30 @@
 import stopIconUrl from '@/assets/marker-stop.png'
 import downIconUrl from '@/assets/marker-stop.png'
 import upIconUrl from '@/assets/marker-stop.png'
-import L from 'leaflet'
+import { DivIcon, icon, Icon } from 'leaflet'
 
-export const geoLocationIcon = new L.DivIcon({
+export const geoLocationIcon = new DivIcon({
   className: 'location-marker',
 })
 
-export const miniStopIcon = new L.DivIcon({
+export const miniStopIcon = new DivIcon({
   className: 'ministop-marker',
 })
 
-export const StopIconA = new L.DivIcon({
+export const StopIconA = new DivIcon({
   className: 'stop-marker-a',
 })
 
-export const StopIconB = new L.DivIcon({
+export const StopIconB = new DivIcon({
   className: 'stop-marker-b',
 })
 
-export const StopIconT = new L.DivIcon({
+export const StopIconT = new DivIcon({
   className: 'stop-marker-t',
 })
 
-export const StopIcon = L.icon(
-  Object.assign({}, L.Icon.Default.prototype.options, {
+export const StopIcon = icon(
+  Object.assign({}, Icon.Default.prototype.options, {
     iconUrl: stopIconUrl,
     iconRetinaUrl: stopIconUrl,
     iconSize: [40, 40],
@@ -33,8 +33,8 @@ export const StopIcon = L.icon(
   }),
 )
 
-export const DownIcon = L.icon(
-  Object.assign({}, L.Icon.Default.prototype.options, {
+export const DownIcon = icon(
+  Object.assign({}, Icon.Default.prototype.options, {
     iconUrl: downIconUrl,
     iconRetinaUrl: downIconUrl,
     iconSize: [40, 40],
@@ -43,8 +43,8 @@ export const DownIcon = L.icon(
   }),
 )
 
-export const UpIcon = L.icon(
-  Object.assign({}, L.Icon.Default.prototype.options, {
+export const UpIcon = icon(
+  Object.assign({}, Icon.Default.prototype.options, {
     iconUrl: upIconUrl,
     iconRetinaUrl: upIconUrl,
     iconSize: [40, 40],
@@ -53,22 +53,22 @@ export const UpIcon = L.icon(
   }),
 )
 
-export const AIcon = new L.DivIcon({
+export const AIcon = new DivIcon({
   className: 'markerAB markerA',
   popupAnchor: [0, -40],
 })
 
-export const BIcon = new L.DivIcon({
+export const BIcon = new DivIcon({
   className: 'markerAB markerB',
   popupAnchor: [0, -40],
 })
 
-export const AIconDragging = new L.DivIcon({
+export const AIconDragging = new DivIcon({
   className: 'markerAB markerA drag',
   popupAnchor: [0, -40],
 })
 
-export const BIconDragging = new L.DivIcon({
+export const BIconDragging = new DivIcon({
   className: 'markerAB markerB drag',
   popupAnchor: [0, -40],
 })

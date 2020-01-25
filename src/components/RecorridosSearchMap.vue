@@ -1,7 +1,6 @@
 <template>
   <div class="mapContainer">
     <l-map :zoom="zoom" :center="center" :options="options" ref="mapref">
-      <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
 
       <template v-if="recorrido">
         <l-polyline :latLngs="recorrido.ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
@@ -22,6 +21,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker, LPolyline, LPopup } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
+import 'mapbox-gl-leaflet'
 import 'leaflet-polylinedecorator'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch'
@@ -151,22 +151,10 @@ export default class Map extends Vue {
     }
   }
   public mounted() {
-    // const A = this.A
-    // const B = this.B
-
-    // let bounds = L.latLngBounds([])
-    // if (A && A.lat !== null && A.lng !== null) {
-    //   bounds.extend({ lat: A.lat, lng: A.lng })
-    // }
-    // if (B && B.lat !== null && B.lng !== null) {
-    //   bounds.extend({ lat: B.lat, lng: B.lng })
-    // }
-
-    // if (bounds.isValid()) {
-    //   bounds = bounds.pad(0.1)
-    //   const mapref: any = this.$refs.mapref
-    //   mapref.mapObject.flyToBounds(bounds, { maxZoom: 14, animate: false })
-    // }
+    (L as any).mapboxGL({
+        style: 'https://tiles.cualbondi.com.ar/styles/osm-bright/style.json',
+        accessToken: 'no-token'
+    }).addTo((this.$refs.mapref as any).mapObject);
   }
 }
 </script>

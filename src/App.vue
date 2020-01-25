@@ -8,7 +8,7 @@
         :bottom="true"
       >
         {{ messageText }}
-        <v-btn dark flat @click.native="closeMessage">Cerrar</v-btn>
+        <v-btn dark text @click.native="closeMessage">Cerrar</v-btn>
       </v-snackbar>
       <ShareModal v-if="shareModalOpen"/>
     </div>
@@ -72,10 +72,13 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  .v-list__tile__title,
-  .v-list__tile__sub-title {
+  .v-list-item__title,
+  .v-list-item__sub-title {
     white-space: normal;
   }
+}
+.v-btn {
+  margin: 5px;
 }
 .row {
   display: flex;

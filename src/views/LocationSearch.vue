@@ -2,7 +2,7 @@
     <div class="location-search-container">
         <div class="location-search">
             <div class="input-container">
-                <v-btn class="menubtn" flat icon @click="goBack">
+                <v-btn class="menubtn" text icon @click="goBack">
                     <v-icon>arrow_back</v-icon>  
                 </v-btn>
                 <v-text-field
@@ -11,7 +11,7 @@
                 :value="location"
                 @input="setLocation"
                 :label="inputLabel"
-                flat
+                text
                 solo
                 autofocus
                 hide-details

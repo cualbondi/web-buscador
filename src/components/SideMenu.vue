@@ -18,7 +18,7 @@
       </v-toolbar>
       <v-divider></v-divider>
       <v-list>
-        <v-list-tile>
+        <v-list-item>
           <v-select
             class="citySelect"
             :items="ciudades"
@@ -31,38 +31,38 @@
             prepend-icon="map"
             hide-details
           ></v-select>
-        </v-list-tile>
-        <v-list-tile @click="openExternalLink(`https://cualbondi.com.ar/${ciudad.slug}/`)">
+        </v-list-item>
+        <v-list-item @click="openExternalLink(`https://cualbondi.com.ar/${ciudad.slug}/`)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>location_city</v-icon></div></div>
           Ver mas informaci&oacute;n
-        </v-list-tile>
+        </v-list-item>
         <v-divider></v-divider>
-        <v-list-tile>
+        <v-list-item>
           <v-slider
             @change="setRadius"
             v-model="radius"
             prepend-icon="directions_walk"
             :persistent-hint="true"
-            :hint="'100'"
+            :hint="`caminar ${radius} mts maximo`"
             :min="200"
             :max="800"
             :step="100"
             :ticks="true"
           />
-        </v-list-tile>
+        </v-list-item>
         <v-divider></v-divider>
-        <v-list-tile @click="openExternalLink(`https://cualbondi.com.ar/agradecimientos/`)">
+        <v-list-item @click="openExternalLink(`https://cualbondi.com.ar/agradecimientos/`)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>star</v-icon></div></div>
           Top usuarios
-        </v-list-tile>
-        <v-list-tile @click="openExternalLink(`https://goo.gl/forms/JRfMgq4ar0VgF9OA3`, true)">
+        </v-list-item>
+        <v-list-item @click="openExternalLink(`https://goo.gl/forms/JRfMgq4ar0VgF9OA3`, true)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>comment</v-icon></div></div>
           Sugerencias
-        </v-list-tile>
-        <v-list-tile @click="openExternalLink(`https://github.com/cualbondi`, true)">
+        </v-list-item>
+        <v-list-item @click="openExternalLink(`https://github.com/cualbondi`, true)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>usb</v-icon></div></div>
           Github
-        </v-list-tile>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 </template>
@@ -104,6 +104,10 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss">
+.v-slider__thumb:before {
+  left: 17px !important;
+  top: 17px !important;
+}
 .theme--light .v-text-field .v-input__slot:before,
 .application .theme--light.v-text-field .v-input__slot:before,
 .theme--light

@@ -3,7 +3,7 @@
 
     <TopBar />
 
-    <v-btn class="swap" flat icon dark @click="swap">
+    <v-btn class="swap" text icon dark @click="swap">
       <v-icon dark>swap_vert</v-icon>
     </v-btn>
     <div class="input-location origin" @click="searchOrigin">

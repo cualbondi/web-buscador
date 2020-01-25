@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 import api from '@/api/auth'
-import router from '@/router'
+import router from '@/plugins/router'
 
 
 interface User {

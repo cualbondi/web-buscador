@@ -4,11 +4,12 @@ const path = require('path')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 const CIUDADES = require('./src/ciudades.json')
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
 const production = process.env.NODE_ENV === 'production'
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : '/mapa/'
 
-const developmentPlugins = []
+const developmentPlugins = [new VuetifyLoaderPlugin()]
 const productionPlugins = [
   new PrerenderSPAPlugin({
     staticDir: path.join(__dirname, 'dist'),
@@ -21,10 +22,11 @@ const productionPlugins = [
     reportFilename: 'report.html',
     openAnalyzer: true,
   }),
+  new VuetifyLoaderPlugin(),
 ]
 
 module.exports = {
-  baseUrl: BASE_URL,
+  publicPath: BASE_URL,
   outputDir: 'dist' + BASE_URL,
   devServer: {
     public: '0.0.0.0:' + process.env.HOST_PORT || '8080',
@@ -55,6 +57,16 @@ module.exports = {
     plugins: production ? productionPlugins : developmentPlugins,
   },
   lintOnSave: false,
+  css: {
+    loaderOptions: {
+      sass: {
+        options: {
+          implementation: require('sass'),
+          fiber: require('fibers'),
+        },
+      },
+    },
+  },
   pwa: {
     name: 'Cualbondi',
     themeColor: '#4285F4',
