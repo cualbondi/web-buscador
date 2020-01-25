@@ -12,8 +12,7 @@
       </v-btn>
     </v-toolbar>
 
-    <l-map :zoom="zoom" :center="center" ref="mapRef" :options="options" @move="move" @moveend="moveend">
-      <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}"></l-tile-layer>
+    <l-map :zoom="zoom" :center="center" ref="mapref" :options="options" @move="move" @moveend="moveend">
       <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon: icon, draggable: false}" />
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
@@ -30,6 +29,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
+import 'mapbox-gl-leaflet'
 import 'leaflet-editablecirclemarker'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import { geoLocationIcon } from '@/components/icons'
@@ -68,6 +68,13 @@ export default class Map extends Vue {
   public updatingGeolocation = false
 
   public zoom = this.$store.getters.getCiudadZoom
+
+  public mounted() {
+    (L as any).mapboxGL({
+        style: 'https://tiles.cualbondi.com.ar/styles/osm-bright/style.json',
+        accessToken: 'no-token'
+    }).addTo((this.$refs.mapref as any).mapObject);
+  }
 
   public move(e: LeafletMouseEvent) {
     if (!this.updatingGeolocation) {

@@ -1,5 +1,5 @@
 import { Module } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 import api from '@/api/api'
 import { GeocoderResponse } from '@/api/schema'
 import { persistentStorage, RecentGeocoderResults } from '@/storage'

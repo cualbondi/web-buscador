@@ -3,13 +3,8 @@ import Router from 'vue-router'
 import Root from '@/views/Root.vue'
 import ABSearch from '@/views/ABSearch.vue'
 import Recorridos from '@/views/Recorridos.vue'
-import Editor from '@/admin/Editor.vue'
-import OSMDashboard from '@/admin/OSMDashboard.vue'
-import OSMDashboardStats from '@/admin/OSMDashboardStats.vue'
 import LocationSearch from '@/views/LocationSearch.vue'
 import MapLocationSearch from '@/views/MapLocationSearch.vue'
-import NotFound from '@/views/NotFound.vue'
-import Login from '@/views/Login.vue'
 import { BASE_URL } from '@/config'
 
 Vue.use(Router)
@@ -26,22 +21,22 @@ export default new Router({
     {
       path: `/login`,
       name: 'login',
-      component: Login,
+      component: () => import('@/views/Login.vue'),
     },
     {
       path: `/editor/`,
       name: 'editor',
-      component: Editor,
+      component: () => import('@/admin/Editor.vue'),
     },
     {
       path: `/osm/`,
       name: 'osm',
-      component: OSMDashboard,
+      component: () => import('@/admin/OSMDashboard.vue'),
     },
     {
       path: `/osm/stats/`,
       name: 'osmstats',
-      component: OSMDashboardStats,
+      component: () => import('@/admin/OSMDashboardStats.vue'),
     },
     {
       path: `/:ciudadSlug/recorridos/:searchString?`,
@@ -70,7 +65,7 @@ export default new Router({
     },
     {
       path: '*',
-      component: NotFound,
+      component: () => import('@/views/NotFound.vue'),
     },
   ],
 })

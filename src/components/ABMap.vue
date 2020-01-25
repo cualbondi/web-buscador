@@ -1,7 +1,6 @@
 <template>
   <div class="mapContainer">
     <l-map :zoom="zoom" :center="center" @click="onClick" :options="options" ref="mapref">
-      <l-tile-layer :url="'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'" :options="{className:'osmTileLayer'}" />
 
       <template v-if="recorrido">
         <l-polyline :latLngs="recorrido.itinerario[0].ruta" :color="polyStyle.color" :weight="4" :opacity="polyStyle.opacity" />
@@ -62,6 +61,7 @@ import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
 import 'leaflet-editablecirclemarker'
+import 'mapbox-gl-leaflet'
 import LEditablecirclemarker from 'vue2-leaflet-editablecirclemarker'
 import Polylinedecorator from 'vue2-leaflet-polylinedecorator'
 import { LatLngLocation } from '@/modules/absearch'
@@ -234,6 +234,12 @@ export default class Map extends Vue {
   public mounted() {
     const A = this.A
     const B = this.B
+    const mapref: any = this.$refs.mapref
+
+    const gl = (L as any).mapboxGL({
+        style: 'https://tiles.cualbondi.com.ar/styles/osm-bright/style.json',
+        accessToken: 'no-token'
+    }).addTo(mapref.mapObject);
 
     let bounds = L.latLngBounds([])
     if (A && A.lat !== null && A.lng !== null) {
@@ -245,7 +251,6 @@ export default class Map extends Vue {
 
     if (bounds.isValid()) {
       bounds = bounds.pad(0.1)
-      const mapref: any = this.$refs.mapref
       mapref.mapObject.flyToBounds(bounds, { maxZoom: 14, animate: false })
     }
   }
@@ -262,7 +267,7 @@ export default class Map extends Vue {
 }
 </style>
 <style lang="scss">
-.osmTileLayer {
+.leaflet-gl-layer {
   opacity: 0.9 !important;
   filter: saturate(90%);
 }

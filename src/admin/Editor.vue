@@ -25,7 +25,7 @@
         </v-toolbar>
         <v-divider></v-divider>
         <v-list>
-          <v-list-tile>
+          <v-list-item>
             <v-select
               class="citySelect"
               :items="ciudades"
@@ -38,26 +38,26 @@
               prepend-icon="map"
               hide-details
             ></v-select>
-          </v-list-tile>
-          <v-list-tile>
+          </v-list-item>
+          <v-list-item>
           <v-checkbox 
             label="Best matches"
             hide-details
             v-model="bestMatches"
             @change="searchRecorridos()"
           ></v-checkbox>
-          </v-list-tile>
-          <v-list-tile>
+          </v-list-item>
+          <v-list-item>
           <v-checkbox
             label="Show Linked"
             hide-details
             v-model="showLinked"
             @change="searchRecorridos()"
           ></v-checkbox>
-          </v-list-tile>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
-      <v-btn  small class="menubtn" flat icon @click="sideMenuOpen = true">
+      <v-btn  small class="menubtn" text icon @click="sideMenuOpen = true">
         <v-icon>menu</v-icon>  
       </v-btn>
       <v-progress-circular
@@ -72,14 +72,14 @@
 
     <div class="header">
       <v-tooltip bottom>
-        <v-btn :disabled="numDisconnections === 0" slot="activator" flat small icon color="indigo" @click="zoomToPrevGap">
+        <v-btn :disabled="numDisconnections === 0" slot="activator" text small icon color="indigo" @click="zoomToPrevGap">
           <v-icon>arrow_back</v-icon>
         </v-btn> 
         <span>Zoom to previous gap</span>
       </v-tooltip>
       
       <v-tooltip bottom>
-        <v-btn :disabled="numDisconnections === 0" slot="activator" flat small icon color="indigo" @click="zoomToNextGap">
+        <v-btn :disabled="numDisconnections === 0" slot="activator" text small icon color="indigo" @click="zoomToNextGap">
           <v-icon>arrow_forward</v-icon>
         </v-btn>
         <span>Zoom to next gap</span>
@@ -102,18 +102,18 @@
         v-model="cbSearchText"
       ></v-text-field>
       <v-list class="cb-list" dense>
-        <v-list-tile v-for="rec in filteredRecorridosCB" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
+        <v-list-item v-for="rec in filteredRecorridosCB" :key="rec.id" @click="setRecorrido(rec)" :class="{'selected': rec.id==recorrido_selected}">
           
-          <v-list-tile-content>
-            <v-list-tile-title v-text="`${rec.linea.nombre}: ${rec.nombre}`" />
-          </v-list-tile-content>
-            <v-list-tile-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="`${rec.linea.nombre}: ${rec.nombre}`" />
+          </v-list-item-content>
+            <v-list-item-action>
              <v-tooltip bottom>
             <v-icon slot="activator" color="success">{{rec.osm_id ? 'link' : ''}}</v-icon>
             <span>{{rec.osm_id}}</span>
           </v-tooltip>
-            </v-list-tile-action>
-        </v-list-tile>
+            </v-list-item-action>
+        </v-list-item>
       </v-list>
     </div>
 
@@ -126,20 +126,20 @@
         v-model="osmSearchText"
       ></v-text-field>
       <v-list class="osm-list" dense>
-        <v-list-tile v-for="rec in filteredRecorridosOSM" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
-          <v-list-tile-content>
-            <v-list-tile-title v-text="rec.osm_name" />
-          </v-list-tile-content>
-           <v-list-tile-action>
+        <v-list-item v-for="rec in filteredRecorridosOSM" :key="rec.id" @click="setRecorrido_osm(rec)" :class="{'selected': Math.abs(rec.osm_id)==osm_id}">
+          <v-list-item-content>
+            <v-list-item-title v-text="rec.osm_name" />
+          </v-list-item-content>
+           <v-list-item-action>
              <v-tooltip bottom>
                 <v-icon slot="activator" color="success" @click="cbSearchText='id:'+rec.linked_recorrido_id">{{rec.linked_recorrido_id ? 'link' : ''}}</v-icon>
                 <span>{{rec.linked_recorrido_id}}</span>
               </v-tooltip>
-            </v-list-tile-action>
-          <v-list-tile-action>
+            </v-list-item-action>
+          <v-list-item-action>
             {{Math.floor(rec.area*1000000)/100}}
-          </v-list-tile-action>
-        </v-list-tile>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
     
     </div>
@@ -161,7 +161,7 @@
           class="osmid-input"
           v-model="osm_id"
         />
-        <v-btn flat small icon @click="searchOSM">
+        <v-btn text small icon @click="searchOSM">
           <v-icon>search</v-icon>
         </v-btn>
       </div>
@@ -832,7 +832,7 @@ export default class Home extends Vue {
   .v-list {
     padding: 0;
   }
-  .v-list--dense .v-list__tile {
+  .v-list--dense .v-list-item {
     height: 32px !important;
   }
 }

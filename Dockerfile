@@ -7,7 +7,7 @@ ENV NODE_ENV $NODE_ENV
 
 WORKDIR /app
 
-COPY package.json package-lock.json /app/
+COPY package.json /app/
 
 RUN npm i
 

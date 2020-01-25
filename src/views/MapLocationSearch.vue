@@ -5,7 +5,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MapLocationPicker from '@/components/MapLocationPicker.vue'
-import L from 'leaflet'
+import { latLng } from 'leaflet'
+import 'mapbox-gl-leaflet'
 import { LatLngLocation } from '@/modules/absearch'
 import {
   geoLocationIcon,
@@ -53,7 +54,7 @@ export default class extends Vue {
     this.$router.push({ name: 'absearch' })
   }
   get ciudadLatLng() {
-    return L.latLng(this.$store.getters.getCiudadLatlng)
+    return latLng(this.$store.getters.getCiudadLatlng)
   }
 }
 </script>

@@ -1,8 +1,8 @@
 import { Module } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 import api from '@/api/api'
 import { Recorrido, GeocoderResponse } from '@/api/schema'
-import router from '@/router'
+import router from '@/plugins/router'
 import { persistentStorage, RecentLocationResult } from '@/storage'
 
 interface LatLng {

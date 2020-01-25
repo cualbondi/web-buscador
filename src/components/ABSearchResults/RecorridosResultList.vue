@@ -38,34 +38,34 @@
     </div>
     <v-list :two-line="true" class="results">
       <template v-for="(result, $index) in results">
-        <v-list-tile class="first" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
-          <v-list-tile-avatar>
+        <v-list-item class="first" :key="result.id" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
+          <v-list-item-avatar>
             <v-icon>{{iconFromType(result.itinerario[0].type)}}</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title v-html="result.itinerario[0].nombre"></v-list-tile-title>
-            <v-list-tile-sub-title v-if="result.itinerario[0].inicio || result.itinerario[0].fin">de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title class="distances" v-if="result.itinerario.length === 1"><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-tile-sub-title>
-            <v-list-tile-sub-title v-if="result.itinerario.length === 2">Combinar con</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile class="second" v-if="result.itinerario.length === 2" :key="result.id + '_second'" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
-          <v-list-tile-avatar>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="result.itinerario[0].nombre"></v-list-item-title>
+            <v-list-item-subtitle v-if="result.itinerario[0].inicio || result.itinerario[0].fin">de {{result.itinerario[0].inicio}} a {{result.itinerario[0].fin}}</v-list-item-subtitle>
+            <v-list-item-subtitle class="distances" v-if="result.itinerario.length === 1"><v-icon>directions_walk</v-icon>{{Math.floor(result.itinerario[0].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor(result.itinerario[0].long_bondi/100)/10}}km</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="result.itinerario.length === 2">Combinar con</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item class="second" v-if="result.itinerario.length === 2" :key="result.id + '_second'" @click="$emit('update:selectedIndex', $index); toggleSmallResults()" ripple :class="{selected: selectedIndex === $index}">
+          <v-list-item-avatar>
             <v-icon>{{iconFromType(result.itinerario[1].type)}}</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title v-html="result.itinerario[1].nombre"></v-list-tile-title>
-            <v-list-tile-sub-title v-if="result.itinerario[1].inicio || result.itinerario[1].fin">de {{result.itinerario[1].inicio}} a {{result.itinerario[1].fin}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title class="distances2"><v-icon>directions_walk</v-icon>{{Math.floor(result.long_pata_transbordo + result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="result.itinerario[1].nombre"></v-list-item-title>
+            <v-list-item-subtitle v-if="result.itinerario[1].inicio || result.itinerario[1].fin">de {{result.itinerario[1].inicio}} a {{result.itinerario[1].fin}}</v-list-item-subtitle>
+            <v-list-item-subtitle class="distances2"><v-icon>directions_walk</v-icon>{{Math.floor(result.long_pata_transbordo + result.itinerario[0].long_pata + result.itinerario[1].long_pata)}}mts <v-icon>directions_bus</v-icon>{{Math.floor((result.itinerario[0].long_bondi+result.itinerario[1].long_bondi)/100)/10}}km</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
       </template>
-      <v-list-tile v-if="resultsMore" >
+      <v-list-item v-if="resultsMore" >
         <v-btn @click="getNextPage">Buscar mas resultados</v-btn>
-      </v-list-tile>
-      <v-list-tile v-if="resultsMoreLoading">
+      </v-list-item>
+      <v-list-item v-if="resultsMoreLoading">
         <span>Buscando mas ...</span>
-      </v-list-tile>
+      </v-list-item>
     </v-list>
   </div>
 </template>
@@ -94,6 +94,7 @@ export default class RecorridosResultList extends Vue {
       'light_rail': 'tram',
       'bus': 'directions_bus',
       'trolleybus': 'directions_bus',
+      null: 'directions_bus'
     } as any)[type]
 
   public toggleSmallResults() {

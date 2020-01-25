@@ -1,8 +1,8 @@
 import { Module } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 import api from '@/api/api'
 import { Recorrido } from '@/api/schema'
-import router from '@/router'
+import router from '@/plugins/router'
 
 interface State {
   searchString: string

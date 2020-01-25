@@ -1,5 +1,5 @@
 import { Module } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 
 type ITab = 'recorridos' | 'directions'
 

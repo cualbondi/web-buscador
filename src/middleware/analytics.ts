@@ -3,7 +3,7 @@
 import vueInstance from '@/main'
 import { isProd } from '@/config'
 import { Store } from 'vuex'
-import { RootState } from '@/store'
+import { RootState } from '@/plugins/store'
 import Vue from 'vue'
 
 export default (store: Store<RootState>) => {
