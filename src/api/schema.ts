@@ -39,4 +39,5 @@ export interface GeocoderResponse {
   }
   precision: number
   tipo: string
+  magickey?: string
 }
