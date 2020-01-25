@@ -237,7 +237,7 @@ export default class Map extends Vue {
     const mapref: any = this.$refs.mapref
 
     const gl = (L as any).mapboxGL({
-        style: 'https://tiles.cualbondi.com.ar/styles/osm-bright/style.json',
+        style: 'https://tiles.cualbondi.org/styles/osm-bright/style.json',
         accessToken: 'no-token'
     }).addTo(mapref.mapObject);
 
