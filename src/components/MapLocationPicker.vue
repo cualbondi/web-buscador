@@ -13,7 +13,7 @@
     </v-toolbar>
 
     <l-map :zoom="zoom" :center="center" ref="mapref" :options="options" @move="move" @moveend="moveend">
-      <l-control-attribution position="bottomright" prefix="© OpenStreetMap contributors" />
+      <l-control-attribution position="bottomright" prefix="© <a href='https://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors" />
 
       <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon: icon, draggable: false}" />
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>

@@ -1,7 +1,7 @@
 <template>
   <div class="mapContainer">
     <l-map :zoom="zoom" :center="center" @click="onClick" :options="options" ref="mapref">
-      <l-control-attribution position="bottomright" prefix="© OpenStreetMap contributors" />
+      <l-control-attribution position="bottomright" prefix="© <a href='https://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors" />
 
       <template v-if="recorrido">
         <l-polyline :latLngs="recorrido.itinerario[0].ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
