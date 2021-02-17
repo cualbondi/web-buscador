@@ -1,6 +1,7 @@
 <template>
   <div class="mapContainer">
     <l-map :zoom="zoom" :center="center" :options="options" ref="mapref">
+      <l-control-attribution position="bottomright" prefix="© OpenStreetMap contributors" />
 
       <template v-if="recorrido">
         <l-polyline :latLngs="recorrido.ruta_corta" :color="backPolyStyle.color" :weight="backPolyStyle.weight" :opacity="backPolyStyle.opacity" />
@@ -18,7 +19,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker, LPolyline, LPopup } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LPolyline, LPopup, LControlAttribution } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'mapbox-gl-leaflet'
@@ -62,6 +63,7 @@ const decoratorArrow3 = decoratorBuilder('58', 0.9)
     LPolyline,
     Polylinedecorator,
     LPopup,
+    LControlAttribution,
   },
 })
 export default class Map extends Vue {

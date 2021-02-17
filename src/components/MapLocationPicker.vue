@@ -13,6 +13,8 @@
     </v-toolbar>
 
     <l-map :zoom="zoom" :center="center" ref="mapref" :options="options" @move="move" @moveend="moveend">
+      <l-control-attribution position="bottomright" prefix="© OpenStreetMap contributors" />
+
       <l-editablecirclemarker :latLng="center" :rad="300" :icon="icon" :options="{icon: icon, draggable: false}" />
       <l-editablecirclemarker v-if="geolocation" :latLng="geolocation" :rad="geolocation.precision" :options="markerOptions"/>
     </l-map>
@@ -26,7 +28,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LControlAttribution } from 'vue2-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'mapbox-gl-leaflet'
@@ -40,6 +42,7 @@ import { geoLocationIcon } from '@/components/icons'
     LTileLayer,
     LEditablecirclemarker,
     LMarker,
+    LControlAttribution,
   },
 })
 export default class Map extends Vue {
@@ -52,7 +55,10 @@ export default class Map extends Vue {
   @Prop()
   public icon!: any
 
-  public options = { zoomControl: false, attributionControl: false }
+  public options = {
+    zoomControl: false,
+    attributionControl: false
+  }
 
   public center = { ...this.initialCenter }
 
