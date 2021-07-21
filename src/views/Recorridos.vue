@@ -14,12 +14,12 @@
     <RecorridosSearchResults class="bottom" v-if="searchRequested"/>
 
     <div class="footerad">
-      <ins
+      <!-- <ins
         class="adsbygoogle"
         style="display:inline-block;width:320px;height:50px"
         data-ad-client="ca-pub-1193419141108967"
         data-ad-slot="9086127115"
-      ></ins>
+      ></ins> -->
     </div>
   </div>
 </template>
@@ -84,13 +84,13 @@ export default class Home extends Vue {
   public mounted() {
     // avoid rendering ads on prerender stage
     if (!window.navigator.userAgent.includes('Headless')) {
-      VueScript2.load(
-        '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-      )
-      if (!(window as any).adsbygoogle) {
-        ;(window as any).adsbygoogle = []
-      }
-      ;(window as any).adsbygoogle.push({})
+      // VueScript2.load(
+      //   '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+      // )
+      // if (!(window as any).adsbygoogle) {
+      //   ;(window as any).adsbygoogle = []
+      // }
+      // ;(window as any).adsbygoogle.push({})
     }
   }
 }
