@@ -142,7 +142,7 @@ export default class Map extends Vue {
     return this.$store.getters.getRecorridoSelected
   }
   get geolocation() {
-    const coordinates: Coordinates = this.$store.getters.geolocation
+    const coordinates: GeolocationCoordinates = this.$store.getters.geolocation
     if (coordinates === null) {
       return null
     }

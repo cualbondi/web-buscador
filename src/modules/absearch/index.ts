@@ -384,7 +384,7 @@ const module: Module<State, RootState> = {
     },
     // extends A or B so they have geolocation info if available
     A(state, rootState): LatLngLocation {
-      const geolocation: Coordinates = rootState.geolocation
+      const geolocation: GeolocationCoordinates = rootState.geolocation
       if (state.A === null) {
         return null
       }
@@ -398,7 +398,7 @@ const module: Module<State, RootState> = {
       return state.A
     },
     B(state, rootState): LatLngLocation {
-      const geolocation: Coordinates = rootState.geolocation
+      const geolocation: GeolocationCoordinates = rootState.geolocation
       if (state.B === null) {
         return null
       }

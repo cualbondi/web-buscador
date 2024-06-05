@@ -2,7 +2,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 const path = require('path')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 const CIUDADES = require('./src/ciudades.json')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
@@ -30,7 +29,7 @@ module.exports = {
   outputDir: 'dist' + BASE_URL,
   devServer: {
     public: '0.0.0.0:' + process.env.HOST_PORT || '8080',
-    https: process.env.TRAVIS_HTTPS !== 'False',
+    // https: process.env.TRAVIS_HTTPS !== 'False',
   },
   chainWebpack: config => {
     config.plugin('prefetch').tap(options => {
@@ -62,7 +61,7 @@ module.exports = {
       sass: {
         options: {
           implementation: require('sass'),
-          fiber: require('fibers'),
+          // fiber: require('fibers'),
         },
       },
     },
@@ -76,11 +75,11 @@ module.exports = {
       runtimeCaching: [
         {
           // handler: 'staleWhileRevalidate',
-          handler: 'networkFirst',
+          handler: 'NetworkFirst',
           urlPattern: new RegExp('^https://cualbondi.com.ar'),
         },
         {
-          handler: 'networkOnly',
+          handler: 'NetworkOnly',
           urlPattern: new RegExp('.*'),
         },
       ],

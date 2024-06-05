@@ -24,13 +24,3 @@ interface Window {
   FB: any
   fbAsyncInit: any
 }
-
-interface Navigator {
-  share?: (
-    params: {
-      title?: string
-      url?: string
-      text?: string
-    },
-  ) => Promise<any>
-}

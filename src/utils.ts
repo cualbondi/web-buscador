@@ -89,7 +89,7 @@ export function checkGeolocationPermission(
   }
 }
 
-type Observer = (position: Coordinates) => void
+type Observer = (position: GeolocationCoordinates) => void
 
 class GeolocationObservable {
   public static getInstance() {
@@ -103,7 +103,7 @@ class GeolocationObservable {
   private started: boolean
   private watchId: number
   private listenerId: number = 0
-  private lastCoordinate: Coordinates | null
+  private lastCoordinate: GeolocationCoordinates | null
   // array of observers of every update
   private takeManyObservers: { [id: number]: Observer }
   // array of observers for next value
@@ -134,7 +134,7 @@ class GeolocationObservable {
     navigator.geolocation.clearWatch(this.watchId)
     this.started = false
   }
-  public update(position: Coordinates) {
+  public update(position: GeolocationCoordinates) {
     // save for cache
     this.lastCoordinate = position
     // notify observers
@@ -159,7 +159,7 @@ class GeolocationObservable {
       delete this.takeManyObservers[id]
     }
   }
-  public takeFirst(cache = true): Promise<Coordinates> {
+  public takeFirst(cache = true): Promise<GeolocationCoordinates> {
     const lastCoordinate = this.lastCoordinate
 
     // start watching since a position is immediately requested
@@ -179,7 +179,7 @@ class GeolocationObservable {
       })
     })
   }
-  private reject(error: PositionError) {
+  private reject(error: GeolocationPositionError) {
     for (const observer of this.takeFirstObservers) {
       observer.reject(error)
     }

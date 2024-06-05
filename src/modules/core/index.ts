@@ -13,7 +13,7 @@ interface Ciudad {
 const CS: Ciudad[] = CIUDADES
 
 interface State {
-  geolocation: Coordinates | null
+  geolocation: GeolocationCoordinates | null
   geolocationPermission: string
   ciudad: Ciudad | null
 }
@@ -75,7 +75,7 @@ const module: Module<State, RootState> = {
     setCiudad(state, ciudad: Ciudad) {
       state.ciudad = ciudad
     },
-    setGeolocation(state, geolocation: Coordinates) {
+    setGeolocation(state, geolocation: GeolocationCoordinates) {
       state.geolocation = geolocation
     },
     setGeolocationPermission(state, status: string) {
