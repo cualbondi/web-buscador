@@ -77,7 +77,7 @@ export default class Map extends Vue {
 
   public mounted() {
     (L as any).mapboxGL({
-        style: 'https://tiles.cualbondi.com.ar/styles/osm-bright/style.json',
+        style: 'https://tiles.cualbondi.org/api/maps/cualbondi/style.json',
         accessToken: 'no-token'
     }).addTo((this.$refs.mapref as any).mapObject);
   }
