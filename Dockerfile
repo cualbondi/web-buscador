@@ -7,6 +7,8 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
+# add line "try_files $uri $uri/ /index.html;" after line "/usr/share/nginx/html;"
+RUN sed -i 's/\/usr\/share\/nginx\/html;/\/usr\/share\/nginx\/html;\n        try_files $uri $uri\/ \/index.html;/g' /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist/mapa /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
