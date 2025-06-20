@@ -76,7 +76,7 @@ module.exports = {
         {
           // handler: 'staleWhileRevalidate',
           handler: 'NetworkFirst',
-          urlPattern: new RegExp('^https://cualbondi.com.ar'),
+          urlPattern: new RegExp('^https://cualbondi.com'),
         },
         {
           handler: 'NetworkOnly',

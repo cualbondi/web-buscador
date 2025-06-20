@@ -3,7 +3,7 @@ export const isProd = process.env.NODE_ENV === 'production'
 export const API_URL = process.env.VUE_APP_API_URL
   ? process.env.VUE_APP_API_URL
   : isProd
-    ? '//api.cualbondi.com.ar/v3'
+    ? '//api.cualbondi.com/v3'
     : '//localhost:8080/api/v3'
 
 export const SENTRY_URL = isProd

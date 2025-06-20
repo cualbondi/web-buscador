@@ -32,7 +32,7 @@
             hide-details
           ></v-select>
         </v-list-item>
-        <v-list-item @click="openExternalLink(`https://cualbondi.com.ar/${ciudad.slug}/`)">
+        <v-list-item @click="openExternalLink(`https://cualbondi.com/${ciudad.slug}/`)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>location_city</v-icon></div></div>
           Ver mas informaci&oacute;n
         </v-list-item>
@@ -51,7 +51,7 @@
           />
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item @click="openExternalLink(`https://cualbondi.com.ar/agradecimientos/`)">
+        <v-list-item @click="openExternalLink(`https://cualbondi.com/agradecimientos/`)">
           <div class="v-input__prepend-outer"><div class="v-input__icon v-input__icon--prepend"><v-icon>star</v-icon></div></div>
           Top usuarios
         </v-list-item>
